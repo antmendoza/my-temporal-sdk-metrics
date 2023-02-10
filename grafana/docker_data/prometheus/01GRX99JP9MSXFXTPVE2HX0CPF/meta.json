@@ -1,0 +1,17 @@
+{
+	"ulid": "01GRX99JP9MSXFXTPVE2HX0CPF",
+	"minTime": 1676009270870,
+	"maxTime": 1676016000000,
+	"stats": {
+		"numSamples": 199856,
+		"numSeries": 1137,
+		"numChunks": 1157
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01GRX99JP9MSXFXTPVE2HX0CPF"
+		]
+	},
+	"version": 1
+}
