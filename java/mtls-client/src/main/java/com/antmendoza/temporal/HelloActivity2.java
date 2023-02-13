@@ -34,7 +34,7 @@ import java.time.Duration;
 /**
  * Sample Temporal Workflow Definition that executes a single Activity.
  */
-public class HelloActivity {
+public class HelloActivity2 {
 
     // Define the task queue name
     static final String TASK_QUEUE = "HelloActivityTaskQueue";
@@ -46,10 +46,6 @@ public class HelloActivity {
     @WorkflowInterface
     public interface GreetingWorkflow extends IGreetingWorkflow {
 
-
-
-        @SignalMethod
-        void waitForName(String name);
     }
 
 
@@ -62,37 +58,10 @@ public class HelloActivity {
     }
 
 
-    @WorkflowInterface
-    public interface GreetingChild {
-        @WorkflowMethod
-        String composeGreeting(String greeting, String name);
-
-
-    }
-
-    public static class GreetingChildImpl implements GreetingChild {
-
-        @Override
-        public String composeGreeting(String greeting, String name) {
-
-            Workflow.sleep(Duration.ofSeconds(2));
-
-            return greeting + " " + name + "!";
-        }
-
-
-    }
 
     // Define the workflow implementation which implements our getGreeting workflow method.
     public static class GreetingWorkflowImpl implements GreetingWorkflow {
 
-
-        private static int test = 1;
-        private String name;
-
-        public GreetingWorkflowImpl() {
-            System.out.println("Constructor....." + test++);
-        }
 
         private final GreetingActivities activities =
                 Workflow.newActivityStub(
@@ -104,8 +73,6 @@ public class HelloActivity {
                                 .setStartToCloseTimeout(
                                         Duration.ofSeconds(2)
                                 ).build());
-
-
         private final GreetingActivities localActivities =
                 Workflow.newLocalActivityStub(
                         GreetingActivities.class,
@@ -115,75 +82,18 @@ public class HelloActivity {
                                 .setStartToCloseTimeout(Duration.ofSeconds(2)).build());
 
 
+
         @Override
         public String getGreeting(String name) {
 
-
-
-            Workflow.await(() -> "a".equals(this.name));
-
             System.out.println("starting....");
-
-
-            //WorkflowTaskScheduled
-            //WorkflowTaskStarted
-            //WorkflowTaskCompleted
-            //Workflow.sleep(Duration.ofSeconds(5)); //TimerStarted
-            //TimerFired
-
-            //WorkflowTaskScheduled
-            //WorkflowTaskStarted
-            //WorkflowTaskCompleted
-            //ActivityTaskScheduled
-            //String hello = activities.composeGreeting("Hello", name); //ActivityTaskStarted
-            //ActivityTaskCompleted
-
-
-            //for (int i = 0; i < 10; i++) {
-
-               activities.composeGreeting(true, "activity_3");
-
-            //}
-
-
-            System.out.println("  Attemp " + Workflow.getInfo().getAttempt());
-
-            boolean b = true;
-            if (b) {
-
-                //       throw ApplicationFailure.newFailureWithCause("message", "my exceptino", new Exception("es throwable "), 1,2,3);
-            }
-
-
-            Workflow.sleep(2000);
-
-
-            int version = Workflow.getVersion("continueAs", Workflow.DEFAULT_VERSION, 1);
-            if (version == Workflow.DEFAULT_VERSION) {
-                Workflow.continueAsNew(name);
-
-            }
-
-
-            //WorkflowTaskScheduled
-            //WorkflowTaskStarted
-            //WorkflowTaskCompleted
-            //WorkflowExecutionCompleted
-
+            activities.composeGreeting(true, "activity_3");
+            Workflow.sleep(5000);
             return "hello";
 
-
-            //Don't want to wait the child workflow to complete/fails
-            //this does not send any command to the server (same with async activities)
-            //Promise<String> greeting = Async.function(child::composeGreeting, "Hello", name);
-
         }
 
 
-        @Override
-        public void waitForName(String name) {
-            this.name = name;
-        }
     }
 
     /**
@@ -199,7 +109,7 @@ public class HelloActivity {
 
 
             try {
-              //  Thread.sleep(4000);
+                //  Thread.sleep(4000);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -212,7 +122,7 @@ public class HelloActivity {
             System.out.println("REEXECUTE activity " + b + "  ");
             if (b) {
                 //throw new RuntimeException("EXCEPTION... " + activity);
-            } else{
+            } else {
 
                 //throw ApplicationFailure.newNonRetryableFailure("my non retryable type", "my non retryable");
             }

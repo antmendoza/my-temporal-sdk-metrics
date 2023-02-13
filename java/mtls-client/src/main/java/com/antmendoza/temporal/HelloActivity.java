@@ -75,7 +75,7 @@ public class HelloActivity {
         @Override
         public String composeGreeting(String greeting, String name) {
 
-            Workflow.sleep(Duration.ofMinutes(2));
+            Workflow.sleep(Duration.ofSeconds(2));
 
             return greeting + " " + name + "!";
         }

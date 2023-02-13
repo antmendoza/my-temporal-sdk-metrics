@@ -19,7 +19,7 @@ public class TemporalProperties {
 
     private void read(){
 
-        try (InputStream input = new FileInputStream("./src/main/resources/temporal.properties")) {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("temporal.properties")) {
 
             Properties prop = new Properties();
 

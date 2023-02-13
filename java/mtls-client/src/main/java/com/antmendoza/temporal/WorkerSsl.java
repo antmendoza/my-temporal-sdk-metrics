@@ -44,7 +44,7 @@ public class WorkerSsl {
         WorkerFactory factory = WorkerFactory.newInstance(client, WorkerFactoryOptions.newBuilder().setWorkflowCacheSize(2000).build());
 
  //       for (int i = 0; i <= 2; i++) {
-            createWorker(factory,  TASK_QUEUE+1);
+            createWorker(factory,  TASK_QUEUE);
  //       }
 
 
