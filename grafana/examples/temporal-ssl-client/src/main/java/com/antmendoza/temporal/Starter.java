@@ -23,12 +23,11 @@ import com.uber.m3.util.ImmutableMap;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.client.WorkflowOptions;
-import io.temporal.common.RetryOptions;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 
-import java.time.Duration;
 import java.util.Collections;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Starter {
 
@@ -57,7 +56,8 @@ public class Starter {
         WorkflowClient client = WorkflowClient.newInstance(service, clientOptions);
 
 
-        while (true) {
+        AtomicBoolean b = new AtomicBoolean(true);
+        while (b.get()) {
 
 
             Collections.singletonList(
@@ -80,11 +80,13 @@ public class Starter {
                     // Create typed workflow stub
                     IGreetingWorkflow workflow = client.newWorkflowStub(wfClass, workflowOptions);
 
-                    WorkflowClient.start(workflow::getGreeting, "Antonio");
+                    //WorkflowClient.start(workflow::getGreeting, "Antonio");
 
 
-                    //workflow.getGreeting("Antonio");
+                    workflow.getGreeting("Antonio");
 
+
+                    b.set(false);
                 }catch(Exception e){}
 
 

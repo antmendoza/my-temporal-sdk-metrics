@@ -21,7 +21,10 @@ package com.antmendoza.temporal;
 
 import io.temporal.activity.*;
 import io.temporal.common.RetryOptions;
-import io.temporal.workflow.*;
+import io.temporal.workflow.SignalMethod;
+import io.temporal.workflow.Workflow;
+import io.temporal.workflow.WorkflowInterface;
+import io.temporal.workflow.WorkflowMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +45,7 @@ public class HelloActivity {
 
     @WorkflowInterface
     public interface GreetingWorkflow extends IGreetingWorkflow {
+
 
 
         @SignalMethod
@@ -71,7 +75,7 @@ public class HelloActivity {
         @Override
         public String composeGreeting(String greeting, String name) {
 
-            Workflow.sleep(Duration.ofMinutes(2));
+            Workflow.sleep(Duration.ofSeconds(2));
 
             return greeting + " " + name + "!";
         }
@@ -84,49 +88,94 @@ public class HelloActivity {
 
 
         private static int test = 1;
+        private String name;
+
+        public GreetingWorkflowImpl() {
+            System.out.println("Constructor....." + test++);
+        }
+
         private final GreetingActivities activities =
                 Workflow.newActivityStub(
                         GreetingActivities.class,
                         ActivityOptions.newBuilder()
                                 .setScheduleToCloseTimeout(
-                                        Duration.ofSeconds(5)
+                                        Duration.ofSeconds(2)
                                 )
                                 .setStartToCloseTimeout(
-                                        Duration.ofSeconds(5)
-                                ).setRetryOptions(RetryOptions.newBuilder().setMaximumAttempts(1).build()).build());
+                                        Duration.ofSeconds(2)
+                                ).build());
+
+
         private final GreetingActivities localActivities =
                 Workflow.newLocalActivityStub(
                         GreetingActivities.class,
                         LocalActivityOptions.newBuilder()
                                 .setRetryOptions(RetryOptions.newBuilder().setMaximumAttempts(2).build())
                                 //.setCancellationType(WAIT_CANCELLATION_COMPLETED)
-                                .setStartToCloseTimeout(Duration.ofSeconds(3))
-                                .setScheduleToCloseTimeout(
-                                        Duration.ofSeconds(3)
-                                ).build());
-        private String name;
+                                .setStartToCloseTimeout(Duration.ofSeconds(2)).build());
 
-
-        public GreetingWorkflowImpl() {
-            System.out.println("Constructor....." + test++);
-        }
 
         @Override
         public String getGreeting(String name) {
 
 
-            //localActivities.composeGreeting(true, "jespin");
-            Promise<String> get = Async.function(activities::composeGreeting, true, "activity_3");
+
+            Workflow.await(() -> "a".equals(this.name));
+
+            System.out.println("starting....");
 
 
-//            int version = Workflow.getVersion("continueAs", Workflow.DEFAULT_VERSION, 1);
-           // Workflow.continueAsNew(name);
-//
+            //WorkflowTaskScheduled
+            //WorkflowTaskStarted
+            //WorkflowTaskCompleted
+            //Workflow.sleep(Duration.ofSeconds(5)); //TimerStarted
+            //TimerFired
+
+            //WorkflowTaskScheduled
+            //WorkflowTaskStarted
+            //WorkflowTaskCompleted
+            //ActivityTaskScheduled
+            //String hello = activities.composeGreeting("Hello", name); //ActivityTaskStarted
+            //ActivityTaskCompleted
 
 
-            //Workflow.continueAsNew(name);
+            //for (int i = 0; i < 10; i++) {
+
+               activities.composeGreeting(true, "activity_3");
+
+            //}
+
+
+            System.out.println("  Attemp " + Workflow.getInfo().getAttempt());
+
+            boolean b = true;
+            if (b) {
+
+                //       throw ApplicationFailure.newFailureWithCause("message", "my exceptino", new Exception("es throwable "), 1,2,3);
+            }
+
+
+            Workflow.sleep(2000);
+
+
+            int version = Workflow.getVersion("continueAs", Workflow.DEFAULT_VERSION, 1);
+            if (version == Workflow.DEFAULT_VERSION) {
+                Workflow.continueAsNew(name);
+
+            }
+
+
+            //WorkflowTaskScheduled
+            //WorkflowTaskStarted
+            //WorkflowTaskCompleted
+            //WorkflowExecutionCompleted
 
             return "hello";
+
+
+            //Don't want to wait the child workflow to complete/fails
+            //this does not send any command to the server (same with async activities)
+            //Promise<String> greeting = Async.function(child::composeGreeting, "Hello", name);
 
         }
 
@@ -150,24 +199,23 @@ public class HelloActivity {
 
 
             try {
-                //Thread.sleep(10000);
+              //  Thread.sleep(4000);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-//
-//
+
+
             ActivityInfo info = Activity.getExecutionContext().getInfo();
             int attempt = info.getAttempt();
-//            System.out.println("info activity " + attempt + "  ");
+            System.out.println("info activity " + attempt + "  ");
             boolean b = retry && attempt < 2;
-//            System.out.println("REEXECUTE activity " + b + "  ");
+            System.out.println("REEXECUTE activity " + b + "  ");
             if (b) {
                 //throw new RuntimeException("EXCEPTION... " + activity);
+            } else{
+
+                //throw ApplicationFailure.newNonRetryableFailure("my non retryable type", "my non retryable");
             }
-//            } else{
-//
-//                //throw ApplicationFailure.newNonRetryableFailure("my non retryable type", "my non retryable");
-//            }
 
             return activity;
         }

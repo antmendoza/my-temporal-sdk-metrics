@@ -1,6 +1,5 @@
 package com.antmendoza.temporal;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -17,9 +16,11 @@ public class TemporalProperties {
         this.read();
     }
 
-    private void read(){
+    private void read() {
 
-        try (InputStream input = new FileInputStream("src/main/resources/temporal.properties")) {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("temporal.properties")) {
+
+//        try (InputStream input = new FileInputStream("src/main/resources/temporal.properties")) {
 
             Properties prop = new Properties();
 
