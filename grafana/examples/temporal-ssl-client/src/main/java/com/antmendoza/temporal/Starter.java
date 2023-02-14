@@ -56,8 +56,7 @@ public class Starter {
         WorkflowClient client = WorkflowClient.newInstance(service, clientOptions);
 
 
-        AtomicBoolean b = new AtomicBoolean(true);
-        while (b.get()) {
+        while (true) {
 
 
             Collections.singletonList(
@@ -80,13 +79,12 @@ public class Starter {
                     // Create typed workflow stub
                     IGreetingWorkflow workflow = client.newWorkflowStub(wfClass, workflowOptions);
 
-                    //WorkflowClient.start(workflow::getGreeting, "Antonio");
+                    WorkflowClient.start(workflow::getGreeting, "Antonio");
 
 
-                    workflow.getGreeting("Antonio");
+                    //workflow.getGreeting("Antonio");
 
 
-                    b.set(false);
                 }catch(Exception e){}
 
 

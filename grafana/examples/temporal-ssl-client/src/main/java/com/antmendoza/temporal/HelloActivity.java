@@ -116,14 +116,15 @@ public class HelloActivity {
 
 
             //localActivities.composeGreeting(true, "jespin");
-            Promise<String> get = Async.function(activities::composeGreeting, true, "activity_3");
+            //Promise<String> get = Async.function(activities::composeGreeting, true, "activity_3");
 
+
+            activities.composeGreeting(false, "");
 
 //            int version = Workflow.getVersion("continueAs", Workflow.DEFAULT_VERSION, 1);
            // Workflow.continueAsNew(name);
 //
-
-
+            //get.get();
             //Workflow.continueAsNew(name);
 
             return "hello";
