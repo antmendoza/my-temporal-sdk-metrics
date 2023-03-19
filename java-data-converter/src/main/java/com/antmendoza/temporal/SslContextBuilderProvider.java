@@ -3,7 +3,6 @@ package com.antmendoza.temporal;
 import io.grpc.netty.shaded.io.netty.handler.ssl.SslContext;
 import io.temporal.serviceclient.SimpleSslContextBuilder;
 
-import javax.net.ssl.SSLException;
 import java.io.FileInputStream;
 import java.io.InputStream;
 

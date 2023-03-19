@@ -38,6 +38,7 @@ public class Starter {
         WorkflowServiceStubs service =
                 WorkflowServiceStubs.newServiceStubs(
                         WorkflowServiceStubsOptions.newBuilder()
+                                .setMetricsScope(ScopeBuilder.getScope())
                                 .setSslContext(sslContextBuilderProvider.getSslContext())
                                 .setTarget(sslContextBuilderProvider.getTargetEndpoint())
                                 .build());

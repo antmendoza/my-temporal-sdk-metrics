@@ -38,6 +38,7 @@ import io.temporal.workflow.WorkflowMethod;
 
 import java.time.Duration;
 import java.util.Collections;
+import java.util.Map;
 
 /**
  * Hello World Temporal workflow that executes a single activity. Requires a local instance the
@@ -48,7 +49,7 @@ public class EncryptedPayloadsActivity {
     static final String TASK_QUEUE = "EncryptedPayloads";
     static SslContextBuilderProvider sslContextBuilderProvider = new SslContextBuilderProvider();
 
-    public static void main(String[] args) {
+    public  void createWorkflow(Customer customer) {
 
 
         // gRPC stubs wrapper that talks to the local docker instance of temporal service.
@@ -81,11 +82,15 @@ public class EncryptedPayloadsActivity {
 
         // Start a workflow execution. Usually this is done from another program.
         // Uses task queue from the GreetingWorkflow @WorkflowMethod annotation.
+        Object customerId;
         GreetingWorkflow workflow =
                 client.newWorkflowStub(
                         GreetingWorkflow.class,
                         WorkflowOptions.newBuilder()
-                                //.setWorkflowId("EncryptedPayloadsWf")
+                                .setSearchAttributes(Map.of(
+                                        "CustomerId", customer.customerId(),
+                                        "CustomerName", customer.customerName()))
+                                .setWorkflowId(customer.wfId())
                                 .setTaskQueue(TASK_QUEUE)
                                 .build());
         // Execute a workflow waiting for it to complete. See {@link
@@ -93,7 +98,7 @@ public class EncryptedPayloadsActivity {
         // for an example of starting workflow without waiting synchronously for its result.
         String greeting = workflow.getGreeting("My Secret Friend");
         System.out.println(greeting);
-        System.exit(0);
+        // System.exit(0);
     }
 
     /**
@@ -143,7 +148,7 @@ public class EncryptedPayloadsActivity {
             // This is a blocking call that returns only after the activity has completed.
 
 
-          //  Workflow.sleep(Duration.ofSeconds(10));
+            //  Workflow.sleep(Duration.ofSeconds(10));
 
 
             activities.composeGreetingVoid("Hello");

@@ -22,8 +22,10 @@ package com.antmendoza.temporal.temporal.rde.httpserver;
 
 import com.antmendoza.temporal.temporal.payload.codec.AbstractRemoteDataEncoderCodec;
 import com.google.common.net.HttpHeaders;
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import io.temporal.api.common.v1.Header;
 import io.temporal.api.common.v1.Payload;
 import io.temporal.api.common.v1.Payloads;
 import io.temporal.payload.codec.ChainCodec;
@@ -34,6 +36,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.List;
+import java.util.Map;
 
 class DataEncoderHandler implements HttpHandler {
     private final PayloadCodec codec;
@@ -46,6 +49,17 @@ class DataEncoderHandler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
 
         exchange.getRequestHeaders().get("Origin");
+        List<String> namespace = exchange.getRequestHeaders().get("X-Namespace");
+
+        Headers headers = exchange.getRequestHeaders();
+
+
+        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+            System.out.println(entry.getKey() + ":" + entry.getValue());
+        }
+
+
+
 
         boolean isMethodPOST = exchange.getRequestMethod().equals("POST");
         boolean isMethodOPTIONS = exchange.getRequestMethod().equalsIgnoreCase("OPTIONS");

@@ -20,7 +20,6 @@
 package com.antmendoza.temporal;
 
 import io.temporal.activity.*;
-import io.temporal.common.RetryOptions;
 import io.temporal.workflow.SignalMethod;
 import io.temporal.workflow.Workflow;
 import io.temporal.workflow.WorkflowInterface;
@@ -29,7 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
-import java.util.Map;
 
 
 /**
@@ -46,7 +44,6 @@ public class HelloActivity {
 
     @WorkflowInterface
     public interface GreetingWorkflow extends IGreetingWorkflow {
-
 
 
         @SignalMethod
@@ -89,67 +86,41 @@ public class HelloActivity {
 
 
         private static int test = 1;
-        private String name;
-
-        public GreetingWorkflowImpl() {
-            System.out.println("Constructor....." + test++);
-        }
-
         private final GreetingActivities activities =
                 Workflow.newActivityStub(
                         GreetingActivities.class,
                         ActivityOptions.newBuilder()
+                                .setTaskQueue(TASK_QUEUE)
                                 .setScheduleToCloseTimeout(
                                         Duration.ofSeconds(2)
                                 )
                                 .setStartToCloseTimeout(
                                         Duration.ofSeconds(2)
                                 ).build());
-
-
         private final GreetingActivities localActivities =
                 Workflow.newLocalActivityStub(
                         GreetingActivities.class,
                         LocalActivityOptions.newBuilder()
-                                .setRetryOptions(RetryOptions.newBuilder().setMaximumAttempts(2).build())
+                                //.setRetryOptions(RetryOptions.newBuilder().setMaximumAttempts(2).build())
                                 //.setCancellationType(WAIT_CANCELLATION_COMPLETED)
                                 .setStartToCloseTimeout(Duration.ofSeconds(2)).build());
+        private String name;
 
+
+        public GreetingWorkflowImpl() {
+            System.out.println("Constructor....." + test++);
+        }
 
         @Override
         public String getGreeting(String name) {
 
 
-
             Workflow.sleep(Duration.ofMinutes(1));
 
-            System.out.println("starting....1");
-
-            //Workflow.upsertSearchAttributes(Map.of("dd", "ddd"));
 
             System.out.println("starting....2");
 
-
-            //WorkflowTaskScheduled
-            //WorkflowTaskStarted
-            //WorkflowTaskCompleted
-            //Workflow.sleep(Duration.ofSeconds(5)); //TimerStarted
-            //TimerFired
-
-            //WorkflowTaskScheduled
-            //WorkflowTaskStarted
-            //WorkflowTaskCompleted
-            //ActivityTaskScheduled
-            //String hello = activities.composeGreeting("Hello", name); //ActivityTaskStarted
-            //ActivityTaskCompleted
-
-
-            //for (int i = 0; i < 10; i++) {
-
-               activities.composeGreeting(true, "activity_3");
-
-            //}
-
+            activities.composeGreeting(true, "activity_3");
 
             System.out.println("  Attemp " + Workflow.getInfo().getAttempt());
 
@@ -165,7 +136,7 @@ public class HelloActivity {
 
             int version = Workflow.getVersion("continueAs", Workflow.DEFAULT_VERSION, 1);
             if (version == Workflow.DEFAULT_VERSION) {
-                Workflow.continueAsNew(name);
+               // Workflow.continueAsNew(name);
 
             }
 
@@ -200,27 +171,6 @@ public class HelloActivity {
         @Override
         public String composeGreeting(boolean retry, String activity) {
 
-            System.out.println("executing activity " + activity + "  ");
-
-
-            try {
-              //  Thread.sleep(4000);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
-
-            ActivityInfo info = Activity.getExecutionContext().getInfo();
-            int attempt = info.getAttempt();
-            System.out.println("info activity " + attempt + "  ");
-            boolean b = retry && attempt < 2;
-            System.out.println("REEXECUTE activity " + b + "  ");
-            if (b) {
-                //throw new RuntimeException("EXCEPTION... " + activity);
-            } else{
-
-                //throw ApplicationFailure.newNonRetryableFailure("my non retryable type", "my non retryable");
-            }
 
             return activity;
         }
