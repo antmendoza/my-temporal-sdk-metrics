@@ -50,7 +50,7 @@ public class CryptCodec implements PayloadCodec {
   static final ByteString METADATA_ENCRYPTION_CIPHER =
       ByteString.copyFrom(CIPHER, StandardCharsets.UTF_8);
 
-  static final String METADATA_ENCRYPTION_KEY_ID_KEY = "encryption-key-id";
+  static final String METADATA_ENCRYPTION_KEY_ID_KEY = "encryption-key-id--";
 
   private static final int GCM_NONCE_LENGTH_BYTE = 12;
   private static final int GCM_TAG_LENGTH_BIT = 128;

@@ -49,6 +49,10 @@ public class EncryptedPayloadsActivity {
     static final String TASK_QUEUE = "EncryptedPayloads";
     static SslContextBuilderProvider sslContextBuilderProvider = new SslContextBuilderProvider();
 
+    public static void main(String[] args) {
+        new EncryptedPayloadsActivity().createWorkflow(new Customer("1234", "firstname1 surname1 lastSurname"));
+    }
+
     public  void createWorkflow(Customer customer) {
 
 
@@ -73,30 +77,35 @@ public class EncryptedPayloadsActivity {
         WorkerFactory factory = WorkerFactory.newInstance(client);
         // Worker that listens on a task queue and hosts both workflow and activity implementations.
         Worker worker = factory.newWorker(TASK_QUEUE);
-        // Workflows are stateful. So you need a type to create instances.
         worker.registerWorkflowImplementationTypes(GreetingWorkflowImpl.class);
-        // Activities are stateless and thread safe. So a shared instance is used.
         worker.registerActivitiesImplementations(new GreetingActivitiesImpl());
         // Start listening to the workflow and activity task queues.
         factory.start();
 
+
+
+
         // Start a workflow execution. Usually this is done from another program.
         // Uses task queue from the GreetingWorkflow @WorkflowMethod annotation.
         Object customerId;
+        String workflowId = customer.wfId();
+        Map<String, String> searchAttributes = Map.of(
+                "CustomerId", customer.customerId(),
+                "CustomerName", customer.customerName(),
+                "MyCustomWid", workflowId
+        );
         GreetingWorkflow workflow =
                 client.newWorkflowStub(
                         GreetingWorkflow.class,
                         WorkflowOptions.newBuilder()
-                                .setSearchAttributes(Map.of(
-                                        "CustomerId", customer.customerId(),
-                                        "CustomerName", customer.customerName()))
-                                .setWorkflowId(customer.wfId())
+//                                .setSearchAttributes(searchAttributes)
+                                .setWorkflowId(workflowId)
                                 .setTaskQueue(TASK_QUEUE)
                                 .build());
         // Execute a workflow waiting for it to complete. See {@link
         // io.temporal.samples.hello.HelloSignal}
         // for an example of starting workflow without waiting synchronously for its result.
-        String greeting = workflow.getGreeting("My Secret Friend");
+        String greeting = workflow.getGreeting("My secret text");
         System.out.println(greeting);
         // System.exit(0);
     }
@@ -128,11 +137,14 @@ public class EncryptedPayloadsActivity {
         String composeGreetingEmptyStr(String greeting);
     }
 
+
+
     /**
      * GreetingWorkflow implementation that calls GreetingsActivities#composeGreeting.
      */
     public static class GreetingWorkflowImpl implements GreetingWorkflow {
 
+        private String signal;
         /**
          * Activity stub implements activity interface and proxies calls to it to Temporal activity
          * invocations. Because activities are reentrant, only a single stub can be used for multiple
@@ -147,17 +159,9 @@ public class EncryptedPayloadsActivity {
         public String getGreeting(String name) {
             // This is a blocking call that returns only after the activity has completed.
 
+            String hello = activities.composeGreeting("Hello", name);
 
-            //  Workflow.sleep(Duration.ofSeconds(10));
-
-
-            activities.composeGreetingVoid("Hello");
-            activities.composeGreetingNull("Hello");
-
-            activities.composeGreetingEmptyStr("Hello");
-
-
-            return activities.composeGreeting("Hello", name);
+            return hello;
         }
     }
 
