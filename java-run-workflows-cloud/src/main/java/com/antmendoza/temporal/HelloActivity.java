@@ -20,23 +20,20 @@
 package com.antmendoza.temporal;
 
 import io.temporal.activity.*;
-import io.temporal.workflow.SignalMethod;
-import io.temporal.workflow.Workflow;
-import io.temporal.workflow.WorkflowInterface;
-import io.temporal.workflow.WorkflowMethod;
+import io.temporal.common.RetryOptions;
+import io.temporal.workflow.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
+
+import static io.temporal.activity.ActivityCancellationType.WAIT_CANCELLATION_COMPLETED;
 
 
 /**
  * Sample Temporal Workflow Definition that executes a single Activity.
  */
 public class HelloActivity {
-
-    // Define the task queue name
-    static final String TASK_QUEUE = "HelloActivityTaskQueue";
 
     // Define our workflow unique id
     static final String WORKFLOW_ID = "HelloActivityWorkflow";
@@ -60,6 +57,15 @@ public class HelloActivity {
     }
 
 
+    @ActivityInterface
+    public interface GreetingActivities3 {
+
+        // Define your activity method which can be called during workflow execution
+        @ActivityMethod(name = "greet4")
+        String composeGreeting(boolean retry, String activity_3);
+    }
+
+
     @WorkflowInterface
     public interface GreetingChild {
         @WorkflowMethod
@@ -68,35 +74,25 @@ public class HelloActivity {
 
     }
 
-    public static class GreetingChildImpl implements GreetingChild {
-
-        @Override
-        public String composeGreeting(String greeting, String name) {
-
-            Workflow.sleep(Duration.ofSeconds(2));
-
-            return greeting + " " + name + "!";
-        }
-
-
-    }
 
     // Define the workflow implementation which implements our getGreeting workflow method.
     public static class GreetingWorkflowImpl implements GreetingWorkflow {
 
 
         private static int test = 1;
-        private final GreetingActivities activities =
+        private final GreetingActivities3 activities =
                 Workflow.newActivityStub(
-                        GreetingActivities.class,
+                        GreetingActivities3.class,
                         ActivityOptions.newBuilder()
-                                .setTaskQueue(TASK_QUEUE)
-                                .setScheduleToCloseTimeout(
-                                        Duration.ofSeconds(2)
-                                )
+                                .setTaskQueue(WorkerSsl.TASK_QUEUE)
                                 .setStartToCloseTimeout(
                                         Duration.ofSeconds(2)
-                                ).build());
+
+                                )
+                                .setScheduleToStartTimeout(Duration.ofSeconds(2)).setRetryOptions(RetryOptions.newBuilder().setBackoffCoefficient(2)
+                                        .setMaximumInterval(Duration.ofMinutes(2)).build()).build());
+
+
         private final GreetingActivities localActivities =
                 Workflow.newLocalActivityStub(
                         GreetingActivities.class,
@@ -115,43 +111,35 @@ public class HelloActivity {
         public String getGreeting(String name) {
 
 
-            Workflow.sleep(Duration.ofMinutes(1));
-
+            Workflow.getInfo().getAttempt();
 
             System.out.println("starting....2");
+            System.out.println("starting....2");
+            System.out.println("starting....2");
+            System.out.println("starting....2");
+            System.out.println("starting....2");
 
-            activities.composeGreeting(true, "activity_3");
-
-            System.out.println("  Attemp " + Workflow.getInfo().getAttempt());
-
-            boolean b = true;
-            if (b) {
-
-                //       throw ApplicationFailure.newFailureWithCause("message", "my exceptino", new Exception("es throwable "), 1,2,3);
+            if(true){
+                //throw new NullPointerException("My exception");
             }
 
 
-            Workflow.sleep(2000);
+            while(name != null){
 
 
-            int version = Workflow.getVersion("continueAs", Workflow.DEFAULT_VERSION, 1);
-            if (version == Workflow.DEFAULT_VERSION) {
-               // Workflow.continueAsNew(name);
+
+                Async.procedure(activities::composeGreeting, true, "activity_3");
+                Async.procedure(activities::composeGreeting, true, "activity_3");
+                Async.procedure(activities::composeGreeting, true, "activity_3");
+                Async.procedure(activities::composeGreeting, true, "activity_3");
+                Async.procedure(activities::composeGreeting, true, "activity_3");
+
+
+                activities.composeGreeting(true, "activity_3");
 
             }
-
-
-            //WorkflowTaskScheduled
-            //WorkflowTaskStarted
-            //WorkflowTaskCompleted
-            //WorkflowExecutionCompleted
 
             return "hello";
-
-
-            //Don't want to wait the child workflow to complete/fails
-            //this does not send any command to the server (same with async activities)
-            //Promise<String> greeting = Async.function(child::composeGreeting, "Hello", name);
 
         }
 
@@ -170,6 +158,9 @@ public class HelloActivity {
 
         @Override
         public String composeGreeting(boolean retry, String activity) {
+
+
+            //throw new NullPointerException("esto es una prueba");
 
 
             return activity;

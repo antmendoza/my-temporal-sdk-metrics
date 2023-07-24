@@ -20,22 +20,25 @@
 package com.antmendoza.temporal.codec;
 
 import com.antmendoza.temporal.SslContextBuilderProvider;
-import io.temporal.activity.ActivityInterface;
-import io.temporal.activity.ActivityMethod;
-import io.temporal.activity.ActivityOptions;
+import io.temporal.activity.*;
+import io.temporal.api.workflowservice.v1.GetSystemInfoRequest;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.client.WorkflowOptions;
+import io.temporal.common.RetryOptions;
 import io.temporal.common.converter.CodecDataConverter;
 import io.temporal.common.converter.DefaultDataConverter;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 import io.temporal.worker.Worker;
 import io.temporal.worker.WorkerFactory;
+import io.temporal.worker.WorkerFactoryOptions;
+import io.temporal.worker.WorkerOptions;
 import io.temporal.workflow.Workflow;
 import io.temporal.workflow.WorkflowInterface;
 import io.temporal.workflow.WorkflowMethod;
 
+import java.lang.management.ManagementFactory;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Map;
@@ -53,7 +56,15 @@ public class EncryptedPayloadsActivity {
         new EncryptedPayloadsActivity().createWorkflow(new Customer("1234", "firstname1 surname1 lastSurname"));
     }
 
-    public  void createWorkflow(Customer customer) {
+    private static Map<String, String> generateSearch(Customer customer, String workflowId) {
+        return Map.of(
+                "CustomerId", customer.customerId(),
+                "CustomerName", customer.customerName() + " " + " name ",
+                "MyCustomWid", workflowId
+        );
+    }
+
+    public void createWorkflow(Customer customer) {
 
 
         // gRPC stubs wrapper that talks to the local docker instance of temporal service.
@@ -61,6 +72,11 @@ public class EncryptedPayloadsActivity {
                 .setSslContext(sslContextBuilderProvider.getSslContext())
                 .setTarget(sslContextBuilderProvider.getTargetEndpoint())
                 .build());
+
+
+
+        service.blockingStub().getSystemInfo(GetSystemInfoRequest.newBuilder().build());
+
         // client that can be used to start and signal workflows
         WorkflowClient client =
                 WorkflowClient.newInstance(
@@ -74,7 +90,7 @@ public class EncryptedPayloadsActivity {
                                 .build());
 
         // worker factory that can be used to create workers for specific task queues
-        WorkerFactory factory = WorkerFactory.newInstance(client);
+        WorkerFactory factory = WorkerFactory.newInstance(client, WorkerFactoryOptions.newBuilder().build());
         // Worker that listens on a task queue and hosts both workflow and activity implementations.
         Worker worker = factory.newWorker(TASK_QUEUE);
         worker.registerWorkflowImplementationTypes(GreetingWorkflowImpl.class);
@@ -83,29 +99,29 @@ public class EncryptedPayloadsActivity {
         factory.start();
 
 
-
-
         // Start a workflow execution. Usually this is done from another program.
         // Uses task queue from the GreetingWorkflow @WorkflowMethod annotation.
         Object customerId;
         String workflowId = customer.wfId();
-        Map<String, String> searchAttributes = Map.of(
-                "CustomerId", customer.customerId(),
-                "CustomerName", customer.customerName(),
-                "MyCustomWid", workflowId
-        );
+        //generateSearch(customer, workflowId);
+
+        System.out.println(">>>>>>>>>>>>> Starting workflow with WorkflowId=" + workflowId);
+
         GreetingWorkflow workflow =
                 client.newWorkflowStub(
                         GreetingWorkflow.class,
                         WorkflowOptions.newBuilder()
-//                                .setSearchAttributes(searchAttributes)
+                                .setSearchAttributes(generateSearch(customer, workflowId))
                                 .setWorkflowId(workflowId)
                                 .setTaskQueue(TASK_QUEUE)
                                 .build());
         // Execute a workflow waiting for it to complete. See {@link
         // io.temporal.samples.hello.HelloSignal}
         // for an example of starting workflow without waiting synchronously for its result.
-        String greeting = workflow.getGreeting("My secret text");
+        String greeting = workflow.getGreeting(customer);
+
+        System.out.println(">>>>>>>>>>>>> End workflow with WorkflowId=" + workflowId);
+
         System.out.println(greeting);
         // System.exit(0);
     }
@@ -115,8 +131,9 @@ public class EncryptedPayloadsActivity {
      */
     @WorkflowInterface
     public interface GreetingWorkflow {
+
         @WorkflowMethod
-        String getGreeting(String name);
+        String getGreeting(Customer name);
     }
 
     /**
@@ -138,13 +155,11 @@ public class EncryptedPayloadsActivity {
     }
 
 
-
     /**
      * GreetingWorkflow implementation that calls GreetingsActivities#composeGreeting.
      */
     public static class GreetingWorkflowImpl implements GreetingWorkflow {
 
-        private String signal;
         /**
          * Activity stub implements activity interface and proxies calls to it to Temporal activity
          * invocations. Because activities are reentrant, only a single stub can be used for multiple
@@ -153,15 +168,26 @@ public class EncryptedPayloadsActivity {
         private final GreetingActivities activities =
                 Workflow.newActivityStub(
                         GreetingActivities.class,
-                        ActivityOptions.newBuilder().setStartToCloseTimeout(Duration.ofSeconds(2)).build());
-
+                        ActivityOptions.newBuilder()
+                                .setCancellationType(ActivityCancellationType.WAIT_CANCELLATION_COMPLETED)
+                                .setHeartbeatTimeout(Duration.ofSeconds(5))
+                                .setRetryOptions(RetryOptions.newBuilder().build())
+                                .setStartToCloseTimeout(Duration.ofHours(2))
+                                .build());
+        private String signal;
+//http://127.0.0.1:8888
         @Override
-        public String getGreeting(String name) {
+        public String getGreeting(Customer customer) {
             // This is a blocking call that returns only after the activity has completed.
 
-            String hello = activities.composeGreeting("Hello", name);
+            //Workflow.sleep(Duration.ofMinutes(5));
 
-            return hello;
+            String s = activities.composeGreeting("Hello", customer.customerName());
+            //int a = 3/0;
+
+            //Workflow.sleep(30000);
+
+            return s;
         }
     }
 

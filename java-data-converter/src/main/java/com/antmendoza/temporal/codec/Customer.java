@@ -4,8 +4,9 @@ public record Customer(String customerId, String customerName) {
 
 
 
+
     public String wfId() {
-        return "wfId "+customerId + '-' +customerName.replaceAll(" ", "_");
+        return "Custom-wid- "+customerId + '-' +customerName.replaceAll(" ", "_");
     }
 
 }

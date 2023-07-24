@@ -21,9 +21,9 @@
     </build>
 
     <properties>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <temporal-sdk.version>1.16.0</temporal-sdk.version>
+        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <temporal-sdk.version>1.20.0</temporal-sdk.version>
     </properties>
 
     <dependencies>
@@ -33,6 +33,14 @@
             <artifactId>json-path</artifactId>
             <version>2.6.0</version><!--INO-MVN-MAN-VER$-->
         </dependency>
+
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk15on</artifactId>
+            <version>1.70</version>
+        </dependency>
+
+
 
         <dependency>
             <groupId>io.temporal</groupId>
@@ -59,11 +67,7 @@
 
 
 
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-services</artifactId>
-            <version>1.48.1</version>
-        </dependency>
+
 
 
 

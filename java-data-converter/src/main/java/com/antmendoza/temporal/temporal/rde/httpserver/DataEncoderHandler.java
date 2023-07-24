@@ -59,15 +59,12 @@ class DataEncoderHandler implements HttpHandler {
         }
 
 
-
-
         boolean isMethodPOST = exchange.getRequestMethod().equals("POST");
         boolean isMethodOPTIONS = exchange.getRequestMethod().equalsIgnoreCase("OPTIONS");
         if (!isMethodPOST && !isMethodOPTIONS) {
             exchange.sendResponseHeaders(HttpServletResponse.SC_METHOD_NOT_ALLOWED, -1);
             return;
         }
-
 
         exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "*");
         exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");

@@ -19,7 +19,7 @@ public class Main {
             CompletableFuture.runAsync(() -> {
                 try {
 
-                    new EncryptedPayloadsActivity().createWorkflow(new Customer("1234", "firstname1 surname1 lastSurname"));
+                    new EncryptedPayloadsActivity().createWorkflow(new Customer("3454345", "Temporal.io"));
 
                 } catch (Exception e) {
                     e.printStackTrace();

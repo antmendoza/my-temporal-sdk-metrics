@@ -22,14 +22,16 @@ package com.antmendoza.temporal;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.client.WorkflowOptions;
-import io.temporal.common.RetryOptions;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 
-import java.time.Duration;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Starter {
+
+    String a = "{\"a\":\"a\"}";
 
     public static void main(String[] args) {
 
@@ -38,7 +40,7 @@ public class Starter {
         WorkflowServiceStubs service =
                 WorkflowServiceStubs.newServiceStubs(
                         WorkflowServiceStubsOptions.newBuilder()
-                                .setMetricsScope(ScopeBuilder.getScope())
+                                //.setMetricsScope(ScopeBuilder.getScope())
                                 .setSslContext(sslContextBuilderProvider.getSslContext())
                                 .setTarget(sslContextBuilderProvider.getTargetEndpoint())
                                 .build());
@@ -51,6 +53,8 @@ public class Starter {
         WorkflowClient client = WorkflowClient.newInstance(service, clientOptions);
 
 
+        final int[] a = {0};
+
         while (true) {
 
 
@@ -62,9 +66,8 @@ public class Starter {
 
                 WorkflowOptions workflowOptions =
                         WorkflowOptions.newBuilder()
-                                //                 .setWorkflowId("localhost.test.1")
-                                .setRetryOptions(RetryOptions.newBuilder().setMaximumAttempts(3).build())
-                                .setWorkflowTaskTimeout(Duration.ofMinutes(30))
+                                //.setWorkflowId("localhost.test.1"+a)
+                                //.setRetryOptions(RetryOptions.newBuilder().setMaximumAttempts(3).build())
                                 .setTaskQueue(WorkerSsl.TASK_QUEUE)
                                 .build();
 
@@ -72,10 +75,28 @@ public class Starter {
                 // Create typed workflow stub
                 IGreetingWorkflow workflow = client.newWorkflowStub(wfClass, workflowOptions);
 
+
+                a[0]++;
+
+
                 WorkflowClient.start(workflow::getGreeting, "Antonio");
 
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
 
-               //workflow.getGreeting("Antonio");
+//               if(a[0] % 5000 == 0){
+//                   try {
+//                       Thread.sleep(5000);
+//                   } catch (InterruptedException e) {
+//                       throw new RuntimeException(e);
+//                   }
+//               }
+
+
+                workflow.getGreeting("Antonio");
 
 
             });
@@ -92,4 +113,11 @@ public class Starter {
     }
 
 
+    private static Map<String, Object> generateSearchAttributes() {
+        Map<String, Object> searchAttributes = new HashMap<>();
+        searchAttributes.put(
+                "CustomerId",
+                "keys"); // each field can also be array such as: String[] keys = {"k1", "k2"};
+        return searchAttributes;
+    }
 }

@@ -2,16 +2,15 @@ package com.antmendoza.temporal;
 
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
-import io.temporal.serviceclient.SimpleSslContextBuilder;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 import io.temporal.worker.Worker;
 import io.temporal.worker.WorkerFactory;
 import io.temporal.worker.WorkerFactoryOptions;
 import io.temporal.worker.WorkerOptions;
+import io.temporal.workflow.Workflow;
 
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 
 public class WorkerSsl {
@@ -45,23 +44,22 @@ public class WorkerSsl {
 
 //        System.out.println(">>> " + client.getWorkflowServiceStubs().healthCheck().getStatus());
         // worker factory that can be used to create workers for specific task queues
-        WorkerFactory factory = WorkerFactory.newInstance(client, WorkerFactoryOptions.newBuilder().setWorkflowCacheSize(2000).build());
+        WorkerFactoryOptions build = WorkerFactoryOptions.newBuilder()
+                .setWorkflowCacheSize(2000)
+                .build();
+        WorkerFactory factory = WorkerFactory.newInstance(client, build);
 
         //       for (int i = 0; i <= 2; i++) {
-        createWorker(factory, TASK_QUEUE);
-        //       }
-//
+        // Worker that listens on a task queue and hosts both workflow and activslity implementations.
 
-        // timeouts, retry & heartbeat impact
-        factory.start();
-    }
 
-    private static void createWorker(WorkerFactory factory, String taskQueue) {
-        // Worker that listens on a task queue and hosts both workflow and activity implementations.
-        Worker worker = factory.newWorker(taskQueue, WorkerOptions.newBuilder()
-                .setMaxConcurrentWorkflowTaskPollers(1)
+
+
+        WorkerOptions build1 = WorkerOptions.newBuilder()
+                //.setMaxConcurrentWorkflowTaskPollers(1)
                 //.setMaxConcurrentLocalActivityExecutionSize(1)
-                .build());
+                .build();
+        Worker worker = factory.newWorker(TASK_QUEUE, build1);
 
         worker.registerWorkflowImplementationTypes(HelloActivity.GreetingWorkflowImpl.class
                 //,
@@ -69,5 +67,11 @@ public class WorkerSsl {
                 //        HelloActivity3.GreetingWorkflowImpl3.class
         );
         worker.registerActivitiesImplementations(new HelloActivity.GreetingActivitiesImpl());
+        //       }
+//
+
+        // timeouts, retry & heartbeat impact
+        factory.start();
     }
+
 }
