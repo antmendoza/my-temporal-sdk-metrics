@@ -23,10 +23,17 @@
     <properties>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.source>17</maven.compiler.source>
-        <temporal-sdk.version>1.20.0</temporal-sdk.version>
+        <temporal-sdk.version>1.21.0</temporal-sdk.version>
     </properties>
 
+
     <dependencies>
+
+        <dependency>
+            <groupId>com.thedeanda</groupId>
+            <artifactId>lorem</artifactId>
+            <version>2.1</version>
+        </dependency>
 
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>

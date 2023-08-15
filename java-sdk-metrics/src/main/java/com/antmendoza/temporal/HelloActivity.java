@@ -86,7 +86,6 @@ public class HelloActivity {
                                         Duration.ofSeconds(10)
 
                                 )
-                                .setRetryOptions(RetryOptions.newBuilder().setBackoffCoefficient().build())
                                 //.setScheduleToStartTimeout(Duration.ofSeconds(2))
                                 .build());
 

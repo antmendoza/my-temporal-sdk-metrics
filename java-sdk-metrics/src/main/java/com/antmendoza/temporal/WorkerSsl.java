@@ -26,7 +26,7 @@ public class WorkerSsl {
                 WorkflowServiceStubs.newServiceStubs(
                         WorkflowServiceStubsOptions.newBuilder()
                                 // Add metrics scope to workflow service stub options
-                                .setMetricsScope(ScopeBuilder.getScope())
+                                //.setMetricsScope(ScopeBuilder.getScope())
                                 .setSslContext(sslContextBuilderProvider.getSslContext())
                                 .setTarget(sslContextBuilderProvider.getTargetEndpoint())
                                 .build());
@@ -62,6 +62,8 @@ public class WorkerSsl {
                 .setMaxConcurrentActivityExecutionSize(size)
                 .setMaxConcurrentLocalActivityExecutionSize(size)
                 .setMaxConcurrentWorkflowTaskExecutionSize(size)
+                .setMaxConcurrentActivityTaskPollers(500)
+                .setMaxConcurrentWorkflowTaskPollers(500)
                 .build();
         Worker worker = factory.newWorker(TASK_QUEUE, build1);
 
