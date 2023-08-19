@@ -19,9 +19,11 @@
 
 package com.antmendoza.temporal;
 
+import io.temporal.api.common.v1.WorkflowExecution;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.client.WorkflowOptions;
+import io.temporal.client.WorkflowStub;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 
@@ -73,13 +75,20 @@ public class Starter {
 
 
                 // Create typed workflow stub
-                IGreetingWorkflow workflow = client.newWorkflowStub(wfClass, workflowOptions);
 
 
                 a[0]++;
 
+                IGreetingWorkflow workflow = client.newWorkflowStub(wfClass, workflowOptions);
+                WorkflowClient.start(workflow::getGreeting, "input");
+                WorkflowStub untyped = WorkflowStub.fromTyped(workflow);
+                untyped.getResultAsync( String.class).thenApply(result -> {
+                    System.out.println("result " + result);
+                    return result;
+                });
 
-                WorkflowClient.start(workflow::getGreeting, "Antonio");
+
+
 
 
 //               if(a[0] % 5000 == 0){

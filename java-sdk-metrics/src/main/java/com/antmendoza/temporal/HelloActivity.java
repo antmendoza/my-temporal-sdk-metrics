@@ -23,7 +23,7 @@ import io.temporal.activity.ActivityInterface;
 import io.temporal.activity.ActivityMethod;
 import io.temporal.activity.ActivityOptions;
 import io.temporal.activity.LocalActivityOptions;
-import io.temporal.common.RetryOptions;
+import io.temporal.failure.ApplicationFailure;
 import io.temporal.workflow.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,6 +107,7 @@ public class HelloActivity {
         public String getGreeting(String name) {
 
 
+
             List<Promise<String>> result = new ArrayList<>();
 
             result.add(Async.function(activities::sleepForSeconds, 3));
@@ -118,6 +119,13 @@ public class HelloActivity {
 
 
             Promise.allOf(result).get();
+
+
+
+            if(name != null){
+            //    throw ApplicationFailure.newFailure("","", null);
+            }
+
 
             return "hello";
 
