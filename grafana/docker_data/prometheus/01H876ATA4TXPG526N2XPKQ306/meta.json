@@ -1,0 +1,17 @@
+{
+	"ulid": "01H876ATA4TXPG526N2XPKQ306",
+	"minTime": 1692424915841,
+	"maxTime": 1692432000000,
+	"stats": {
+		"numSamples": 65569,
+		"numSeries": 1424,
+		"numChunks": 1424
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01H876ATA4TXPG526N2XPKQ306"
+		]
+	},
+	"version": 1
+}
