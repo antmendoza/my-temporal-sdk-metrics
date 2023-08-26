@@ -44,7 +44,7 @@ public class WorkerSsl {
 
 //        System.out.println(">>> " + client.getWorkflowServiceStubs().healthCheck().getStatus());
         // worker factory that can be used to create workers for specific task queues
-        int size = 20;
+        int size = 10;
         WorkerFactoryOptions build = WorkerFactoryOptions.newBuilder()
                 .setWorkflowCacheSize(size)
                 .build();
@@ -53,19 +53,25 @@ public class WorkerSsl {
         //       for (int i = 0; i <= 2; i++) {
         // Worker that listens on a task queue and hosts both workflow and activslity implementations.
 
-
-
-
         WorkerOptions build1 = WorkerOptions.newBuilder()
                 //.setMaxConcurrentWorkflowTaskPollers(1)
                 //.setMaxConcurrentLocalActivityExecutionSize(1)
                 .setMaxConcurrentActivityExecutionSize(size)
                 .setMaxConcurrentLocalActivityExecutionSize(size)
                 .setMaxConcurrentWorkflowTaskExecutionSize(size)
-                .setMaxConcurrentActivityTaskPollers(500)
-                .setMaxConcurrentWorkflowTaskPollers(500)
+ //               .setMaxConcurrentActivityTaskPollers(500)
+ //               .setMaxConcurrentWorkflowTaskPollers(500)
                 .build();
-        Worker worker = factory.newWorker(TASK_QUEUE, build1);
+        extracted(factory, build1, TASK_QUEUE);
+        //       }
+//
+
+        // timeouts, retry & heartbeat impact
+        factory.start();
+    }
+
+    private static void extracted(WorkerFactory factory, WorkerOptions build1, String taskQueue) {
+        Worker worker = factory.newWorker(taskQueue, build1);
 
         worker.registerWorkflowImplementationTypes(HelloActivity.GreetingWorkflowImpl.class
                 //,
@@ -73,11 +79,6 @@ public class WorkerSsl {
                 //        HelloActivity3.GreetingWorkflowImpl3.class
         );
         worker.registerActivitiesImplementations(new HelloActivity.GreetingActivitiesImpl());
-        //       }
-//
-
-        // timeouts, retry & heartbeat impact
-        factory.start();
     }
 
 }

@@ -19,17 +19,14 @@
 
 package com.antmendoza.temporal;
 
-import io.temporal.api.common.v1.WorkflowExecution;
-import io.temporal.client.WorkflowClient;
-import io.temporal.client.WorkflowClientOptions;
-import io.temporal.client.WorkflowOptions;
-import io.temporal.client.WorkflowStub;
+import io.temporal.client.*;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class Starter {
 
@@ -55,9 +52,13 @@ public class Starter {
         WorkflowClient client = WorkflowClient.newInstance(service, clientOptions);
 
 
+//        Stream<WorkflowExecutionMetadata> result = client.listExecutions("CloseTime < '2022-06-08T16:46:34-08:00'");
+
+
+
         final int[] a = {0};
 
-        while (true) {
+        while (isaBoolean()) {
 
 
             Collections.singletonList(
@@ -89,15 +90,13 @@ public class Starter {
 
 
 
-
-
-//               if(a[0] % 5000 == 0){
-//                   try {
-//                       Thread.sleep(5000);
-//                   } catch (InterruptedException e) {
-//                       throw new RuntimeException(e);
-//                   }
-//               }
+               if(a[0] % 10 == 0){
+                   try {
+                       Thread.sleep(500);
+                   } catch (InterruptedException e) {
+                       throw new RuntimeException(e);
+                   }
+               }
 
 
                 //workflow.getGreeting("Antonio");
@@ -114,6 +113,10 @@ public class Starter {
         //System.out.println("Greeting: " + greeting);
 
         //System.exit(0);
+    }
+
+    private static boolean isaBoolean() {
+        return true;
     }
 
 
