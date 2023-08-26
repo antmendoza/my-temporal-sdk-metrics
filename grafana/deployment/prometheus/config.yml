@@ -80,7 +80,7 @@ scrape_configs:
 
       # Local app targets (if configured)
       - targets:
-          - 'host.docker.internal:9090'
+          - 'host.docker.internal:9091'
         labels:
           group: 'sdk-metrics'
       # Docker metrics
