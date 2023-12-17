@@ -1,5 +1,6 @@
 package com.antmendoza.temporal;
 
+import com.uber.m3.util.ImmutableMap;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.serviceclient.WorkflowServiceStubs;
@@ -8,9 +9,8 @@ import io.temporal.worker.Worker;
 import io.temporal.worker.WorkerFactory;
 import io.temporal.worker.WorkerFactoryOptions;
 import io.temporal.worker.WorkerOptions;
-import io.temporal.workflow.Workflow;
 
-import java.util.Date;
+import static com.antmendoza.temporal.WorkerSsl9.maxTaskQueueActivitiesPerSecond;
 
 
 public class WorkerSsl {
@@ -26,7 +26,10 @@ public class WorkerSsl {
                 WorkflowServiceStubs.newServiceStubs(
                         WorkflowServiceStubsOptions.newBuilder()
                                 // Add metrics scope to workflow service stub options
-                                .setMetricsScope(ScopeBuilder.getScope())
+                                .setMetricsScope(new ScopeBuilder().create(8071, ImmutableMap.of(
+                                        "worker",
+                                        "WorkerSsl")
+                                ))
                                 .setSslContext(sslContextBuilderProvider.getSslContext())
                                 .setTarget(sslContextBuilderProvider.getTargetEndpoint())
                                 .build());
@@ -44,9 +47,7 @@ public class WorkerSsl {
 
 //        System.out.println(">>> " + client.getWorkflowServiceStubs().healthCheck().getStatus());
         // worker factory that can be used to create workers for specific task queues
-        int size = 10;
         WorkerFactoryOptions build = WorkerFactoryOptions.newBuilder()
-                .setWorkflowCacheSize(size)
                 .build();
         WorkerFactory factory = WorkerFactory.newInstance(client, build);
 
@@ -54,13 +55,7 @@ public class WorkerSsl {
         // Worker that listens on a task queue and hosts both workflow and activslity implementations.
 
         WorkerOptions build1 = WorkerOptions.newBuilder()
-                //.setMaxConcurrentWorkflowTaskPollers(1)
-                //.setMaxConcurrentLocalActivityExecutionSize(1)
-                .setMaxConcurrentActivityExecutionSize(size)
-                .setMaxConcurrentLocalActivityExecutionSize(size)
-                .setMaxConcurrentWorkflowTaskExecutionSize(size)
- //               .setMaxConcurrentActivityTaskPollers(500)
- //               .setMaxConcurrentWorkflowTaskPollers(500)
+                .setMaxTaskQueueActivitiesPerSecond(maxTaskQueueActivitiesPerSecond)
                 .build();
         extracted(factory, build1, TASK_QUEUE);
         //       }
@@ -73,11 +68,8 @@ public class WorkerSsl {
     private static void extracted(WorkerFactory factory, WorkerOptions build1, String taskQueue) {
         Worker worker = factory.newWorker(taskQueue, build1);
 
-        worker.registerWorkflowImplementationTypes(HelloActivity.GreetingWorkflowImpl.class
-                //,
-                // HelloActivity2.GreetingWorkflowImpl2.class,
-                //        HelloActivity3.GreetingWorkflowImpl3.class
-        );
+
+        worker.registerWorkflowImplementationTypes(HelloActivity.GreetingWorkflowImpl.class);
         worker.registerActivitiesImplementations(new HelloActivity.GreetingActivitiesImpl());
     }
 

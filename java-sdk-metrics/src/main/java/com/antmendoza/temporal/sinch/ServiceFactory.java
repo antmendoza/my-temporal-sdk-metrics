@@ -21,7 +21,7 @@ public class ServiceFactory {
                     WorkflowServiceStubs.newServiceStubs(
                             WorkflowServiceStubsOptions.newBuilder()
                                     // Add metrics scope to workflow service stub options
-                                    .setMetricsScope(ScopeBuilder.getScope())
+                                    //.setMetricsScope(ScopeBuilder.getScope())
                                     .setSslContext(sslContextBuilderProvider.getSslContext())
                                     .setTarget(sslContextBuilderProvider.getTargetEndpoint())
                                     .build());
@@ -34,7 +34,7 @@ public class ServiceFactory {
                 WorkflowServiceStubs.newServiceStubs(
                         WorkflowServiceStubsOptions.newBuilder()
                                 // Add metrics scope to workflow service stub options
-                                .setMetricsScope(ScopeBuilder.getScope())
+                                //.setMetricsScope(ScopeBuilder.getScope())
                                 .build());
         return service;
 

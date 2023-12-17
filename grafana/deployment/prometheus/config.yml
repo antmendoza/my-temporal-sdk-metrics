@@ -22,9 +22,15 @@ scrape_configs:
 
       # Local app targets (if configured)
       - targets:
+          - 'host.docker.internal:8071'
+          - 'host.docker.internal:8072'
+          - 'host.docker.internal:8073'
+          - 'host.docker.internal:8074'
+          - 'host.docker.internal:8075'
+          - 'host.docker.internal:8076'
           - 'host.docker.internal:8077'
           - 'host.docker.internal:8078'
-          - 'host.docker.internal:9091'
+          - 'host.docker.internal:8079'
         labels:
           group: 'sdk-metrics'
       # Docker metrics

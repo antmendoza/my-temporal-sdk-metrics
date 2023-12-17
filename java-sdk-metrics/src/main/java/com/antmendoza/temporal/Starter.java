@@ -23,6 +23,7 @@ import io.temporal.client.*;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +31,6 @@ import java.util.stream.Stream;
 
 public class Starter {
 
-    String a = "{\"a\":\"a\"}";
 
     public static void main(String[] args) {
 
@@ -61,7 +61,14 @@ public class Starter {
         while (isaBoolean()) {
 
 
-            Collections.singletonList(
+            Arrays.asList(
+                    HelloActivity.GreetingWorkflow.class,
+                    HelloActivity.GreetingWorkflow.class,
+                    HelloActivity.GreetingWorkflow.class,
+                    HelloActivity.GreetingWorkflow.class,
+                    HelloActivity.GreetingWorkflow.class,
+                    HelloActivity.GreetingWorkflow.class,
+                    HelloActivity.GreetingWorkflow.class,
                     HelloActivity.GreetingWorkflow.class
                     //,HelloActivity2.GreetingWorkflow2.class
                     //,HelloActivity3.GreetingWorkflow3.class
@@ -83,20 +90,22 @@ public class Starter {
                 IGreetingWorkflow workflow = client.newWorkflowStub(wfClass, workflowOptions);
                 WorkflowClient.start(workflow::getGreeting, "input");
                 WorkflowStub untyped = WorkflowStub.fromTyped(workflow);
-                untyped.getResultAsync( String.class).thenApply(result -> {
-                    System.out.println("result " + result);
-                    return result;
-                });
+//                untyped.getResultAsync(String.class).thenApply(result -> {
+//                    System.out.println("result " + result);
+//                    return result;
+//                });
 
 
 
-               if(a[0] % 10 == 0){
-                   try {
-                       Thread.sleep(500);
-                   } catch (InterruptedException e) {
-                       throw new RuntimeException(e);
-                   }
-               }
+
+                if (a[0] % 10 == 0) {
+
+                    try {
+                        //Thread.sleep(500);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
 
 
                 //workflow.getGreeting("Antonio");

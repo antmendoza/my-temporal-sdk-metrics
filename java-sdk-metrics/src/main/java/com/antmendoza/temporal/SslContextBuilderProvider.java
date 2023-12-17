@@ -19,8 +19,8 @@ public class SslContextBuilderProvider {
     public SslContext getSslContext() {
 
         try {
-            InputStream clientCert = new FileInputStream(properties.temporal_cert_location);
-            InputStream clientKey = new FileInputStream(properties.temporal_key_location);
+            InputStream clientCert = getClass().getResourceAsStream(properties.temporal_cert_location);
+            InputStream clientKey = getClass().getResourceAsStream(properties.temporal_key_location);
             return SimpleSslContextBuilder.forPKCS8(clientCert, clientKey).build();
         } catch (Exception e) {
             throw new RuntimeException(e);

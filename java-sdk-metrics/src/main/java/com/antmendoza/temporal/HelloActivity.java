@@ -19,18 +19,17 @@
 
 package com.antmendoza.temporal;
 
+import io.temporal.activity.Activity;
 import io.temporal.activity.ActivityInterface;
 import io.temporal.activity.ActivityMethod;
 import io.temporal.activity.ActivityOptions;
-import io.temporal.activity.LocalActivityOptions;
-import io.temporal.failure.ApplicationFailure;
+import io.temporal.common.RetryOptions;
 import io.temporal.workflow.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -49,9 +48,6 @@ public class HelloActivity {
         @SignalMethod
         void waitForName(String name);
     }
-
-
-
 
 
     @ActivityInterface
@@ -76,7 +72,6 @@ public class HelloActivity {
     public static class GreetingWorkflowImpl implements GreetingWorkflow {
 
 
-        private static int test = 1;
         private final GreetingActivities3 activities =
                 Workflow.newActivityStub(
                         GreetingActivities3.class,
@@ -84,19 +79,12 @@ public class HelloActivity {
                                 .setTaskQueue(WorkerSsl.TASK_QUEUE)
                                 .setStartToCloseTimeout(
                                         Duration.ofSeconds(10)
-
                                 )
+                                .setRetryOptions(RetryOptions.newBuilder()
+                                        .setBackoffCoefficient(1)
+                                        .build())
                                 //.setScheduleToStartTimeout(Duration.ofSeconds(2))
                                 .build());
-
-
-        private final GreetingActivities3 localActivities =
-                Workflow.newLocalActivityStub(
-                        GreetingActivities3.class,
-                        LocalActivityOptions.newBuilder()
-                                //.setRetryOptions(RetryOptions.newBuilder().setMaximumAttempts(2).build())
-                                //.setCancellationType(WAIT_CANCELLATION_COMPLETED)
-                                .setStartToCloseTimeout(Duration.ofSeconds(10)).build());
         private String name;
 
 
@@ -107,24 +95,23 @@ public class HelloActivity {
         public String getGreeting(String name) {
 
 
-
-            List<Promise<String>> result = new ArrayList<>();
-
-            result.add(Async.function(activities::sleepForSeconds, 3));
-            result.add(Async.function(activities::sleepForSeconds, 3));
+            final List<Promise<String>> results = new ArrayList<>();
 
 
-            result.add(Async.function(localActivities::sleepForSeconds, 1));
-            result.add(Async.function(localActivities::sleepForSeconds, 1));
+            results.add(Async.function(() -> activities.sleepForSeconds(1)));
+            results.add(Async.function(() -> activities.sleepForSeconds(1)));
+            results.add(Async.function(() -> activities.sleepForSeconds(1)));
+            results.add(Async.function(() -> activities.sleepForSeconds(1)));
+            results.add(Async.function(() -> activities.sleepForSeconds(1)));
+            results.add(Async.function(() -> activities.sleepForSeconds(1)));
+            results.add(Async.function(() -> activities.sleepForSeconds(1)));
+            results.add(Async.function(() -> activities.sleepForSeconds(1)));
+            results.add(Async.function(() -> activities.sleepForSeconds(1)));
+            results.add(Async.function(() -> activities.sleepForSeconds(1)));
+            results.add(Async.function(() -> activities.sleepForSeconds(1)));
+            results.add(Async.function(() -> activities.sleepForSeconds(1)));
 
-
-            Promise.allOf(result).get();
-
-
-
-            if(name != null){
-            //    throw ApplicationFailure.newFailure("","", null);
-            }
+            Promise.allOf(results).get();
 
 
             return "hello";
@@ -142,19 +129,53 @@ public class HelloActivity {
      * Simple activity implementation, that concatenates two strings.
      */
     public static class GreetingActivitiesImpl implements GreetingActivities3 {
-        private static final Logger log = LoggerFactory.getLogger(GreetingActivitiesImpl.class);
 
+
+        private static final Logger log = LoggerFactory.getLogger("-");
+        private static final Map<String, Integer> map = new HashMap<>();
+        int activity = 0;
 
         @Override
         public String sleepForSeconds(int seconds) {
 
+
+            Date date = new Date();
+            String second_ = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+            int counter = map.get(second_) == null ? 1 : map.get(second_) + 1;
+            map.put(second_, counter);
+
+            log.info("Adding metric " + second_ + " : " + counter);
+
+            Activity.getExecutionContext().getMetricsScope().counter("custom_activity_retries").inc(1);
+
+            activity++;
+
+
+
+            if(Activity.getExecutionContext().getInfo().getAttempt() < 5)
+            {
+          //      throw new RuntimeException("fake...");
+            }
+
             try {
-                Thread.sleep(seconds * 1000);
+                Thread.sleep(seconds *  500L);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+
+            if (activity % 2 == 0) {
+                 throw new RuntimeException("fake failure");
+            }
+
+
             return null;
         }
+
+        public int getRandomNumber(int min, int max) {
+            return (int) ((Math.random() * (max - min)) + min);
+        }
+
     }
+
 
 }

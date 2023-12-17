@@ -1,5 +1,6 @@
 package com.antmendoza.temporal;
 
+import com.uber.m3.util.ImmutableMap;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.serviceclient.WorkflowServiceStubs;
@@ -8,6 +9,8 @@ import io.temporal.worker.Worker;
 import io.temporal.worker.WorkerFactory;
 import io.temporal.worker.WorkerFactoryOptions;
 import io.temporal.worker.WorkerOptions;
+
+import static com.antmendoza.temporal.WorkerSsl9.maxTaskQueueActivitiesPerSecond;
 
 
 public class WorkerSsl2 {
@@ -19,11 +22,24 @@ public class WorkerSsl2 {
 
         // Create SSL enabled client by passing SslContext, created by SimpleSslContextBuilder.
         SslContextBuilderProvider sslContextBuilderProvider = new SslContextBuilderProvider();
+        String ENV = "PQL_PORT";
+
+
+        System.out.println("PORT : " +System.getenv(ENV));
+
+        int port = Integer.parseInt(System.getenv(ENV));
+
+        System.out.println("PORT : " + port);
+
         WorkflowServiceStubs service =
                 WorkflowServiceStubs.newServiceStubs(
                         WorkflowServiceStubsOptions.newBuilder()
                                 // Add metrics scope to workflow service stub options
-                                .setMetricsScope(ScopeBuilder.getScope())
+                                //or it is a better option to have the rate limit on workflow code itself?
+                                .setMetricsScope(new ScopeBuilder().create(port, ImmutableMap.of(
+                                        "worker",
+                                        "WorkerSsl2")
+                                ))
                                 .setSslContext(sslContextBuilderProvider.getSslContext())
                                 .setTarget(sslContextBuilderProvider.getTargetEndpoint())
                                 .build());
@@ -41,9 +57,7 @@ public class WorkerSsl2 {
 
 //        System.out.println(">>> " + client.getWorkflowServiceStubs().healthCheck().getStatus());
         // worker factory that can be used to create workers for specific task queues
-        int size = 20;
         WorkerFactoryOptions build = WorkerFactoryOptions.newBuilder()
-                .setWorkflowCacheSize(size)
                 .build();
         WorkerFactory factory = WorkerFactory.newInstance(client, build);
 
@@ -51,17 +65,18 @@ public class WorkerSsl2 {
         // Worker that listens on a task queue and hosts both workflow and activslity implementations.
 
 
+        String actions_per_second = System.getenv("ACTIONS_PER_SECOND");
+        System.out.println("Actions per second" + actions_per_second);
+        int actions = Integer.parseInt(actions_per_second);
+
+
+        System.out.println("Actions per second" + actions);
 
 
         WorkerOptions build1 = WorkerOptions.newBuilder()
-                //.setMaxConcurrentWorkflowTaskPollers(1)
-                //.setMaxConcurrentLocalActivityExecutionSize(1)
-                .setMaxConcurrentActivityExecutionSize(size)
-                .setMaxConcurrentLocalActivityExecutionSize(size)
-                .setMaxConcurrentWorkflowTaskExecutionSize(size)
-                .setMaxConcurrentActivityTaskPollers(100)
-                .setMaxConcurrentWorkflowTaskPollers(100)
+                .setMaxTaskQueueActivitiesPerSecond(actions)
                 .build();
+
         Worker worker = factory.newWorker(TASK_QUEUE, build1);
 
         worker.registerWorkflowImplementationTypes(HelloActivity.GreetingWorkflowImpl.class

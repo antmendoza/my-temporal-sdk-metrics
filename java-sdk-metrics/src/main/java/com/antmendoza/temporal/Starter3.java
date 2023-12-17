@@ -22,16 +22,16 @@ package com.antmendoza.temporal;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.client.WorkflowOptions;
+import io.temporal.client.WorkflowStub;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Starter3 {
 
-    String a = "{\"a\":\"a\"}";
 
     public static void main(String[] args) {
 
@@ -53,12 +53,23 @@ public class Starter3 {
         WorkflowClient client = WorkflowClient.newInstance(service, clientOptions);
 
 
+//        Stream<WorkflowExecutionMetadata> result = client.listExecutions("CloseTime < '2022-06-08T16:46:34-08:00'");
+
+
+
         final int[] a = {0};
 
-        while (true) {
+        while (isaBoolean()) {
 
 
-            Collections.singletonList(
+            Arrays.asList(
+                    HelloActivity.GreetingWorkflow.class,
+                    HelloActivity.GreetingWorkflow.class,
+                    HelloActivity.GreetingWorkflow.class,
+                    HelloActivity.GreetingWorkflow.class,
+                    HelloActivity.GreetingWorkflow.class,
+                    HelloActivity.GreetingWorkflow.class,
+                    HelloActivity.GreetingWorkflow.class,
                     HelloActivity.GreetingWorkflow.class
                     //,HelloActivity2.GreetingWorkflow2.class
                     //,HelloActivity3.GreetingWorkflow3.class
@@ -73,22 +84,29 @@ public class Starter3 {
 
 
                 // Create typed workflow stub
-                IGreetingWorkflow workflow = client.newWorkflowStub(wfClass, workflowOptions);
 
 
                 a[0]++;
 
+                IGreetingWorkflow workflow = client.newWorkflowStub(wfClass, workflowOptions);
+                WorkflowClient.start(workflow::getGreeting, "input");
+                WorkflowStub untyped = WorkflowStub.fromTyped(workflow);
+//                untyped.getResultAsync(String.class).thenApply(result -> {
+//                    System.out.println("result " + result);
+//                    return result;
+//                });
 
-                WorkflowClient.start(workflow::getGreeting, "Antonio");
 
 
-//               if(a[0] % 5000 == 0){
-//                   try {
-//                       Thread.sleep(5000);
-//                   } catch (InterruptedException e) {
-//                       throw new RuntimeException(e);
-//                   }
-//               }
+
+                if (a[0] % 10 == 0) {
+
+                    try {
+                        //Thread.sleep(500);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
 
 
                 //workflow.getGreeting("Antonio");
@@ -105,6 +123,10 @@ public class Starter3 {
         //System.out.println("Greeting: " + greeting);
 
         //System.exit(0);
+    }
+
+    private static boolean isaBoolean() {
+        return true;
     }
 
 
