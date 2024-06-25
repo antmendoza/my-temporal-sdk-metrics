@@ -3203,9 +3203,9 @@
                 "type": "prometheus",
                 "uid": "P7AC1CE4626B85CB6"
               },
-              "expr": "sum by (namespace) (temporal_worker_task_slots_available)",
+              "expr": "sum by (namespace, worker_type) (temporal_worker_task_slots_available)",
               "interval": "",
-              "legendFormat": "{{ namespace }}",
+              "legendFormat": "{{ namespace }} - {{ worker_type }}",
               "refId": "A"
             }
           ],

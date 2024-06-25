@@ -44,17 +44,10 @@ public class Starter {
 
         SslContextBuilderProvider sslContextBuilderProvider = new SslContextBuilderProvider();
 
-
-        final int port = 8079;
-        Scope metricsScope = new ScopeBuilder().create(port, ImmutableMap.of(
-                "client",
-                "ClientSsl_" + port)
-        );
-
         WorkflowServiceStubs service =
                 WorkflowServiceStubs.newServiceStubs(
                         WorkflowServiceStubsOptions.newBuilder()
-                                .setMetricsScope(metricsScope)
+                               // .setMetricsScope(metricsScope)
                                 .setSslContext(sslContextBuilderProvider.getSslContext())
                                 .setTarget(sslContextBuilderProvider.getTargetEndpoint())
                                 .build());

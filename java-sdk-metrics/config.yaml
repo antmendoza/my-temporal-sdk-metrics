@@ -24,6 +24,8 @@ processors:
 exporters:
   logging:
     verbosity: detailed
+  prometheusremotewrite:
+    endpoint: "http://prometheus:9090/api/v1/write"
 
 service:
   extensions: []
@@ -31,4 +33,4 @@ service:
     metrics:
       receivers: [prometheus]
       processors: [memory_limiter,batch]
-      exporters: [logging]
+      exporters: [prometheusremotewrite]

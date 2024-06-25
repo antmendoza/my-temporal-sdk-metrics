@@ -90,16 +90,10 @@ public class WorkflowHelloActivity {
 
             final List<Promise<String>> results = new ArrayList<>();
 
-
-            activities.dontSleep();
-
             results.add(Async.function(() -> activities.sleep()));
             results.add(Async.function(() -> activities.dontSleep()));
 
             Promise.allOf(results).get();
-
-            activities.dontSleep();
-
 
             return "hello";
 
@@ -144,9 +138,9 @@ public class WorkflowHelloActivity {
 
             activity++;
             //if(Activity.getExecutionContext().getInfo().getAttempt() < 6){
-            if (activity % 2 == 0) {
-                throw new RuntimeException("fake failure");
-            }
+            //if (activity % 2 == 0) {
+            //    throw new RuntimeException("fake failure");
+            //}
 
 
             return null;

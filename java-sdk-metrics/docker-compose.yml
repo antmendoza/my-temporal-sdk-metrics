@@ -4,6 +4,8 @@ services:
     image: java-worker
     build:
       dockerfile: Dockerfile
+    ports:
+      - ${PQL_PORT}:${PQL_PORT} # pprof extension
     environment:
       - MAX_TASKQUEUE_ACTIVITIES_PER_SECOND=${MAX_TASKQUEUE_ACTIVITIES_PER_SECOND}
       - PQL_PORT=${PQL_PORT}
@@ -13,6 +15,9 @@ services:
       - CACHE_SIZE=${CACHE_SIZE}
       - DISABLE_EAGER_DISPATCH=${DISABLE_EAGER_DISPATCH}
       - SLEEP_ACTIVITY_IN_MS=${SLEEP_ACTIVITY_IN_MS}
+    networks:
+      - temporal_network
+
   otel-collector:
     image: otel/opentelemetry-collector-contrib
     volumes:
@@ -27,3 +32,9 @@ services:
       - 55679:55679 # zpages extension
     depends_on:
       - java-worker
+    networks:
+      - temporal_network
+
+networks:
+  temporal_network:
+    external: true
