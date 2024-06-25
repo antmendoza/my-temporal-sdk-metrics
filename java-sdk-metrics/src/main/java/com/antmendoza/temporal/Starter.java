@@ -88,19 +88,23 @@ public class Starter {
         while (true) {
 
             CompletableFuture.runAsync(() -> {
+                try {
+                    WorkflowOptions workflowOptions =
+                            WorkflowOptions.newBuilder()
+                                    //.setWorkflowId("localhost.test.1"+a)
+                                    //.setRetryOptions(RetryOptions.newBuilder().setMaximumAttempts(3).build())
+                                    .setTaskQueue(TASK_QUEUE)
+                                    .build();
 
-                WorkflowOptions workflowOptions =
-                        WorkflowOptions.newBuilder()
-                                //.setWorkflowId("localhost.test.1"+a)
-                                //.setRetryOptions(RetryOptions.newBuilder().setMaximumAttempts(3).build())
-                                .setTaskQueue(TASK_QUEUE)
-                                .build();
 
+                    IGreetingWorkflow workflow = client.newWorkflowStub(IGreetingWorkflow.class, workflowOptions);
+                    WorkflowClient.start(workflow::getGreeting, "input");
+                    System.out.println("Starting workflow... ");
+                    WorkflowStub untyped = WorkflowStub.fromTyped(workflow);
+                }catch (Exception e){
+                    e.printStackTrace();
 
-                IGreetingWorkflow workflow = client.newWorkflowStub(IGreetingWorkflow.class, workflowOptions);
-                WorkflowClient.start(workflow::getGreeting, "input");
-                System.out.println("Starting workflow... ");
-                WorkflowStub untyped = WorkflowStub.fromTyped(workflow);
+                }
 
             });
 
