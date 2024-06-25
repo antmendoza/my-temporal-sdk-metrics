@@ -19,27 +19,42 @@
 
 package com.antmendoza.temporal;
 
-import io.temporal.client.*;
+import com.antmendoza.temporal.config.ScopeBuilder;
+import com.antmendoza.temporal.config.SslContextBuilderProvider;
+import com.antmendoza.temporal.workflow.IGreetingWorkflow;
+import com.uber.m3.tally.Scope;
+import com.uber.m3.util.ImmutableMap;
+import io.temporal.api.common.v1.WorkflowExecution;
+import io.temporal.api.workflowservice.v1.DescribeWorkflowExecutionRequest;
+import io.temporal.client.WorkflowClient;
+import io.temporal.client.WorkflowClientOptions;
+import io.temporal.client.WorkflowOptions;
+import io.temporal.client.WorkflowStub;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Stream;
+import java.util.concurrent.CompletableFuture;
+
+import static com.antmendoza.temporal.WorkerSsl.TASK_QUEUE;
 
 public class Starter {
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         SslContextBuilderProvider sslContextBuilderProvider = new SslContextBuilderProvider();
+
+
+        final int port = 8079;
+        Scope metricsScope = new ScopeBuilder().create(port, ImmutableMap.of(
+                "client",
+                "ClientSsl_" + port)
+        );
 
         WorkflowServiceStubs service =
                 WorkflowServiceStubs.newServiceStubs(
                         WorkflowServiceStubsOptions.newBuilder()
-                                //.setMetricsScope(ScopeBuilder.getScope())
+                                .setMetricsScope(metricsScope)
                                 .setSslContext(sslContextBuilderProvider.getSslContext())
                                 .setTarget(sslContextBuilderProvider.getTargetEndpoint())
                                 .build());
@@ -54,86 +69,56 @@ public class Starter {
 
 //        Stream<WorkflowExecutionMetadata> result = client.listExecutions("CloseTime < '2022-06-08T16:46:34-08:00'");
 
+        if (false) {
 
+            final DescribeWorkflowExecutionRequest build = DescribeWorkflowExecutionRequest.newBuilder()
+                    .setNamespace(sslContextBuilderProvider.getNamespace())
+                    .setExecution(WorkflowExecution.newBuilder().setWorkflowId("test").build()).build();
+            try {
+                client.getWorkflowServiceStubs().blockingStub().describeWorkflowExecution(build);
 
-        final int[] a = {0};
+            } catch (Exception e) {
 
-        while (isaBoolean()) {
+            }
 
+            Thread.sleep(5000);
 
-            Arrays.asList(
-                    HelloActivity.GreetingWorkflow.class,
-                    HelloActivity.GreetingWorkflow.class,
-                    HelloActivity.GreetingWorkflow.class,
-                    HelloActivity.GreetingWorkflow.class,
-                    HelloActivity.GreetingWorkflow.class,
-                    HelloActivity.GreetingWorkflow.class,
-                    HelloActivity.GreetingWorkflow.class,
-                    HelloActivity.GreetingWorkflow.class
-                    //,HelloActivity2.GreetingWorkflow2.class
-                    //,HelloActivity3.GreetingWorkflow3.class
-            ).forEach(wfClass -> {
+        }
+
+        while (true) {
+
+            CompletableFuture.runAsync(() -> {
 
                 WorkflowOptions workflowOptions =
                         WorkflowOptions.newBuilder()
                                 //.setWorkflowId("localhost.test.1"+a)
                                 //.setRetryOptions(RetryOptions.newBuilder().setMaximumAttempts(3).build())
-                                .setTaskQueue(WorkerSsl.TASK_QUEUE)
+                                .setTaskQueue(TASK_QUEUE)
                                 .build();
 
 
-                // Create typed workflow stub
-
-
-                a[0]++;
-
-                IGreetingWorkflow workflow = client.newWorkflowStub(wfClass, workflowOptions);
+                IGreetingWorkflow workflow = client.newWorkflowStub(IGreetingWorkflow.class, workflowOptions);
                 WorkflowClient.start(workflow::getGreeting, "input");
+                System.out.println("Starting workflow... ");
                 WorkflowStub untyped = WorkflowStub.fromTyped(workflow);
-//                untyped.getResultAsync(String.class).thenApply(result -> {
-//                    System.out.println("result " + result);
-//                    return result;
-//                });
-
-
-
-
-                if (a[0] % 10 == 0) {
-
-                    try {
-                        //Thread.sleep(500);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-
-
-                //workflow.getGreeting("Antonio");
-
 
             });
 
-            //return;
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
         }
 
-
-//        String greeting = workflow.getGreeting("Antonio");
-
-        //System.out.println("Greeting: " + greeting);
-
-        //System.exit(0);
     }
+
 
     private static boolean isaBoolean() {
         return true;
     }
 
 
-    private static Map<String, Object> generateSearchAttributes() {
-        Map<String, Object> searchAttributes = new HashMap<>();
-        searchAttributes.put(
-                "CustomerId",
-                "keys"); // each field can also be array such as: String[] keys = {"k1", "k2"};
-        return searchAttributes;
-    }
 }

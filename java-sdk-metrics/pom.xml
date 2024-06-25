@@ -44,7 +44,7 @@
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>libs/</classpathPrefix>
                             <mainClass>
-                                com.antmendoza.temporal.WorkerSsl2
+                                com.antmendoza.temporal.WorkerSsl
                             </mainClass>
                         </manifest>
                     </archive>
@@ -118,11 +118,7 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
             <version>1.8.5</version>
         </dependency>
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-sync</artifactId>
-            <version>4.3.4</version>
-        </dependency>
+
 
     </dependencies>
 
