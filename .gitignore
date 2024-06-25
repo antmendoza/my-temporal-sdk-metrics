@@ -1,2 +1,2 @@
 /java-sdk-metrics/src/main/resources/certs/**
-java-sdk-metrics/target/**
+*/target
