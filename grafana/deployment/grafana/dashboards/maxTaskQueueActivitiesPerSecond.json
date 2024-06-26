@@ -3291,7 +3291,7 @@
                 "type": "prometheus",
                 "uid": "P7AC1CE4626B85CB6"
               },
-              "expr": "sum by (namespace) (temporal_workflow_active_thread_count)",
+              "expr": "sum(increase(temporal_workflow_active_thread_count[$__rate_interval])) by (namespace)",
               "interval": "",
               "legendFormat": "{{ namespace }}",
               "refId": "A"
