@@ -4,7 +4,7 @@ cd ../grafana
 
 docker compose down --remove-orphans
 
-cd ..
+cd ../java-sdk-metrics
 
 
 docker compose down --remove-orphans

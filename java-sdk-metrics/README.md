@@ -1,3 +1,6 @@
+# todo
+- add CPU and Memory to containers and expose as metric 
+
 # About this project
 
 [Main readme](../README.md)

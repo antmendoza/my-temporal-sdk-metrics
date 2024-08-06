@@ -19,11 +19,8 @@
 
 package com.antmendoza.temporal;
 
-import com.antmendoza.temporal.config.ScopeBuilder;
 import com.antmendoza.temporal.config.SslContextBuilderProvider;
-import com.antmendoza.temporal.workflow.IGreetingWorkflow;
-import com.uber.m3.tally.Scope;
-import com.uber.m3.util.ImmutableMap;
+import com.antmendoza.temporal.workflow.MyWorkflow;
 import io.temporal.api.common.v1.WorkflowExecution;
 import io.temporal.api.workflowservice.v1.DescribeWorkflowExecutionRequest;
 import io.temporal.client.WorkflowClient;
@@ -32,7 +29,6 @@ import io.temporal.client.WorkflowOptions;
 import io.temporal.client.WorkflowStub;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
-import io.temporal.workflow.Workflow;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -45,10 +41,17 @@ public class Starter {
 
         SslContextBuilderProvider sslContextBuilderProvider = new SslContextBuilderProvider();
 
+
+//        final int port = 8079;
+//        Scope metricsScope = new ScopeBuilder().create(port, ImmutableMap.of(
+//                "client",
+//                "ClientSsl_" + port)
+//        );
+
         WorkflowServiceStubs service =
                 WorkflowServiceStubs.newServiceStubs(
                         WorkflowServiceStubsOptions.newBuilder()
-                               // .setMetricsScope(metricsScope)
+                                // .setMetricsScope(metricsScope)
                                 .setSslContext(sslContextBuilderProvider.getSslContext())
                                 .setTarget(sslContextBuilderProvider.getTargetEndpoint())
                                 .build());
@@ -61,61 +64,33 @@ public class Starter {
         WorkflowClient client = WorkflowClient.newInstance(service, clientOptions);
 
 
-//        Stream<WorkflowExecutionMetadata> result = client.listExecutions("CloseTime < '2022-06-08T16:46:34-08:00'");
-
-        if (false) {
-
-            final DescribeWorkflowExecutionRequest build = DescribeWorkflowExecutionRequest.newBuilder()
-                    .setNamespace(sslContextBuilderProvider.getNamespace())
-                    .setExecution(WorkflowExecution.newBuilder().setWorkflowId("test").build()).build();
-            try {
-                client.getWorkflowServiceStubs().blockingStub().describeWorkflowExecution(build);
-
-            } catch (Exception e) {
-
-            }
-
-            Thread.sleep(5000);
-
-        }
-
+        final int millisSleep = 250;
         while (true) {
-
             CompletableFuture.runAsync(() -> {
                 try {
                     WorkflowOptions workflowOptions =
                             WorkflowOptions.newBuilder()
-                                    //.setWorkflowId("localhost.test.1"+a)
-                                    //.setRetryOptions(RetryOptions.newBuilder().setMaximumAttempts(3).build())
                                     .setTaskQueue(TASK_QUEUE)
                                     .build();
 
 
-                    IGreetingWorkflow workflow = client.newWorkflowStub(IGreetingWorkflow.class, workflowOptions);
-                    WorkflowClient.start(workflow::getGreeting, "input");
-                    System.out.println("Starting workflow... ");
-                    WorkflowStub untyped = WorkflowStub.fromTyped(workflow);
-                }catch (Exception e){
+                    MyWorkflow workflow = client.newWorkflowStub(MyWorkflow.class, workflowOptions);
+                    WorkflowClient.start(workflow::run, "input");
+                    System.out.println("Starting workflow...with after = "+ millisSleep+" ms");
+                } catch (Exception e) {
                     e.printStackTrace();
-
                 }
-
             });
 
 
             try {
-                Thread.sleep(100);
+                Thread.sleep(millisSleep);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
 
         }
 
-    }
-
-
-    private static boolean isaBoolean() {
-        return true;
     }
 
 

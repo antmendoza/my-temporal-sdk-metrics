@@ -4,8 +4,8 @@ import io.temporal.workflow.WorkflowInterface;
 import io.temporal.workflow.WorkflowMethod;
 
 @WorkflowInterface
-public interface IGreetingWorkflow {
+public interface MyWorkflow {
 
     @WorkflowMethod
-    String getGreeting(String name);
+    String run(String name);
 }

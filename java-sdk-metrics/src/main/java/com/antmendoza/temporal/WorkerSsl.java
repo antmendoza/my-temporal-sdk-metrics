@@ -90,17 +90,18 @@ public class WorkerSsl {
                 //.setMaxConcurrentActivityTaskPollers()
                 //.setMaxConcurrentActivityTaskPollers(10)
                 //.setMaxConcurrentWorkflowTaskPollers(10)
+                //.setMaxConcurrentWorkflowTaskPollers()
                 .setDisableEagerExecution(FromEnv.getDisableEagerDispatch())
                 .build();
 
         Worker worker = factory.newWorker(TASK_QUEUE, build1);
 
-        worker.registerWorkflowImplementationTypes(WorkflowHelloActivity.GreetingWorkflowImpl.class
+        worker.registerWorkflowImplementationTypes(WorkflowHelloActivity.MyWorkflowImpl.class
                 //,
                 // HelloActivity2.GreetingWorkflowImpl2.class,
                 //        HelloActivity3.GreetingWorkflowImpl3.class
         );
-        worker.registerActivitiesImplementations(new WorkflowHelloActivity.GreetingActivitiesImpl());
+        worker.registerActivitiesImplementations(new WorkflowHelloActivity.MyActivitiesImpl());
         //       }
 //
 

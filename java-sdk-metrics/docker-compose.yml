@@ -2,6 +2,7 @@ version: "3.5"
 services:
   java-worker:
     image: java-worker
+    container_name: java-worker
     build:
       dockerfile: Dockerfile
     ports:
@@ -34,6 +35,25 @@ services:
       - java-worker
     networks:
       - temporal_network
+
+
+
+#
+#  cadvisor:
+#    image: gcr.io/cadvisor/cadvisor:v0.50.0 # m1/m2 mac
+##    image: 'google/cadvisor:latest'
+#    container_name: cadvisor
+#    platform: linux/aarch64 # m1/m2 mac
+#    volumes:
+#      - /:/rootfs:ro
+#      - /var/run:/var/run:ro
+#      - /sys:/sys:ro
+#      - /var/lib/docker/:/var/lib/docker:ro
+#      - /dev/disk:/dev/disk/:ro
+#    ports:
+#      - '8085:8080'
+#    networks:
+#      - temporal_network
 
 networks:
   temporal_network:

@@ -26,6 +26,7 @@ import io.temporal.activity.ActivityInterface;
 import io.temporal.activity.ActivityMethod;
 import io.temporal.activity.ActivityOptions;
 import io.temporal.common.RetryOptions;
+import io.temporal.failure.ApplicationFailure;
 import io.temporal.workflow.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,7 @@ public class WorkflowHelloActivity {
 
 
     @ActivityInterface
-    public interface GreetingActivities3 {
+    public interface MyActivities {
 
         // Define your activity method which can be called during workflow execution
         @ActivityMethod
@@ -54,26 +55,20 @@ public class WorkflowHelloActivity {
     }
 
 
-    @WorkflowInterface
-    public interface GreetingChild {
-        @WorkflowMethod
-        String composeGreeting(String greeting, String name);
-
-
-    }
-
 
     // Define the workflow implementation which implements our getGreeting workflow method.
-    public static class GreetingWorkflowImpl implements IGreetingWorkflow {
+    public static class MyWorkflowImpl implements MyWorkflow {
 
+        private Logger logger = Workflow.getLogger(MyWorkflowImpl.class.getName());
 
-        private final GreetingActivities3 activities =
+        private final MyActivities activities =
                 Workflow.newActivityStub(
-                        GreetingActivities3.class,
+                        MyActivities.class,
                         ActivityOptions.newBuilder()
                                 .setTaskQueue(WorkerSsl.TASK_QUEUE)
                                 .setStartToCloseTimeout(
-                                        Duration.ofSeconds(10)
+                                        //setting to a very large value for demo purpose.
+                                        Duration.ofMinutes(10)
                                 )
                                 .setRetryOptions(RetryOptions.newBuilder()
                                         .setBackoffCoefficient(1)
@@ -82,18 +77,35 @@ public class WorkflowHelloActivity {
                                 .build());
 
 
-        public GreetingWorkflowImpl() {
+        public MyWorkflowImpl() {
         }
 
-        @Override
-        public String getGreeting(String name) {
+        public String run(String name) {
+
+            activities.dontSleep();
 
             final List<Promise<String>> results = new ArrayList<>();
-
             results.add(Async.function(() -> activities.sleep()));
             results.add(Async.function(() -> activities.dontSleep()));
+            results.add(Async.function(() -> activities.sleep()));
+            results.add(Async.function(() -> activities.sleep()));
+            results.add(Async.function(() -> activities.sleep()));
 
-            Promise.allOf(results).get();
+            try {
+                Promise.allOf(results).get();
+            }catch (ApplicationFailure e){
+                for (Promise<String> result : results ){
+                    if (result.getFailure() != null) {
+                        //Activity failed, do something
+                        logger.info("Activity failed " + result.getFailure());
+                    }
+
+                }
+            }
+
+
+            activities.sleep();
+
 
             return "hello";
 
@@ -105,7 +117,7 @@ public class WorkflowHelloActivity {
     /**
      * Simple activity implementation, that concatenates two strings.
      */
-    public static class GreetingActivitiesImpl implements GreetingActivities3 {
+    public static class MyActivitiesImpl implements MyActivities {
 
 
         private static final Logger log = LoggerFactory.getLogger("-");
@@ -131,6 +143,7 @@ public class WorkflowHelloActivity {
 
 
 
+
             try {
                 Thread.sleep(i);
             } catch (InterruptedException e) {
@@ -139,9 +152,10 @@ public class WorkflowHelloActivity {
 
             activity++;
             //if(Activity.getExecutionContext().getInfo().getAttempt() < 6){
-            //if (activity % 2 == 0) {
-            //    throw new RuntimeException("fake failure");
-            //}
+
+//            if (activity % 2 == 0) {
+//                throw new RuntimeException("fake failure");
+//            }
 
 
             return null;
