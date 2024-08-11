@@ -21,16 +21,14 @@ package com.antmendoza.temporal;
 
 import com.antmendoza.temporal.config.SslContextBuilderProvider;
 import com.antmendoza.temporal.workflow.MyWorkflow;
-import io.temporal.api.common.v1.WorkflowExecution;
-import io.temporal.api.workflowservice.v1.DescribeWorkflowExecutionRequest;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.client.WorkflowOptions;
-import io.temporal.client.WorkflowStub;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.antmendoza.temporal.WorkerSsl.TASK_QUEUE;
 
@@ -64,7 +62,10 @@ public class Starter {
         WorkflowClient client = WorkflowClient.newInstance(service, clientOptions);
 
 
-        final int millisSleep = 250;
+        final int millisSleep = 500;
+
+
+        final AtomicInteger input = new AtomicInteger();
         while (true) {
             CompletableFuture.runAsync(() -> {
                 try {
@@ -75,7 +76,7 @@ public class Starter {
 
 
                     MyWorkflow workflow = client.newWorkflowStub(MyWorkflow.class, workflowOptions);
-                    WorkflowClient.start(workflow::run, "input");
+                    WorkflowClient.start(workflow::run, ""+ input.getAndIncrement());
                     System.out.println("Starting workflow...with after = "+ millisSleep+" ms");
                 } catch (Exception e) {
                     e.printStackTrace();

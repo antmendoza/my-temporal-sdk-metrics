@@ -21,18 +21,17 @@ package com.antmendoza.temporal.workflow;
 
 import com.antmendoza.temporal.WorkerSsl;
 import com.antmendoza.temporal.config.FromEnv;
-import io.temporal.activity.Activity;
-import io.temporal.activity.ActivityInterface;
-import io.temporal.activity.ActivityMethod;
-import io.temporal.activity.ActivityOptions;
+import io.temporal.activity.*;
 import io.temporal.common.RetryOptions;
-import io.temporal.failure.ApplicationFailure;
+import io.temporal.failure.ActivityFailure;
 import io.temporal.workflow.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.*;
+
+import static io.temporal.activity.ActivityCancellationType.WAIT_CANCELLATION_COMPLETED;
 
 
 public class WorkflowHelloActivity {
@@ -52,21 +51,36 @@ public class WorkflowHelloActivity {
     // Define the workflow implementation which implements our getGreeting workflow method.
     public static class MyWorkflowImpl implements MyWorkflow {
 
-        private final MyActivities activities =
-                Workflow.newActivityStub(
-                        MyActivities.class,
-                        ActivityOptions.newBuilder()
-                                .setTaskQueue(WorkerSsl.TASK_QUEUE)
-                                .setStartToCloseTimeout(
-                                        //setting to a very large value for demo purpose.
-                                        Duration.ofMinutes(10)
-                                )
-                                .setRetryOptions(RetryOptions.newBuilder()
-                                        .setBackoffCoefficient(1)
-                                        .build())
-                                //.setScheduleToStartTimeout(Duration.ofSeconds(2))
-                                .build());
+        final int starToClose = Integer.parseInt(FromEnv.getActivityLatency());
         private final Logger logger = Workflow.getLogger(MyWorkflowImpl.class.getName());
+        private final MyActivities activities = Workflow.newActivityStub(
+                MyActivities.class,
+                ActivityOptions.newBuilder()
+                        .setTaskQueue(WorkerSsl.TASK_QUEUE)
+                        .setStartToCloseTimeout(
+                                //setting to a very large value for demo purpose.
+                                Duration.ofMillis(starToClose + 1000)
+                        )
+                        .setCancellationType(WAIT_CANCELLATION_COMPLETED)
+                        .setHeartbeatTimeout(Duration.ofMillis(starToClose / 2))
+                        .setRetryOptions(RetryOptions.newBuilder()
+                                .setBackoffCoefficient(1)
+                                .build())
+                        //.setScheduleToStartTimeout(Duration.ofSeconds(2))
+                        .build());
+
+        private final MyActivities localActivity = Workflow.newLocalActivityStub(
+                MyActivities.class,
+                LocalActivityOptions.newBuilder()
+                        .setStartToCloseTimeout(
+                                //setting to a very large value for demo purpose.
+                                Duration.ofMillis(starToClose + 1000)
+                        )
+                        .setRetryOptions(RetryOptions.newBuilder()
+                                .setBackoffCoefficient(1)
+                                .build())
+                        //.setScheduleToStartTimeout(Duration.ofSeconds(2))
+                        .build());
 
 
         public MyWorkflowImpl() {
@@ -74,21 +88,51 @@ public class WorkflowHelloActivity {
 
         public String run(String name) {
 
-            activities.sleep();
-
             final List<Promise<String>> results = new ArrayList<>();
-            results.add(Async.function(() -> activities.dontSleep()));
-            results.add(Async.function(() -> activities.dontSleep()));
-//            results.add(Async.function(() -> activities.sleep()));
+
+            CancellationScope cancellationScope = Workflow.newCancellationScope(() -> {
 
 
+                results.add(Async.function(activities::sleep));
+                results.add(Async.function(localActivity::sleep));
+                results.add(Async.function(localActivity::dontSleep));
+                results.add(Async.function(activities::sleep));
+                results.add(Async.function(activities::dontSleep));
 
-            Workflow.sleep(3_000);
-            activities.sleep();
 
-            Promise.allOf(results).get();
+                try {
 
-            activities.sleep();
+                    Promise.allOf(results).get();
+                } catch (ActivityFailure e) {
+                    for (Promise<String> result : results) {
+                        if (result.getFailure() != null) {
+                            System.out.println("Activity failed , cause: " + result.getFailure().getCause());
+                        } else {
+                            result.get();
+                        }
+                    }
+
+                }
+
+            });
+
+
+            Workflow.newTimer(Duration.ofSeconds(3))
+                    .thenApply(
+                            result -> {
+                                // Cancel our activity, note activity has to heartbeat to receive cancellation
+                                System.out.println("Cancelling scope as timer fired");
+                                if (Integer.parseInt(name) % 5 == 0 && true) {
+                                    System.out.println("Cancelling scope: ");
+                                    cancellationScope.cancel();
+                                }
+                                return null;
+                            });
+
+
+            cancellationScope.run();
+
+
 
             return "done";
 
@@ -124,18 +168,26 @@ public class WorkflowHelloActivity {
             int i = Integer.parseInt(sleep_activity_in_ms);
             log.info("SLEEP_ACTIVITY_IN_MS : " + i);
 
-
-            try {
-                Thread.sleep(i);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
             activity++;
             //if(Activity.getExecutionContext().getInfo().getAttempt() < 6){
 
             if (activity % 2 == 0) {
                 throw new RuntimeException("fake failure");
+            }
+
+
+            final int iteration = i / 1000;
+            for (int j = 0; j < iteration; j++) {
+
+
+                Activity.getExecutionContext().heartbeat("iteration number  " + j + " of " + iteration);
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
             }
 
 
