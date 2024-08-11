@@ -35,6 +35,17 @@ public class FromEnv {
         return concurrent_workflow_execution_size == null ? 0 : Integer.parseInt(concurrent_workflow_execution_size);
     }
 
+
+    public static Integer getConcurrentWorkflowPollers() {
+        final String value = System.getenv("CONCURRENT_WORKFLOW_POLLERS");
+        return value == null ? 0 : Integer.parseInt(value);
+    }
+
+    public static Integer getConcurrentActivityPollers() {
+        final String value = System.getenv("CONCURRENT_ACTIVITY_POLLERS");
+        return value == null ? 0 : Integer.parseInt(value);
+    }
+
     public static int getCacheSize() {
         final String cache_size = System.getenv("CACHE_SIZE");
         return cache_size == null ? 0 : Integer.parseInt(cache_size);

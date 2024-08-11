@@ -35,14 +35,7 @@ import java.time.Duration;
 import java.util.*;
 
 
-/**
- * Sample Temporal Workflow Definition that executes a single Activity.
- */
 public class WorkflowHelloActivity {
-
-    // Define our workflow unique id
-    static final String WORKFLOW_ID = "HelloActivityWorkflow";
-
 
     @ActivityInterface
     public interface MyActivities {
@@ -50,16 +43,14 @@ public class WorkflowHelloActivity {
         // Define your activity method which can be called during workflow execution
         @ActivityMethod
         String sleep();
+
         @ActivityMethod
         String dontSleep();
     }
 
 
-
     // Define the workflow implementation which implements our getGreeting workflow method.
     public static class MyWorkflowImpl implements MyWorkflow {
-
-        private Logger logger = Workflow.getLogger(MyWorkflowImpl.class.getName());
 
         private final MyActivities activities =
                 Workflow.newActivityStub(
@@ -75,6 +66,7 @@ public class WorkflowHelloActivity {
                                         .build())
                                 //.setScheduleToStartTimeout(Duration.ofSeconds(2))
                                 .build());
+        private final Logger logger = Workflow.getLogger(MyWorkflowImpl.class.getName());
 
 
         public MyWorkflowImpl() {
@@ -82,32 +74,23 @@ public class WorkflowHelloActivity {
 
         public String run(String name) {
 
-            activities.dontSleep();
+            activities.sleep();
 
             final List<Promise<String>> results = new ArrayList<>();
-            results.add(Async.function(() -> activities.sleep()));
             results.add(Async.function(() -> activities.dontSleep()));
-            results.add(Async.function(() -> activities.sleep()));
-            results.add(Async.function(() -> activities.sleep()));
-            results.add(Async.function(() -> activities.sleep()));
+            results.add(Async.function(() -> activities.dontSleep()));
+//            results.add(Async.function(() -> activities.sleep()));
 
-            try {
-                Promise.allOf(results).get();
-            }catch (ApplicationFailure e){
-                for (Promise<String> result : results ){
-                    if (result.getFailure() != null) {
-                        //Activity failed, do something
-                        logger.info("Activity failed " + result.getFailure());
-                    }
 
-                }
-            }
 
+            Workflow.sleep(3_000);
+            activities.sleep();
+
+            Promise.allOf(results).get();
 
             activities.sleep();
 
-
-            return "hello";
+            return "done";
 
         }
 
@@ -142,8 +125,6 @@ public class WorkflowHelloActivity {
             log.info("SLEEP_ACTIVITY_IN_MS : " + i);
 
 
-
-
             try {
                 Thread.sleep(i);
             } catch (InterruptedException e) {
@@ -153,9 +134,9 @@ public class WorkflowHelloActivity {
             activity++;
             //if(Activity.getExecutionContext().getInfo().getAttempt() < 6){
 
-//            if (activity % 2 == 0) {
-//                throw new RuntimeException("fake failure");
-//            }
+            if (activity % 2 == 0) {
+                throw new RuntimeException("fake failure");
+            }
 
 
             return null;

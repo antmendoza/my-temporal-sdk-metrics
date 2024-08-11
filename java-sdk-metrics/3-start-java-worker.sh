@@ -1,5 +1,6 @@
 #!/bin/sh
 
+./mvnw clean install
 
 docker compose down --remove-orphans
 
