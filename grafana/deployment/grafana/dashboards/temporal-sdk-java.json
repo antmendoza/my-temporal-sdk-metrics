@@ -25,7 +25,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 3,
+  "id": 2,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -239,23 +239,13 @@
             "type": "prometheus",
             "uid": "$datasource"
           },
-          "expr": "sum(rate(temporal_request_total{namespace=~\"$namespace\"}[$__rate_interval])) by (namespace)\n",
+          "expr": "sum(rate(temporal_request_failure_total{namespace=~\"$namespace\"}[$__rate_interval])) by (namespace, operation)\n",
           "intervalFactor": 2,
-          "legendFormat": "request - {{namespace}}\n",
+          "legendFormat": "{{namespace}} - {{operation}}",
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "expr": "sum(rate(temporal_request_failure_total{namespace=~\"$namespace\"}[$__rate_interval])) by (namespace)\n",
-          "intervalFactor": 2,
-          "legendFormat": "failure - {{namespace}}\n",
-          "refId": "B"
         }
       ],
-      "title": "RPC Requests Vs Failures",
+      "title": "RPC Failures Per Operation",
       "type": "timeseries"
     },
     {
@@ -3405,8 +3395,8 @@
   },
   "timepicker": {},
   "timezone": "utc",
-  "title": "Temporal SDK (Java)",
+  "title": "Temporal SDK (Java) temporal-sdk-java",
   "uid": "kCVDBCrIk",
-  "version": 8,
+  "version": 2,
   "weekStart": ""
 }

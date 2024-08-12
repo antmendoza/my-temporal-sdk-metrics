@@ -8,259 +8,28 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
-        "target": {
-          "limit": 100,
-          "matchAny": false,
-          "tags": [],
-          "type": "dashboard"
-        },
         "type": "dashboard"
       }
     ]
   },
   "editable": true,
-  "fiscalYearStartMonth": 0,
+  "gnetId": null,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 7,
+  "iteration": 1601313172987,
   "links": [],
-  "liveNow": false,
   "panels": [
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
-      "fieldConfig": {
-        "defaults": {
-          "links": []
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 9,
-        "w": 24,
-        "x": 0,
-        "y": 0
-      },
-      "hiddenSeries": false,
-      "id": 44,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "9.1.4",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "datasource": "$datasource",
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum(rate(temporal_activity_execution_latency_seconds_bucket{namespace=~\"$Namespace\"}[$__rate_interval])) by (namespace, activity_type, le))",
-          "hide": true,
-          "interval": "",
-          "legendFormat": "Activity execution latency",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": "$datasource",
-          "editorMode": "code",
-          "expr": "sum by (namespace) (rate(custom_activity_retries_total{namespace=~\"$Namespace\"}[$__rate_interval]))",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "activities started per second",
-          "range": true,
-          "refId": "B"
-        },
-        {
-          "datasource": "$datasource",
-          "editorMode": "code",
-          "expr": "sum by (namespace, worker) (MAX_TASKQUEUE_ACTIVITIES_PER_SECOND)",
-          "hide": true,
-          "interval": "",
-          "legendFormat": "MAX_TASKQUEUE_ACTIVITIES_PER_SECOND set per worker:  {{worker}}",
-          "range": true,
-          "refId": "C"
-        }
-      ],
-      "thresholds": [],
-      "timeRegions": [],
-      "title": "activities started per second",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:2433",
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:2434",
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
-      "fieldConfig": {
-        "defaults": {
-          "links": []
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 10,
-        "w": 24,
-        "x": 0,
-        "y": 9
-      },
-      "hiddenSeries": false,
-      "id": 60,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "9.1.4",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "datasource": "$datasource",
-          "editorMode": "code",
-          "expr": "sum by (namespace) ((rate(temporal_request_total{namespace=~\"$Namespace\", operation=~\"RespondActivityTaskCompleted|RespondActivityTaskFailed\" }[$__rate_interval])))",
-          "interval": "",
-          "legendFormat": "RespondActivityTaskCompleted or RespondActivityTaskFailed",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": "$datasource",
-          "editorMode": "code",
-          "expr": "sum by (namespace) ((rate(temporal_request_total{namespace=~\"$Namespace\", operation=~\"RespondActivityTaskCompleted\" }[$__rate_interval])))",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "RespondActivityTaskCompleted",
-          "range": true,
-          "refId": "B"
-        },
-        {
-          "datasource": "$datasource",
-          "editorMode": "code",
-          "expr": "sum by (namespace) ((rate(temporal_request_total{namespace=~\"$Namespace\", operation=~\"RespondActivityTaskFailed\" }[$__rate_interval])))",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "RespondActivityTaskFailed",
-          "range": true,
-          "refId": "C"
-        }
-      ],
-      "thresholds": [],
-      "timeRegions": [],
-      "title": "RespondActivityTaskCompleted / RespondActivityTaskFailed",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:307",
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:308",
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
-    },
-    {
       "collapsed": false,
-      "datasource": "$datasource",
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 19
+        "y": 0
       },
       "id": 8,
       "panels": [],
-      "targets": [
-        {
-          "datasource": "$datasource",
-          "refId": "A"
-        }
-      ],
       "title": "RPC Overview ($Namespace)",
       "type": "row"
     },
@@ -269,20 +38,14 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "$datasource",
-      "fieldConfig": {
-        "defaults": {
-          "links": []
-        },
-        "overrides": []
-      },
+      "datasource": null,
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
         "h": 10,
         "w": 8,
         "x": 0,
-        "y": 20
+        "y": 1
       },
       "hiddenSeries": false,
       "id": 2,
@@ -299,10 +62,9 @@
       "linewidth": 1,
       "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "dataLinks": []
       },
       "percentage": false,
-      "pluginVersion": "9.1.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -312,26 +74,22 @@
       "steppedLine": false,
       "targets": [
         {
-          "datasource": "$datasource",
-          "editorMode": "code",
-          "expr": "sum(rate(temporal_request_total{namespace=~\"$Namespace\"}[$__rate_interval]))",
+          "expr": "sum(rate(temporal_request{namespace=~\"$Namespace\"}[5m]))",
           "interval": "",
           "legendFormat": "requests",
-          "range": true,
           "refId": "A"
         },
         {
-          "datasource": "$datasource",
-          "editorMode": "code",
-          "expr": "sum(rate(temporal_request_failure_total{namespace=\"$Namespace\"}[$__rate_interval]))",
+          "expr": "sum(rate(temporal_request_failure{namespace=~\"$Namespace\"}[5m]))",
           "interval": "",
           "legendFormat": "failures",
-          "range": true,
           "refId": "B"
         }
       ],
       "thresholds": [],
+      "timeFrom": null,
       "timeRegions": [],
+      "timeShift": null,
       "title": "Requests Vs Failures",
       "tooltip": {
         "shared": true,
@@ -340,26 +98,33 @@
       },
       "type": "graph",
       "xaxis": {
+        "buckets": null,
         "mode": "time",
+        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
-          "$$hashKey": "object:147",
           "format": "short",
+          "label": null,
           "logBase": 1,
+          "max": null,
+          "min": null,
           "show": true
         },
         {
-          "$$hashKey": "object:148",
           "format": "short",
+          "label": null,
           "logBase": 1,
+          "max": null,
+          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false
+        "align": false,
+        "alignLevel": null
       }
     },
     {
@@ -367,20 +132,14 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "$datasource",
-      "fieldConfig": {
-        "defaults": {
-          "links": []
-        },
-        "overrides": []
-      },
+      "datasource": null,
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
         "h": 10,
         "w": 7,
         "x": 8,
-        "y": 20
+        "y": 1
       },
       "hiddenSeries": false,
       "id": 5,
@@ -397,10 +156,9 @@
       "linewidth": 1,
       "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "dataLinks": []
       },
       "percentage": false,
-      "pluginVersion": "9.1.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -410,17 +168,16 @@
       "steppedLine": false,
       "targets": [
         {
-          "datasource": "$datasource",
-          "editorMode": "code",
-          "expr": "sum by (operation) ((rate(temporal_request_total{namespace=~\"$Namespace\"}[$__rate_interval])))",
+          "expr": "sum by (operation) ((rate(temporal_request{namespace=~\"$Namespace\"}[5m])))",
           "interval": "",
           "legendFormat": "{{ operation }}",
-          "range": true,
           "refId": "A"
         }
       ],
       "thresholds": [],
+      "timeFrom": null,
       "timeRegions": [],
+      "timeShift": null,
       "title": "RPC Requests Per Operation",
       "tooltip": {
         "shared": true,
@@ -429,26 +186,33 @@
       },
       "type": "graph",
       "xaxis": {
+        "buckets": null,
         "mode": "time",
+        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
-          "$$hashKey": "object:307",
           "format": "short",
+          "label": null,
           "logBase": 1,
+          "max": null,
+          "min": null,
           "show": true
         },
         {
-          "$$hashKey": "object:308",
           "format": "short",
+          "label": null,
           "logBase": 1,
+          "max": null,
+          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false
+        "align": false,
+        "alignLevel": null
       }
     },
     {
@@ -456,20 +220,14 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "$datasource",
-      "fieldConfig": {
-        "defaults": {
-          "links": []
-        },
-        "overrides": []
-      },
+      "datasource": null,
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
         "h": 10,
         "w": 9,
         "x": 15,
-        "y": 20
+        "y": 1
       },
       "hiddenSeries": false,
       "id": 4,
@@ -486,10 +244,9 @@
       "linewidth": 1,
       "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "dataLinks": []
       },
       "percentage": false,
-      "pluginVersion": "9.1.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -499,17 +256,16 @@
       "steppedLine": false,
       "targets": [
         {
-          "datasource": "$datasource",
-          "editorMode": "code",
-          "expr": "sum by (operation) (rate(temporal_request_failure_total{namespace=~\"$Namespace\"}[$__rate_interval]))",
+          "expr": "sum by (operation) (rate(temporal_request_failure{namespace=~\"$Namespace\"}[5m]))",
           "interval": "",
           "legendFormat": "{{ operation }}",
-          "range": true,
           "refId": "A"
         }
       ],
       "thresholds": [],
+      "timeFrom": null,
       "timeRegions": [],
+      "timeShift": null,
       "title": "RPC Failures Per Operation",
       "tooltip": {
         "shared": true,
@@ -518,26 +274,33 @@
       },
       "type": "graph",
       "xaxis": {
+        "buckets": null,
         "mode": "time",
+        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
-          "$$hashKey": "object:388",
           "format": "short",
+          "label": null,
           "logBase": 1,
+          "max": null,
+          "min": null,
           "show": true
         },
         {
-          "$$hashKey": "object:389",
           "format": "short",
+          "label": null,
           "logBase": 1,
+          "max": null,
+          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false
+        "align": false,
+        "alignLevel": null
       }
     },
     {
@@ -545,20 +308,14 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "$datasource",
-      "fieldConfig": {
-        "defaults": {
-          "links": []
-        },
-        "overrides": []
-      },
+      "datasource": null,
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 30
+        "y": 11
       },
       "hiddenSeries": false,
       "id": 6,
@@ -575,10 +332,9 @@
       "linewidth": 1,
       "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "dataLinks": []
       },
       "percentage": false,
-      "pluginVersion": "9.1.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -588,17 +344,16 @@
       "steppedLine": false,
       "targets": [
         {
-          "datasource": "$datasource",
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_request_latency_seconds_bucket{namespace=~\"$Namespace\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_request_latency_bucket{namespace=~\"$Namespace\"}[5m])))",
           "interval": "",
           "legendFormat": "{{ namespace }} - {{ operation }}",
-          "range": true,
           "refId": "A"
         }
       ],
       "thresholds": [],
+      "timeFrom": null,
       "timeRegions": [],
+      "timeShift": null,
       "title": "RPC Latencies ($Namespace)",
       "tooltip": {
         "shared": true,
@@ -607,36 +362,43 @@
       },
       "type": "graph",
       "xaxis": {
+        "buckets": null,
         "mode": "time",
+        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
-          "$$hashKey": "object:548",
           "format": "dtdurations",
+          "label": null,
           "logBase": 1,
+          "max": null,
+          "min": null,
           "show": true
         },
         {
-          "$$hashKey": "object:549",
           "format": "short",
+          "label": null,
           "logBase": 1,
+          "max": null,
+          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false
+        "align": false,
+        "alignLevel": null
       }
     },
     {
       "collapsed": true,
-      "datasource": "$datasource",
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 39
+        "y": 20
       },
       "id": 12,
       "panels": [
@@ -645,20 +407,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 21
+            "y": 2
           },
           "hiddenSeries": false,
           "id": 10,
@@ -675,10 +431,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -688,57 +443,35 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "sum(rate(temporal_workflow_completed_total{namespace=~\"$Namespace\"}[$__rate_interval]))",
+              "expr": "sum(rate(temporal_workflow_completed{namespace=~\"$Namespace\"}[5m]))",
               "hide": false,
               "interval": "",
               "legendFormat": "success",
-              "range": true,
               "refId": "A"
             },
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "sum(rate(temporal_workflow_failed_total{namespace=~\"$Namespace\"}[$__rate_interval]))",
+              "expr": "sum(rate(temporal_workflow_failed{namespace=~\"$Namespace\"}[5m]))",
               "interval": "",
               "legendFormat": "failed",
-              "range": true,
               "refId": "B"
             },
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "sum(rate(temporal_workflow_canceled_total{namespace=~\"$Namespace\"}[$__rate_interval]))",
+              "expr": "sum(rate(temporal_workflow_canceled{namespace=~\"$Namespace\"}[5m]))",
               "interval": "",
               "legendFormat": "canceled",
-              "range": true,
               "refId": "C"
             },
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "sum(rate(temporal_workflow_continue_as_new_total{namespace=~\"$Namespace\"}[$__rate_interval]))",
+              "expr": "sum(rate(temporal_workflow_continue_as_new{namespace=~\"$Namespace\"}[5m]))",
               "interval": "",
               "legendFormat": "continued_as_new",
-              "range": true,
               "refId": "D"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Workflow Completion",
           "tooltip": {
             "shared": true,
@@ -747,26 +480,33 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:629",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:630",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -774,20 +514,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 21
+            "y": 2
           },
           "hiddenSeries": false,
           "id": 15,
@@ -804,10 +538,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -817,20 +550,16 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "histogram_quantile(0.95, sum(rate(temporal_workflow_endtoend_latency_seconds_bucket{namespace=~\"$Namespace\"}[$__rate_interval])) by (namespace, workflow_type, le))",
+              "expr": "histogram_quantile(0.95, sum(rate(temporal_workflow_endtoend_latency_bucket{namespace=~\"$Namespace\"}[5m])) by (namespace, workflow_type, le))",
               "interval": "",
               "legendFormat": "{{ namespace }} - {{ workflow_type }}",
-              "range": true,
               "refId": "B"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Workflow End-To-End Latencies",
           "tooltip": {
             "shared": true,
@@ -839,26 +568,33 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:710",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:711",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -866,20 +602,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 29
+            "y": 10
           },
           "hiddenSeries": false,
           "id": 16,
@@ -896,10 +626,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -909,21 +638,17 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_completed_total{namespace=~\"$Namespace\"}[$__rate_interval]))",
+              "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_completed{namespace=~\"$Namespace\"}[5m]))",
               "hide": false,
               "interval": "",
               "legendFormat": "{{ namespace }} - {{ workflow_type }}",
-              "range": true,
               "refId": "A"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Workflow Success By Type",
           "tooltip": {
             "shared": true,
@@ -932,26 +657,33 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:791",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:792",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -959,20 +691,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 29
+            "y": 10
           },
           "hiddenSeries": false,
           "id": 17,
@@ -989,10 +715,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1002,21 +727,17 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_failed_total{namespace=~\"$Namespace\"}[$__rate_interval]))",
+              "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_failed{namespace=~\"$Namespace\"}[5m]))",
               "hide": false,
               "interval": "",
               "legendFormat": "{{ namespace }} - {{ workflow_type }}",
-              "range": true,
               "refId": "A"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Workflow Failures By Type",
           "tooltip": {
             "shared": true,
@@ -1025,33 +746,34 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:872",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:873",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
-        }
-      ],
-      "targets": [
-        {
-          "datasource": "$datasource",
-          "refId": "A"
         }
       ],
       "title": "Workflows",
@@ -1059,12 +781,12 @@
     },
     {
       "collapsed": true,
-      "datasource": "$datasource",
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 40
+        "y": 21
       },
       "id": 20,
       "panels": [
@@ -1073,20 +795,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 22
+            "y": 12
           },
           "hiddenSeries": false,
           "id": 21,
@@ -1103,10 +819,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1116,20 +831,16 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_task_queue_poll_succeed_total{namespace=~\"$Namespace\"}[$__rate_interval]))",
+              "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_task_queue_poll_succeed{namespace=~\"$Namespace\"}[5m]))",
               "interval": "",
               "legendFormat": "{{ namespace }} - {{ workflow_type }}",
-              "range": true,
               "refId": "B"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Workflow Task Throughput By WorkflowType",
           "tooltip": {
             "shared": true,
@@ -1138,26 +849,33 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:668",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:669",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -1165,20 +883,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 22
+            "y": 12
           },
           "hiddenSeries": false,
           "id": 18,
@@ -1195,10 +907,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1208,20 +919,16 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "sum by (namespace) (rate(temporal_workflow_task_queue_poll_succeed_total{namespace=~\"$Namespace\"}[$__rate_interval]))",
+              "expr": "sum by (namespace) (rate(temporal_workflow_task_queue_poll_succeed{namespace=~\"$Namespace\"}[5m]))",
               "interval": "",
               "legendFormat": "{{ namespace }}",
-              "range": true,
               "refId": "B"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Workflow Task Throughput By Namespace",
           "tooltip": {
             "shared": true,
@@ -1230,26 +937,33 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:757",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:758",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -1257,20 +971,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 24,
             "x": 0,
-            "y": 30
+            "y": 20
           },
           "hiddenSeries": false,
           "id": 14,
@@ -1287,10 +995,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1300,20 +1007,16 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "sum by (namespace) (rate(temporal_workflow_task_queue_poll_empty_total{namespace=~\"$Namespace\"}[$__rate_interval]))",
+              "expr": "sum by (namespace) (rate(temporal_workflow_task_queue_poll_empty{namespace=~\"$Namespace\"}[5m]))",
               "interval": "",
               "legendFormat": "Empty Poll - {{ namespace }}",
-              "range": true,
               "refId": "A"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Empty Polls",
           "tooltip": {
             "shared": true,
@@ -1322,26 +1025,33 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:846",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:847",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -1349,20 +1059,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 38
+            "y": 28
           },
           "hiddenSeries": false,
           "id": 22,
@@ -1379,10 +1083,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1392,20 +1095,16 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "histogram_quantile(0.95, sum(rate(temporal_workflow_task_schedule_to_start_latency_seconds_bucket{namespace=~\"$Namespace\"}[$__rate_interval])) by (namespace, le))",
+              "expr": "histogram_quantile(0.95, sum(rate(temporal_workflow_task_schedule_to_start_latency_bucket{namespace=~\"$Namespace\"}[5m])) by (namespace, le))",
               "interval": "",
               "legendFormat": "{{ namespace }}",
-              "range": true,
               "refId": "A"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Workflow Task Backlog By Namespace",
           "tooltip": {
             "shared": true,
@@ -1414,26 +1113,33 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:959",
               "format": "dtdurations",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:960",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -1441,20 +1147,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 38
+            "y": 28
           },
           "hiddenSeries": false,
           "id": 23,
@@ -1471,10 +1171,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1484,20 +1183,16 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "histogram_quantile(0.95, sum(rate(temporal_workflow_task_schedule_to_start_latency_seconds_bucket{namespace=~\"$Namespace\"}[$__rate_interval])) by (namespace, workflow_type, le))",
+              "expr": "histogram_quantile(0.95, sum(rate(temporal_workflow_task_schedule_to_start_latency_bucket{namespace=~\"$Namespace\"}[5m])) by (namespace, workflow_type, le))",
               "interval": "",
               "legendFormat": "{{ namespace }} -- {{ workflow_type }}",
-              "range": true,
               "refId": "A"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Workflow Task Backlog By Workflow Type",
           "tooltip": {
             "shared": true,
@@ -1506,26 +1201,33 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:1040",
               "format": "dtdurations",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:1041",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -1533,20 +1235,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 46
+            "y": 36
           },
           "hiddenSeries": false,
           "id": 28,
@@ -1563,10 +1259,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1576,20 +1271,16 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "sum by (namespace) (rate(temporal_workflow_task_execution_failed_total{namespace=~\"$Namespace\"}[$__rate_interval]))",
+              "expr": "sum by (namespace) (rate(temporal_workflow_task_execution_failed{namespace=~\"$Namespace\"}[5m]))",
               "interval": "",
               "legendFormat": "{{ namespace }}",
-              "range": true,
               "refId": "B"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Workflow Task Failed By Namespace",
           "tooltip": {
             "shared": true,
@@ -1598,26 +1289,33 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:1200",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:1201",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -1625,20 +1323,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 46
+            "y": 36
           },
           "hiddenSeries": false,
           "id": 29,
@@ -1655,10 +1347,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1668,21 +1359,17 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_task_execution_failed_total{namespace=~\"$Namespace\"}[$__rate_interval]))",
+              "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_task_execution_failed{namespace=~\"$Namespace\"}[5m]))",
               "interval": "",
               "legendFormat": "{{ namespace }} -- {{ workflow_type }}",
-              "range": true,
               "refId": "B"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
-          "title": "Workflow Task Failed  By Workflow Type",
+          "timeShift": null,
+          "title": "Workflow Task Failed By Namespace",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -1690,26 +1377,33 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:1281",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:1282",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -1717,20 +1411,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 54
+            "y": 44
           },
           "hiddenSeries": false,
           "id": 25,
@@ -1747,10 +1435,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1760,20 +1447,16 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "histogram_quantile(0.95, sum(rate(temporal_workflow_task_execution_latency_seconds_bucket{namespace=~\"$Namespace\"}[$__rate_interval])) by (namespace, le))",
+              "expr": "histogram_quantile(0.95, sum(rate(temporal_workflow_task_execution_latency_bucket{namespace=~\"$Namespace\"}[5m])) by (namespace, le))",
               "interval": "",
               "legendFormat": "{{ namespace }}",
-              "range": true,
               "refId": "A"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Workflow Task Execution Latency By Namespace",
           "tooltip": {
             "shared": true,
@@ -1782,26 +1465,33 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:1522",
               "format": "dtdurations",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:1523",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -1809,20 +1499,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 54
+            "y": 44
           },
           "hiddenSeries": false,
           "id": 24,
@@ -1839,10 +1523,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1852,20 +1535,16 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "histogram_quantile(0.95, sum(rate(temporal_workflow_task_execution_latency_seconds_bucket{namespace=~\"$Namespace\"}[$__rate_interval])) by (namespace, workflow_type, le))",
+              "expr": "histogram_quantile(0.95, sum(rate(temporal_workflow_task_execution_latency_bucket{namespace=~\"$Namespace\"}[5m])) by (namespace, workflow_type, le))",
               "interval": "",
               "legendFormat": "{{ namespace }} -- {{ workflow_type }}",
-              "range": true,
               "refId": "A"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Workflow Task Execution Latency By Workflow Type",
           "tooltip": {
             "shared": true,
@@ -1874,26 +1553,33 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:1362",
               "format": "dtdurations",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:1363",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -1901,20 +1587,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 62
+            "y": 52
           },
           "hiddenSeries": false,
           "id": 27,
@@ -1931,10 +1611,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -1944,20 +1623,16 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "histogram_quantile(0.95, sum(rate(temporal_workflow_task_replay_latency_seconds_bucket{namespace=~\"$Namespace\"}[$__rate_interval])) by (namespace, le))",
+              "expr": "histogram_quantile(0.95, sum(rate(temporal_workflow_task_replay_latency_bucket{namespace=~\"$Namespace\"}[5m])) by (namespace, le))",
               "interval": "",
               "legendFormat": "{{ namespace }}",
-              "range": true,
               "refId": "A"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Workflow Task Replay Latency By Namespace",
           "tooltip": {
             "shared": true,
@@ -1966,26 +1641,33 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:2109",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:2110",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -1993,20 +1675,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 62
+            "y": 52
           },
           "hiddenSeries": false,
           "id": 26,
@@ -2023,10 +1699,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2036,20 +1711,16 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "histogram_quantile(0.95, sum(rate(temporal_workflow_task_replay_latency_seconds_bucket{namespace=~\"$Namespace\"}[$__rate_interval])) by (namespace, workflow_type, le))",
+              "expr": "histogram_quantile(0.95, sum(rate(temporal_workflow_task_replay_latency_bucket{namespace=~\"$Namespace\"}[5m])) by (namespace, workflow_type, le))",
               "interval": "",
               "legendFormat": "{{ namespace }} -- {{ workflow_type }}",
-              "range": true,
               "refId": "A"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Workflow Task Replay Latency By Workflow Type",
           "tooltip": {
             "shared": true,
@@ -2058,33 +1729,34 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:2190",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:2191",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
-        }
-      ],
-      "targets": [
-        {
-          "datasource": "$datasource",
-          "refId": "A"
         }
       ],
       "title": "Workflow Task Processing",
@@ -2092,12 +1764,12 @@
     },
     {
       "collapsed": true,
-      "datasource": "$datasource",
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 41
+        "y": 22
       },
       "id": 42,
       "panels": [
@@ -2106,23 +1778,17 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
-            "h": 9,
-            "w": 24,
+            "h": 8,
+            "w": 12,
             "x": 0,
-            "y": 31
+            "y": 1
           },
           "hiddenSeries": false,
-          "id": 59,
+          "id": 38,
           "legend": {
             "avg": false,
             "current": false,
@@ -2136,10 +1802,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2149,20 +1814,192 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_failed_total{namespace=~\"$Namespace\"}[$__rate_interval]))",
+              "expr": "sum by (namespace) (rate(temporal_activity_execution_latency_count{namespace=~\"$Namespace\"}[5m]))",
               "interval": "",
-              "legendFormat": "{{ namespace }} - {{ activity_type }}",
-              "range": true,
+              "legendFormat": "",
               "refId": "A"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
+          "title": "Activity Throughput By Namespace",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 1
+          },
+          "hiddenSeries": false,
+          "id": 40,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_latency_count{namespace=~\"$Namespace\"}[5m]))",
+              "interval": "",
+              "legendFormat": "{{ namespace }} - {{ activity_type }}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Activity Throughput By Activity Type",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 9
+          },
+          "hiddenSeries": false,
+          "id": 44,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_failed{namespace=~\"$Namespace\"}[5m]))",
+              "interval": "",
+              "legendFormat": "{{ namespace }} - {{ activity_type }}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
           "title": "Failed Activity by Type",
           "tooltip": {
             "shared": true,
@@ -2171,26 +2008,33 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:2433",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:2434",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -2198,20 +2042,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 40
+            "y": 18
           },
           "hiddenSeries": false,
           "id": 46,
@@ -2228,10 +2066,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2241,20 +2078,16 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "histogram_quantile(0.95, sum(rate(temporal_activity_execution_latency_seconds_bucket{namespace=~\"$Namespace\"}[$__rate_interval])) by (namespace, activity_type, le))",
+              "expr": "histogram_quantile(0.95, sum(rate(temporal_activity_execution_latency_bucket{namespace=~\"$Namespace\"}[5m])) by (namespace, activity_type, le))",
               "interval": "",
               "legendFormat": "{{ namespace }} - {{ activity_type }}",
-              "range": true,
               "refId": "A"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Activity Execution Latencies",
           "tooltip": {
             "shared": true,
@@ -2263,26 +2096,33 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:2830",
               "format": "dtdurations",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:2831",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -2290,23 +2130,17 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 40
+            "y": 18
           },
           "hiddenSeries": false,
-          "id": 58,
+          "id": 48,
           "legend": {
             "avg": false,
             "current": false,
@@ -2320,10 +2154,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2333,21 +2166,17 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "histogram_quantile(0.95, sum(rate(temporal_activity_schedule_to_start_latency_seconds_bucket{namespace=~\"$Namespace\"}[$__rate_interval])) by (namespace, le))",
+              "expr": "histogram_quantile(0.95, sum(rate(temporal_activity_endtoend_latency_bucket{namespace=~\"$Namespace\"}[5m])) by (namespace, activity_type, le))",
               "interval": "",
-              "legendFormat": "{{ namespace }}",
-              "range": true,
+              "legendFormat": "",
               "refId": "A"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
-          "title": "Activity ScheduleToStart",
+          "timeShift": null,
+          "title": "Activity End-To-End Latencies",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -2355,33 +2184,34 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:2830",
-              "format": "s",
+              "format": "dtdurations",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:2831",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
-        }
-      ],
-      "targets": [
-        {
-          "datasource": "$datasource",
-          "refId": "A"
         }
       ],
       "title": "Activities",
@@ -2389,12 +2219,12 @@
     },
     {
       "collapsed": true,
-      "datasource": "$datasource",
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 42
+        "y": 23
       },
       "id": 34,
       "panels": [
@@ -2403,20 +2233,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 14
+            "y": 6
           },
           "hiddenSeries": false,
           "id": 31,
@@ -2433,10 +2257,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2446,20 +2269,16 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "sum by (namespace) (rate(temporal_activity_poll_no_task_total{namespace=~\"$Namespace\"}[$__rate_interval]))",
+              "expr": "sum by (namespace) (rate(temporal_activity_poll_no_task{namespace=~\"$Namespace\"}[5m]))",
               "interval": "",
               "legendFormat": "{{ namespace }}",
-              "range": true,
               "refId": "A"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Empty Activity Polls By Namespace",
           "tooltip": {
             "shared": true,
@@ -2468,33 +2287,210 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:2996",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:2997",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
-        }
-      ],
-      "targets": [
+        },
         {
-          "datasource": "$datasource",
-          "refId": "A"
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 6
+          },
+          "hiddenSeries": false,
+          "id": 32,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.95, sum(rate(temporal_activity_schedule_to_start_latency_bucket{namespace=~\"$Namespace\"}[5m])) by (namespace, le))",
+              "interval": "",
+              "legendFormat": "",
+              "refId": "B"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Activity Task Backlog By Namespace",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "dtdurationms",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 14
+          },
+          "hiddenSeries": false,
+          "id": 36,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.95, sum(rate(temporal_activity_schedule_to_start_latency_bucket{namespace=~\"$Namespace\"}[5m])) by (namespace, activity_type, le))",
+              "interval": "",
+              "legendFormat": "{{ namespace }} - {{ activity_type }}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Activity Task Backlog By Activity Type",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "dtdurationms",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
         }
       ],
       "title": "Activity Task Processing",
@@ -2502,12 +2498,12 @@
     },
     {
       "collapsed": true,
-      "datasource": "$datasource",
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 43
+        "y": 24
       },
       "id": 57,
       "panels": [
@@ -2516,20 +2512,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 9,
             "x": 0,
-            "y": 15
+            "y": 6
           },
           "hiddenSeries": false,
           "id": 50,
@@ -2546,10 +2536,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2559,20 +2548,16 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "sum by (namespace) (rate(temporal_sticky_cache_hit_total{namespace=~\"$Namespace\"}[$__rate_interval]))",
+              "expr": "sum by (namespace) (rate(temporal_sticky_cache_hit{namespace=~\"$Namespace\"}[5m]))",
               "interval": "",
               "legendFormat": "{{ namespace }}",
-              "range": true,
               "refId": "A"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Sticky Cache Hit",
           "tooltip": {
             "shared": true,
@@ -2581,26 +2566,33 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:3322",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:3323",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -2608,20 +2600,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 7,
             "x": 9,
-            "y": 15
+            "y": 6
           },
           "hiddenSeries": false,
           "id": 52,
@@ -2638,10 +2624,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2651,20 +2636,16 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "sum by (namespace) (rate(temporal_sticky_cache_miss_total{namespace=~\"$Namespace\"}[$__rate_interval]))",
+              "expr": "sum by (namespace) (rate(temporal_sticky_cache_miss{namespace=~\"Namespace\"}[5m]))",
               "interval": "",
               "legendFormat": "{{ namespace  }}",
-              "range": true,
               "refId": "A"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Sticky Cache Miss",
           "tooltip": {
             "shared": true,
@@ -2673,26 +2654,33 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:3403",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:3404",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -2700,20 +2688,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 8,
             "x": 16,
-            "y": 15
+            "y": 6
           },
           "hiddenSeries": false,
           "id": 53,
@@ -2730,10 +2712,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2743,20 +2724,16 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "editorMode": "code",
-              "expr": "sum by (namespace) (rate(temporal_sticky_cache_total_forced_eviction_total{namespace=~\"$Namespace\"}[$__rate_interval]))",
+              "expr": "sum by (namespace) (rate(temporal_sticky_cache_total_forced_eviction{namespace=~\"Namespace\"}[5m]))",
               "interval": "",
               "legendFormat": "{{ namespace  }}",
-              "range": true,
               "refId": "A"
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Sticky Cache Forced Eviction",
           "tooltip": {
             "shared": true,
@@ -2765,26 +2742,33 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
-              "$$hashKey": "object:3484",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
-              "$$hashKey": "object:3485",
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -2792,20 +2776,14 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
+          "datasource": null,
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 24,
             "x": 0,
-            "y": 23
+            "y": 14
           },
           "hiddenSeries": false,
           "id": 55,
@@ -2822,10 +2800,9 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "dataLinks": []
           },
           "percentage": false,
-          "pluginVersion": "9.1.4",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2835,10 +2812,6 @@
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
               "expr": "sum by (namespace) (temporal_sticky_cache_size)",
               "interval": "",
               "legendFormat": "{{ namespace }}",
@@ -2846,7 +2819,9 @@
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Sticky Cache Size",
           "tooltip": {
             "shared": true,
@@ -2855,240 +2830,45 @@
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             },
             {
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
+              "min": null,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 8,
-            "w": 24,
-            "x": 0,
-            "y": 23
-          },
-          "hiddenSeries": false,
-          "id": 156,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "9.1.4",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "expr": "sum by (namespace, worker_type) (temporal_worker_task_slots_available)",
-              "interval": "",
-              "legendFormat": "{{ namespace }} - {{ worker_type }}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeRegions": [],
-          "title": "Worker Slots Available",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "logBase": 1,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$datasource",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 8,
-            "w": 24,
-            "x": 0,
-            "y": 23
-          },
-          "hiddenSeries": false,
-          "id": 157,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "9.1.4",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P7AC1CE4626B85CB6"
-              },
-              "expr": "sum by (namespace) (temporal_workflow_active_thread_count)",
-              "interval": "",
-              "legendFormat": "{{ namespace }}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeRegions": [],
-          "title": "Workflow active thread count",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "logBase": 1,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
-        }
-      ],
-      "targets": [
-        {
-          "datasource": "$datasource",
-          "refId": "A"
         }
       ],
       "title": "Sticky Cache",
       "type": "row"
     }
   ],
-  "refresh": false,
-  "schemaVersion": 37,
+  "schemaVersion": 22,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": [
-      {
-        "current": {
-          "selected": false,
-          "text": "default",
-          "value": "default"
-        },
-        "description": null,
-        "error": null,
-        "hide": 0,
-        "includeAll": false,
-        "label": null,
-        "multi": false,
-        "name": "datasource",
-        "options": [],
-        "query": "prometheus",
-        "queryValue": "",
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "type": "datasource"
-      },
       {
         "allValue": ".*",
         "current": {
@@ -3098,6 +2878,7 @@
         },
         "hide": 0,
         "includeAll": true,
+        "label": null,
         "multi": false,
         "name": "Namespace",
         "options": [
@@ -3107,8 +2888,6 @@
             "value": "$__all"
           }
         ],
-        "query": "",
-        "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
       },
@@ -3121,6 +2900,7 @@
         },
         "hide": 0,
         "includeAll": true,
+        "label": null,
         "multi": false,
         "name": "WorkflowType",
         "options": [
@@ -3130,24 +2910,33 @@
             "value": "$__all"
           }
         ],
-        "query": "",
         "skipUrlSync": false,
         "type": "custom"
       }
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {
     "refresh_intervals": [
-      "30s"
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
     ]
   },
   "timezone": "",
-  "title": "SDK Metrics",
-  "uid": "whtBuu0Vkddd",
-  "version": 1,
-  "weekStart": ""
+  "title": "SDK Metrics sdk-general",
+  "variables": {
+    "list": []
+  },
+  "version": 2
 }
