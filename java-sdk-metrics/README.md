@@ -1,34 +1,36 @@
-# todo
-- add CPU and Memory to containers and expose as metric 
 
 # About this project
 
-[Main readme](../README.md)
+[Main README](../README.md)
 
 
 ## Configuration
 
-See [temporal.properties](./src/main/resources/temporal.properties) file.
+See 
+- [temporal.properties](./src/main/resources/temporal.properties) file.
+- [env](./.env) file.
+
+
+
 
 ## Start environment
 
-- `1-start-grafana_prometheus.sh`
+- `1-create-network.sh`
 
-  Navigate to the [dashboard](http://localhost:3000/d/whtBuu0Vkddd/sdk-metrics?orgId=1)
+- `2-start-grafana_prometheus.sh`
 
-- `2-stop-workers.sh`
+  Navigate to the [dashboard](http://localhost:3000/)
 
 
-## Build the docker image
+## Run the worker
 
-- `3-build-project.sh`
+- `3-start-java-worker.sh`
+Start one worker with the given [env](./.env) variables.
 
-## Create workflows, it will create one workflow every 100ms
 
-- `5-create-backlog.sh`
+## Start workflows
 
-## Start workers to drain the backlog
+- `4-create-backlog.sh`
 
-- `6-start-workers.sh`
 
-- Open the script ^^ to change workers configuration
+The [dashboard](http://localhost:3000/) will start showing metrics.
