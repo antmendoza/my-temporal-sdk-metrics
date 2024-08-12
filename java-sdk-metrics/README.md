@@ -33,4 +33,4 @@ Start one worker with the given [env](./.env) variables.
 - `4-create-backlog.sh`
 
 
-The [dashboard](http://localhost:3000/) will start showing metrics.
+The Java dashboard in [dashboard](http://localhost:3000/) will start showing data.
