@@ -447,7 +447,7 @@
       "type": "timeseries"
     },
     {
-      "collapsed": true,
+      "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -3037,7 +3037,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "temporal_sticky_cache_size",
+          "expr": "sum by (namespace) (rate(temporal_sticky_cache_size{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "intervalFactor": 2,
           "legendFormat": "{{namespace}}",
           "range": true,

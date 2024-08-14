@@ -38,7 +38,9 @@ async function run() {
                 workflowId: 'otel-example-' + (wid++),
                 args: ['Temporal'],
             }).then(handle => {
-                console.log(handle.result()); // Hello, Temporal!
+
+            }).catch(e =>{
+
             });
         } catch (error) {
 

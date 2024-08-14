@@ -40,6 +40,11 @@ async function main() {
   const worker = await Worker.create({
     workflowsPath: require.resolve('./workflows'),
     activities,
+//    maxCachedWorkflows:10,
+//    maxConcurrentActivityTaskPolls:5,
+//    maxConcurrentWorkflowTaskPolls:5,
+//    maxConcurrentWorkflowTaskExecutions:5,
+//    maxConcurrentActivityTaskExecutions:5,
     taskQueue: 'interceptors-opentelemetry-example',
     sinks: {
       exporter: makeWorkflowExporter(exporter, resource),
