@@ -49,7 +49,7 @@ public class WorkflowHelloActivity {
 
 
     // Define the workflow implementation which implements our getGreeting workflow method.
-    public static class MyWorkflowImpl implements MyWorkflow {
+    public static class MyWorkflowImpl implements MyWorkflow1 {
 
         final int starToClose = Integer.parseInt(FromEnv.getActivityLatency());
         private final Logger logger = Workflow.getLogger(MyWorkflowImpl.class.getName());
@@ -136,6 +136,11 @@ public class WorkflowHelloActivity {
 
             return "done";
 
+        }
+
+        @Override
+        public String update() {
+            return null;
         }
 
 

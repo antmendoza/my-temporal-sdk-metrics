@@ -18,7 +18,7 @@ import io.temporal.worker.WorkerOptions;
 
 public class WorkerSsl {
 
-    public static final String TASK_QUEUE = "MyTaskQueue3";
+    public static final String TASK_QUEUE = "MyTaskQueue_";
 
     public static void main(String[] args) throws Exception {
 

@@ -13,6 +13,11 @@ scrape_configs:
           - 'host.docker.internal:9464'
   - job_name: 'cadvisor'
     static_configs:
-      - targets: ['host.docker.internal:8085']
+      - targets: [ 'host.docker.internal:8085' ]
+  - job_name: 'client-java'
+    static_configs:
+      - targets:
+          - 'host.docker.internal:8079'
+
 
 
