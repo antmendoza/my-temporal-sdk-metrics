@@ -130,7 +130,7 @@ public class Starter {
         WorkflowClientOptions clientOptions =
                 WorkflowClientOptions.newBuilder()
                         .setNamespace(sslContextBuilderProvider.getNamespace())
-                        .setDataConverter(dataConverter)
+//                        .setDataConverter(dataConverter)
                         .build();
         WorkflowClient client = WorkflowClient.newInstance(service, clientOptions);
 
@@ -141,9 +141,9 @@ public class Starter {
         while (input.get() < 10) {
 
 
-                final int andIncrement = input.getAndIncrement();
+            final int andIncrement = input.getAndIncrement();
             CompletableFuture.runAsync(() -> {
-                    final String workflowId = andIncrement + "-" + Math.random();
+                final String workflowId = andIncrement + "-" + Math.random();
                 try {
 
                     WorkflowOptions workflowOptions =
@@ -155,9 +155,9 @@ public class Starter {
 
                     MyWorkflow1 workflow = client.newWorkflowStub(MyWorkflow1.class, workflowOptions);
                     System.out.println("Starting workflow...with after = " + millisSleep + " ms");
-  System.out.println( workflowId + "init " + new Date());
-                   WorkflowExecution execution = WorkflowClient.start(workflow::run, "" + andIncrement);
-  System.out.println( workflowId + "end " + new Date());
+                    System.out.println(workflowId + "init " + new Date());
+                    WorkflowExecution execution = WorkflowClient.start(workflow::run, "" + andIncrement);
+                    System.out.println(workflowId + "end " + new Date());
 
 //                    workflow.run("");
 
