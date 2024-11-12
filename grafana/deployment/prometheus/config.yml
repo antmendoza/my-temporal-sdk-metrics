@@ -11,13 +11,15 @@ scrape_configs:
     static_configs:
       - targets:
           - 'host.docker.internal:9464'
-  - job_name: 'cadvisor'
-    static_configs:
-      - targets: [ 'host.docker.internal:8085' ]
   - job_name: 'client-java'
     static_configs:
       - targets:
           - 'host.docker.internal:8079'
-
-
+  - job_name: 'python_core_metrics'
+    static_configs:
+      - targets:
+          - 'host.docker.internal:8085'
+          - 'host.docker.internal:8086'
+        labels:
+          source: 'python_metric'
 

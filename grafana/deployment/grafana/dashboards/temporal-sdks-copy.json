@@ -516,7 +516,7 @@
           "refId": "B"
         }
       ],
-      "title": "RPC Latencies (p951)",
+      "title": "RPC Latencies (p95)",
       "type": "timeseries"
     },
     {
