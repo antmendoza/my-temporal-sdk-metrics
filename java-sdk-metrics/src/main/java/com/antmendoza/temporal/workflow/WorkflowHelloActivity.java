@@ -24,6 +24,7 @@ import com.antmendoza.temporal.config.FromEnv;
 import io.temporal.activity.*;
 import io.temporal.common.RetryOptions;
 import io.temporal.failure.ActivityFailure;
+import io.temporal.failure.ApplicationFailure;
 import io.temporal.workflow.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,11 @@ public class WorkflowHelloActivity {
         // Define your activity method which can be called during workflow execution
         @ActivityMethod
         String sleep();
+
+
+        // Define your activity method which can be called during workflow execution
+        @ActivityMethod
+        String exception();
 
         @ActivityMethod
         String dontSleep();
@@ -62,9 +68,10 @@ public class WorkflowHelloActivity {
                                 Duration.ofMillis(starToClose + 1000)
                         )
                         .setCancellationType(WAIT_CANCELLATION_COMPLETED)
-                        .setHeartbeatTimeout(Duration.ofMillis(starToClose / 2))
+//                        .setHeartbeatTimeout(Duration.ofMillis(starToClose / 2))
                         .setRetryOptions(RetryOptions.newBuilder()
                                 .setBackoffCoefficient(1)
+                                .setInitialInterval(Duration.ofSeconds(5))
                                 .build())
                         //.setScheduleToStartTimeout(Duration.ofSeconds(2))
                         .build());
@@ -88,49 +95,8 @@ public class WorkflowHelloActivity {
 
         public String run(String name) {
 
-            final List<Promise<String>> results = new ArrayList<>();
+            activities.exception();
 
-            CancellationScope cancellationScope = Workflow.newCancellationScope(() -> {
-
-
-                results.add(Async.function(activities::sleep));
-                results.add(Async.function(localActivity::sleep));
-                results.add(Async.function(localActivity::dontSleep));
-                results.add(Async.function(activities::sleep));
-                results.add(Async.function(activities::dontSleep));
-
-
-                try {
-
-                    Promise.allOf(results).get();
-                } catch (ActivityFailure e) {
-                    for (Promise<String> result : results) {
-                        if (result.getFailure() != null) {
-                            System.out.println("Activity failed , cause: " + result.getFailure().getCause());
-                        } else {
-                            result.get();
-                        }
-                    }
-
-                }
-
-            });
-
-
-            Workflow.newTimer(Duration.ofSeconds(3))
-                    .thenApply(
-                            result -> {
-                                // Cancel our activity, note activity has to heartbeat to receive cancellation
-                                System.out.println("Cancelling scope as timer fired");
-                                if (Integer.parseInt(name) % 5 == 0 && true) {
-                                    System.out.println("Cancelling scope: ");
-                                    cancellationScope.cancel();
-                                }
-                                return null;
-                            });
-
-
-            cancellationScope.run();
 
 
 
@@ -197,6 +163,232 @@ public class WorkflowHelloActivity {
 
 
             return null;
+        }
+
+        @Override
+        public String exception() {
+
+                final String s = "                {\n" +
+                        "                  \"metadata\": {\n" +
+                        "                    \"encoding\": \"anNvbi9wbGFpbg==\"\n" +
+                        "                  },\n" +
+                        "                  \"data\": {\n" +
+                        "                    \"cause\": null,\n" +
+                        "                    \"stackTrace\": [\n" +
+                        "                      {\n" +
+                        "                        \"classLoaderName\": null,\n" +
+                        "                        \"moduleName\": null,\n" +
+                        "                        \"moduleVersion\": null,\n" +
+                        "                        \"methodName\": \"handleCspApiErrorBadRequest\",\n" +
+                        "                        \"fileName\": \"TemporalUtils.java\",\n" +
+                        "                        \"lineNumber\": 302,\n" +
+                        "                        \"nativeMethod\": false,\n" +
+                        "                        \"className\": \"com.twilio.messaging.a2p.temporal.TemporalUtils\"\n" +
+                        "                      },\n" +
+                        "                      {\n" +
+                        "                        \"classLoaderName\": null,\n" +
+                        "                        \"moduleName\": null,\n" +
+                        "                        \"moduleVersion\": null,\n" +
+                        "                        \"methodName\": \"lambda$resend2faEmail$1\",\n" +
+                        "                        \"fileName\": \"TcrCspResend2FaEmailActivityImpl.java\",\n" +
+                        "                        \"lineNumber\": 59,\n" +
+                        "                        \"nativeMethod\": false,\n" +
+                        "                        \"className\": \"com.twilio.messaging.a2p.temporal.activities.tcr.csp.TcrCspResend2FaEmailActivityImpl\"\n" +
+                        "                      },\n" +
+                        "                      {\n" +
+                        "                        \"classLoaderName\": null,\n" +
+                        "                        \"moduleName\": null,\n" +
+                        "                        \"moduleVersion\": null,\n" +
+                        "                        \"methodName\": \"fold\",\n" +
+                        "                        \"fileName\": \"Resend2FaEmailResponse.java\",\n" +
+                        "                        \"lineNumber\": 123,\n" +
+                        "                        \"nativeMethod\": false,\n" +
+                        "                        \"className\": \"com.twilio.messaging.a2p.providers.kaleyra.client.csp.Brand.Resend2FaEmailResponse\"\n" +
+                        "                      },\n" +
+                        "                      {\n" +
+                        "                        \"classLoaderName\": null,\n" +
+                        "                        \"moduleName\": null,\n" +
+                        "                        \"moduleVersion\": null,\n" +
+                        "                        \"methodName\": \"resend2faEmail\",\n" +
+                        "                        \"fileName\": \"TcrCspResend2FaEmailActivityImpl.java\",\n" +
+                        "                        \"lineNumber\": 51,\n" +
+                        "                        \"nativeMethod\": false,\n" +
+                        "                        \"className\": \"com.twilio.messaging.a2p.temporal.activities.tcr.csp.TcrCspResend2FaEmailActivityImpl\"\n" +
+                        "                      },\n" +
+                        "                      {\n" +
+                        "                        \"classLoaderName\": null,\n" +
+                        "                        \"moduleName\": \"java.base\",\n" +
+                        "                        \"moduleVersion\": \"17.0.9\",\n" +
+                        "                        \"methodName\": \"invoke0\",\n" +
+                        "                        \"fileName\": \"NativeMethodAccessorImpl.java\",\n" +
+                        "                        \"lineNumber\": -2,\n" +
+                        "                        \"nativeMethod\": true,\n" +
+                        "                        \"className\": \"jdk.internal.reflect.NativeMethodAccessorImpl\"\n" +
+                        "                      },\n" +
+                        "                      {\n" +
+                        "                        \"classLoaderName\": null,\n" +
+                        "                        \"moduleName\": \"java.base\",\n" +
+                        "                        \"moduleVersion\": \"17.0.9\",\n" +
+                        "                        \"methodName\": \"invoke\",\n" +
+                        "                        \"fileName\": \"NativeMethodAccessorImpl.java\",\n" +
+                        "                        \"lineNumber\": 77,\n" +
+                        "                        \"nativeMethod\": false,\n" +
+                        "                        \"className\": \"jdk.internal.reflect.NativeMethodAccessorImpl\"\n" +
+                        "                      },\n" +
+                        "                      {\n" +
+                        "                        \"classLoaderName\": null,\n" +
+                        "                        \"moduleName\": \"java.base\",\n" +
+                        "                        \"moduleVersion\": \"17.0.9\",\n" +
+                        "                        \"methodName\": \"invoke\",\n" +
+                        "                        \"fileName\": \"DelegatingMethodAccessorImpl.java\",\n" +
+                        "                        \"lineNumber\": 43,\n" +
+                        "                        \"nativeMethod\": false,\n" +
+                        "                        \"className\": \"jdk.internal.reflect.DelegatingMethodAccessorImpl\"\n" +
+                        "                      },\n" +
+                        "                      {\n" +
+                        "                        \"classLoaderName\": null,\n" +
+                        "                        \"moduleName\": \"java.base\",\n" +
+                        "                        \"moduleVersion\": \"17.0.9\",\n" +
+                        "                        \"methodName\": \"invoke\",\n" +
+                        "                        \"fileName\": \"Method.java\",\n" +
+                        "                        \"lineNumber\": 568,\n" +
+                        "                        \"nativeMethod\": false,\n" +
+                        "                        \"className\": \"java.lang.reflect.Method\"\n" +
+                        "                      },\n" +
+                        "                      {\n" +
+                        "                        \"classLoaderName\": null,\n" +
+                        "                        \"moduleName\": null,\n" +
+                        "                        \"moduleVersion\": null,\n" +
+                        "                        \"methodName\": \"executeActivity\",\n" +
+                        "                        \"fileName\": \"RootActivityInboundCallsInterceptor.java\",\n" +
+                        "                        \"lineNumber\": 64,\n" +
+                        "                        \"nativeMethod\": false,\n" +
+                        "                        \"className\": \"io.temporal.internal.activity.RootActivityInboundCallsInterceptor$POJOActivityInboundCallsInterceptor\"\n" +
+                        "                      },\n" +
+                        "                      {\n" +
+                        "                        \"classLoaderName\": null,\n" +
+                        "                        \"moduleName\": null,\n" +
+                        "                        \"moduleVersion\": null,\n" +
+                        "                        \"methodName\": \"execute\",\n" +
+                        "                        \"fileName\": \"RootActivityInboundCallsInterceptor.java\",\n" +
+                        "                        \"lineNumber\": 43,\n" +
+                        "                        \"nativeMethod\": false,\n" +
+                        "                        \"className\": \"io.temporal.internal.activity.RootActivityInboundCallsInterceptor\"\n" +
+                        "                      },\n" +
+                        "                      {\n" +
+                        "                        \"classLoaderName\": null,\n" +
+                        "                        \"moduleName\": null,\n" +
+                        "                        \"moduleVersion\": null,\n" +
+                        "                        \"methodName\": \"execute\",\n" +
+                        "                        \"fileName\": \"ActivityTaskExecutors.java\",\n" +
+                        "                        \"lineNumber\": 107,\n" +
+                        "                        \"nativeMethod\": false,\n" +
+                        "                        \"className\": \"io.temporal.internal.activity.ActivityTaskExecutors$BaseActivityTaskExecutor\"\n" +
+                        "                      },\n" +
+                        "                      {\n" +
+                        "                        \"classLoaderName\": null,\n" +
+                        "                        \"moduleName\": null,\n" +
+                        "                        \"moduleVersion\": null,\n" +
+                        "                        \"methodName\": \"handle\",\n" +
+                        "                        \"fileName\": \"ActivityTaskHandlerImpl.java\",\n" +
+                        "                        \"lineNumber\": 124,\n" +
+                        "                        \"nativeMethod\": false,\n" +
+                        "                        \"className\": \"io.temporal.internal.activity.ActivityTaskHandlerImpl\"\n" +
+                        "                      },\n" +
+                        "                      {\n" +
+                        "                        \"classLoaderName\": null,\n" +
+                        "                        \"moduleName\": null,\n" +
+                        "                        \"moduleVersion\": null,\n" +
+                        "                        \"methodName\": \"handleActivity\",\n" +
+                        "                        \"fileName\": \"ActivityWorker.java\",\n" +
+                        "                        \"lineNumber\": 278,\n" +
+                        "                        \"nativeMethod\": false,\n" +
+                        "                        \"className\": \"io.temporal.internal.worker.ActivityWorker$TaskHandlerImpl\"\n" +
+                        "                      },\n" +
+                        "                      {\n" +
+                        "                        \"classLoaderName\": null,\n" +
+                        "                        \"moduleName\": null,\n" +
+                        "                        \"moduleVersion\": null,\n" +
+                        "                        \"methodName\": \"handle\",\n" +
+                        "                        \"fileName\": \"ActivityWorker.java\",\n" +
+                        "                        \"lineNumber\": 243,\n" +
+                        "                        \"nativeMethod\": false,\n" +
+                        "                        \"className\": \"io.temporal.internal.worker.ActivityWorker$TaskHandlerImpl\"\n" +
+                        "                      },\n" +
+                        "                      {\n" +
+                        "                        \"classLoaderName\": null,\n" +
+                        "                        \"moduleName\": null,\n" +
+                        "                        \"moduleVersion\": null,\n" +
+                        "                        \"methodName\": \"handle\",\n" +
+                        "                        \"fileName\": \"ActivityWorker.java\",\n" +
+                        "                        \"lineNumber\": 216,\n" +
+                        "                        \"nativeMethod\": false,\n" +
+                        "                        \"className\": \"io.temporal.internal.worker.ActivityWorker$TaskHandlerImpl\"\n" +
+                        "                      },\n" +
+                        "                      {\n" +
+                        "                        \"classLoaderName\": null,\n" +
+                        "                        \"moduleName\": null,\n" +
+                        "                        \"moduleVersion\": null,\n" +
+                        "                        \"methodName\": \"lambda$process$0\",\n" +
+                        "                        \"fileName\": \"PollTaskExecutor.java\",\n" +
+                        "                        \"lineNumber\": 105,\n" +
+                        "                        \"nativeMethod\": false,\n" +
+                        "                        \"className\": \"io.temporal.internal.worker.PollTaskExecutor\"\n" +
+                        "                      },\n" +
+                        "                      {\n" +
+                        "                        \"classLoaderName\": null,\n" +
+                        "                        \"moduleName\": \"java.base\",\n" +
+                        "                        \"moduleVersion\": \"17.0.9\",\n" +
+                        "                        \"methodName\": \"runWorker\",\n" +
+                        "                        \"fileName\": \"ThreadPoolExecutor.java\",\n" +
+                        "                        \"lineNumber\": 1136,\n" +
+                        "                        \"nativeMethod\": false,\n" +
+                        "                        \"className\": \"java.util.concurrent.ThreadPoolExecutor\"\n" +
+                        "                      },\n" +
+                        "                      {\n" +
+                        "                        \"classLoaderName\": null,\n" +
+                        "                        \"moduleName\": \"java.base\",\n" +
+                        "                        \"moduleVersion\": \"17.0.9\",\n" +
+                        "                        \"methodName\": \"run\",\n" +
+                        "                        \"fileName\": \"ThreadPoolExecutor.java\",\n" +
+                        "                        \"lineNumber\": 635,\n" +
+                        "                        \"nativeMethod\": false,\n" +
+                        "                        \"className\": \"java.util.concurrent.ThreadPoolExecutor$Worker\"\n" +
+                        "                      },\n" +
+                        "                      {\n" +
+                        "                        \"classLoaderName\": null,\n" +
+                        "                        \"moduleName\": \"java.base\",\n" +
+                        "                        \"moduleVersion\": \"17.0.9\",\n" +
+                        "                        \"methodName\": \"run\",\n" +
+                        "                        \"fileName\": \"Thread.java\",\n" +
+                        "                        \"lineNumber\": 840,\n" +
+                        "                        \"nativeMethod\": false,\n" +
+                        "                        \"className\": \"java.lang.Thread\"\n" +
+                        "                      }\n" +
+                        "                    ],\n" +
+                        "                    \"httpStatus\": 500,\n" +
+                        "                    \"messageForCustomer\": null,\n" +
+                        "                    \"tcrErrors\": [\n" +
+                        "                      {\n" +
+                        "                        \"translatedFailureReason\": \"2FA verification is already complete\",\n" +
+                        "                        \"apiErrorCode\": \"GENERAL_ERROR\"\n" +
+                        "                      }\n" +
+                        "                    ],\n" +
+                        "                    \"failureReason\": \"Registrar response: Fields Error: 2FA verification is already complete\",\n" +
+                        "                    \"message\": \"TCR CSP error: Registrar response: Fields Error: 2FA verification is already complete\",\n" +
+                        "                    \"suppressed\": [],\n" +
+                        "                    \"localizedMessage\": \"TCR CSP error: Registrar response: Fields Error: 2FA verification is already complete\"\n" +
+                        "                  }\n" +
+                        "                }\n";
+
+            if(Activity.getExecutionContext().getInfo().getAttempt() < 3){
+
+                throw ApplicationFailure.newFailureWithCause("this is a test","MyException", new NullPointerException(), s);
+
+            }
+
+            throw ApplicationFailure.newNonRetryableFailureWithCause("this is a test","MyException", new NullPointerException(), s);
+
         }
 
         @Override

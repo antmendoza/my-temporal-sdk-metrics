@@ -21,11 +21,11 @@
       }
     ]
   },
-  "description": "Temporal SDK (Java)\n",
+  "description": "Temporal SDKs \n",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 2,
+  "id": 1,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -131,9 +131,11 @@
             "type": "prometheus",
             "uid": "$datasource"
           },
-          "expr": "sum(rate(temporal_request_total{namespace=~\"$namespace\"}[$__rate_interval])) by (namespace)\n",
+          "editorMode": "code",
+          "expr": "sum(rate(temporal_request_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
           "intervalFactor": 2,
-          "legendFormat": "request - {{namespace}}\n",
+          "legendFormat": "[Java-SDK] request: namespace: {{ namespace }}",
+          "range": true,
           "refId": "A"
         },
         {
@@ -141,10 +143,38 @@
             "type": "prometheus",
             "uid": "$datasource"
           },
-          "expr": "sum(rate(temporal_request_failure_total{namespace=~\"$namespace\"}[$__rate_interval])) by (namespace)\n",
+          "editorMode": "code",
+          "expr": "sum(rate(temporal_request_failure_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
           "intervalFactor": 2,
-          "legendFormat": "failure - {{namespace}}\n",
+          "legendFormat": "[Java-SDK] failure: namespace: {{ namespace }}",
+          "range": true,
           "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(temporal_request{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
+          "hide": false,
+          "intervalFactor": 2,
+          "legendFormat": "[Core-SDK] request: namespace: {{ namespace }}",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(temporal_request_failure{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
+          "hide": false,
+          "intervalFactor": 2,
+          "legendFormat": "[Core-SDK] failure: namespace: {{ namespace }}",
+          "range": true,
+          "refId": "D"
         }
       ],
       "title": "RPC Requests Vs Failures",
@@ -215,7 +245,7 @@
         "x": 12,
         "y": 1
       },
-      "id": 50,
+      "id": 64,
       "interval": "5s",
       "options": {
         "legend": {
@@ -239,10 +269,25 @@
             "type": "prometheus",
             "uid": "$datasource"
           },
-          "expr": "sum(rate(temporal_request_failure_total{namespace=~\"$namespace\"}[$__rate_interval])) by (namespace, operation)\n",
+          "editorMode": "code",
+          "expr": "sum(rate(temporal_request_failure_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
           "intervalFactor": 2,
-          "legendFormat": "{{namespace}} - {{operation}}",
-          "refId": "A"
+          "legendFormat": "[Java-SDK] failure: namespace: {{ namespace }}; operation:{{operation}}",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(temporal_request_failure{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
+          "hide": false,
+          "intervalFactor": 2,
+          "legendFormat": "[Core-SDK] failure: namespace: {{ namespace }}; operation:{{operation}}",
+          "range": true,
+          "refId": "D"
         }
       ],
       "title": "RPC Failures Per Operation",
@@ -313,7 +358,7 @@
         "x": 0,
         "y": 9
       },
-      "id": 3,
+      "id": 65,
       "interval": "5s",
       "options": {
         "legend": {
@@ -338,14 +383,27 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(temporal_request_total{namespace=~\"$namespace\"}[$__rate_interval])) by (namespace, operation)\n",
+          "expr": "sum(rate(temporal_request_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
           "intervalFactor": 2,
-          "legendFormat": "{{namespace}} - {{operation}}",
+          "legendFormat": "[Java-SDK] request: namespace: {{ namespace }}; operation:{{operation}}",
           "range": true,
-          "refId": "A"
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(temporal_request{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
+          "hide": false,
+          "intervalFactor": 2,
+          "legendFormat": "[Core-SDK] request: namespace: {{ namespace }}; operation:{{operation}}",
+          "range": true,
+          "refId": "D"
         }
       ],
-      "title": "RPC per operation",
+      "title": "RPC Failures Per Operation",
       "type": "timeseries"
     },
     {
@@ -437,10 +495,25 @@
             "type": "prometheus",
             "uid": "$datasource"
           },
+          "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_request_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "{{ namespace }} - {{ operation }}\n",
+          "legendFormat": "[Java-SDK] request: namespace: {{ namespace }}; operation: {{ operation }}",
+          "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_request_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
+          "hide": false,
+          "intervalFactor": 2,
+          "legendFormat": "[Core-SDK] request: namespace: {{ namespace }}; operation: {{ operation }}",
+          "range": true,
+          "refId": "B"
         }
       ],
       "title": "RPC Latencies (p95)",
@@ -917,8 +990,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1015,8 +1087,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1126,8 +1197,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1226,8 +1296,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1327,8 +1396,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1427,8 +1495,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1527,8 +1594,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1627,8 +1693,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1740,8 +1805,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1840,8 +1904,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1941,8 +2004,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2041,8 +2103,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2154,8 +2215,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2254,8 +2314,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2354,8 +2413,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2452,8 +2510,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2553,8 +2610,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2667,8 +2723,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2767,8 +2822,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2880,8 +2934,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2993,8 +3046,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3093,8 +3145,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3193,8 +3244,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3293,8 +3343,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3355,6 +3404,11 @@
   "templating": {
     "list": [
       {
+        "current": {
+          "selected": false,
+          "text": "prometheus",
+          "value": "prometheus"
+        },
         "hide": 0,
         "includeAll": false,
         "multi": false,
@@ -3367,6 +3421,11 @@
         "type": "datasource"
       },
       {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
         "datasource": {
           "type": "prometheus",
           "uid": "${datasource}"
@@ -3395,8 +3454,8 @@
   },
   "timepicker": {},
   "timezone": "utc",
-  "title": "Temporal SDK (Java) temporal-sdk-java",
-  "uid": "kCVDBCrIk",
-  "version": 2,
+  "title": "Temporal SDKs Copy",
+  "uid": "uvNCObMHz",
+  "version": 9,
   "weekStart": ""
 }

@@ -138,7 +138,7 @@ public class Starter {
         final int millisSleep = 500;
 
         final AtomicInteger input = new AtomicInteger();
-        while (input.get() < 10) {
+        while (input.get() < 1000) {
 
 
             final int andIncrement = input.getAndIncrement();
@@ -179,11 +179,6 @@ public class Starter {
             });
 
 
-            try {
-                Thread.sleep(millisSleep);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
 
         }
 
