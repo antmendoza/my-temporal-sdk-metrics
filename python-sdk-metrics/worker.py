@@ -3,6 +3,7 @@ from datetime import timedelta
 
 from temporalio import activity, workflow
 from temporalio.client import Client
+from temporalio.common import RetryPolicy
 from temporalio.runtime import PrometheusConfig, Runtime, TelemetryConfig
 from temporalio.worker import Worker
 
@@ -14,16 +15,20 @@ class GreetingWorkflow:
         result = await workflow.execute_activity(
             compose_greeting,
             name,
-            start_to_close_timeout=timedelta(seconds=10),
+            start_to_close_timeout=timedelta(seconds=2),
+            retry_policy=RetryPolicy(
+                maximum_attempts=1,
+            )
         )
-        while True:
-            await asyncio.sleep(3)
+
+        await asyncio.sleep(1)
 
         return result
 
 
 @activity.defn
 async def compose_greeting(name: str) -> str:
+    await asyncio.sleep(4)
     return f"Hello, {name}!"
 
 
@@ -34,7 +39,10 @@ def init_runtime_with_prometheus(port: int) -> Runtime:
     # Create runtime for use with Prometheus metrics
     return Runtime(
         telemetry=TelemetryConfig(
-            metrics=PrometheusConfig(bind_address=f"127.0.0.1:{port}")
+            metrics=PrometheusConfig(
+                bind_address=f"127.0.0.1:{port}",
+                durations_as_seconds=True
+            )
         )
     )
 

@@ -37,7 +37,6 @@ import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 import io.temporal.workflow.unsafe.WorkflowUnsafe;
 
 import java.lang.reflect.Type;
-import java.time.Duration;
 import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -179,8 +178,11 @@ public class Starter {
             });
 
 
-
         }
+
+
+        Thread.sleep(millisSleep);
+
 
     }
 

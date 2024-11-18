@@ -95,7 +95,9 @@ public class WorkflowHelloActivity {
 
         public String run(String name) {
 
-            activities.exception();
+            activities.dontSleep();
+            activities.dontSleep();
+            activities.dontSleep();
 
 
 

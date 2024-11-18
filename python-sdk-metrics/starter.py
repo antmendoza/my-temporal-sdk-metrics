@@ -16,24 +16,29 @@ async def main():
         runtime=runtime,
     )
 
+    print(
+        "Prometheus client metrics available at http://127.0.0.1:8085/metrics, ctrl+c to exit"
+    )
+
     while True:
+        await asyncio.sleep(1)
         try:
             await asyncio.sleep(1)
             await client.get_workflow_handle("prometheus-workflow-id").signal("test","test")
         except Exception:
             pass
 
-    # Run workflow
-    result = await client.execute_workflow(
-        GreetingWorkflow.run,
-        "Temporal",
-        id="prometheus-workflow-id",
-        task_queue="prometheus-task-queue",
-    )
-    print(f"Workflow result: {result}")
-    print(
-        "Prometheus client metrics available at http://127.0.0.1:8085/metrics, ctrl+c to exit"
-    )
+        # Run workflow
+        result = await client.execute_workflow(
+            GreetingWorkflow.run,
+            "Temporal",
+            id="prometheus-workflow-id",
+            task_queue="prometheus-task-queue",
+        )
+        print(f"Workflow result: {result}")
+
+
+
     await interrupt_event.wait()
 
 
