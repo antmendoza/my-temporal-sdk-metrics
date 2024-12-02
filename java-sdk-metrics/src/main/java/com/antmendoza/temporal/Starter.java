@@ -134,7 +134,7 @@ public class Starter {
         WorkflowClient client = WorkflowClient.newInstance(service, clientOptions);
 
 
-        final int millisSleep = 500;
+        final int millisSleep = 1000;
 
         final AtomicInteger input = new AtomicInteger();
         while (input.get() < 1000) {
@@ -177,11 +177,12 @@ public class Starter {
                 }
             });
 
+            Thread.sleep(millisSleep);
+
 
         }
 
 
-        Thread.sleep(millisSleep);
 
 
     }

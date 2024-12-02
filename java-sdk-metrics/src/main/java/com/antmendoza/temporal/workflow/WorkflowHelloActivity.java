@@ -95,11 +95,16 @@ public class WorkflowHelloActivity {
 
         public String run(String name) {
 
-            activities.dontSleep();
-            activities.dontSleep();
-            activities.dontSleep();
+            try {
 
+            activities.exception();
+            }catch (Exception e){
 
+            }
+
+            activities.dontSleep();
+            activities.dontSleep();
+            activities.dontSleep();
 
 
             return "done";

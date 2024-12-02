@@ -12,10 +12,11 @@ from temporalio.worker import Worker
 class GreetingWorkflow:
     @workflow.run
     async def run(self, name: str) -> str:
+
         result = await workflow.execute_activity(
             compose_greeting,
             name,
-            start_to_close_timeout=timedelta(seconds=2),
+            start_to_close_timeout=timedelta(seconds=3),
             retry_policy=RetryPolicy(
                 maximum_attempts=1,
             )
@@ -28,7 +29,7 @@ class GreetingWorkflow:
 
 @activity.defn
 async def compose_greeting(name: str) -> str:
-    await asyncio.sleep(4)
+    await asyncio.sleep(0.5)
     return f"Hello, {name}!"
 
 
