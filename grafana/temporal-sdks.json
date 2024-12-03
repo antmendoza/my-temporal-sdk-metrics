@@ -25,7 +25,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 1,
+  "id": 2,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -134,7 +134,7 @@
           "editorMode": "code",
           "expr": "sum(rate(temporal_request_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK] request: namespace: {{ namespace }}",
+          "legendFormat": "[Java/Go-SDK] request: namespace: {{ namespace }}",
           "range": true,
           "refId": "A"
         },
@@ -146,7 +146,7 @@
           "editorMode": "code",
           "expr": "sum(rate(temporal_request_failure_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK] failure: namespace: {{ namespace }}",
+          "legendFormat": "[Java/Go-SDK] failure: namespace: {{ namespace }}",
           "range": true,
           "refId": "B"
         },
@@ -272,7 +272,7 @@
           "editorMode": "code",
           "expr": "sum(rate(temporal_request_failure_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK] failure: namespace: {{ namespace }}; operation:{{operation}}",
+          "legendFormat": "[Java/Go-SDK] failure: namespace: {{ namespace }}; operation:{{operation}}",
           "range": true,
           "refId": "B"
         },
@@ -385,7 +385,7 @@
           "editorMode": "code",
           "expr": "sum(rate(temporal_request_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK] request: namespace: {{ namespace }}; operation:{{operation}}",
+          "legendFormat": "[Java/Go-SDK] request: namespace: {{ namespace }}; operation:{{operation}}",
           "range": true,
           "refId": "B"
         },
@@ -403,7 +403,7 @@
           "refId": "D"
         }
       ],
-      "title": "RPC Failures Per Operation",
+      "title": "RPC Requests Per Operation",
       "type": "timeseries"
     },
     {
@@ -498,7 +498,7 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_request_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK] request: namespace: {{ namespace }}; operation: {{ operation }}",
+          "legendFormat": "[Java/Go-SDK] request: namespace: {{ namespace }}; operation: {{ operation }}",
           "range": true,
           "refId": "A"
         },
@@ -624,7 +624,7 @@
           "editorMode": "code",
           "expr": "sum(rate(temporal_long_request_failure_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK] long_request: namespace: {{ namespace }}; operation:{{operation}}",
+          "legendFormat": "[Java/Go-SDK] long_request: namespace: {{ namespace }}; operation:{{operation}}",
           "range": true,
           "refId": "B"
         },
@@ -737,7 +737,7 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_long_request_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK] long_request: namespace: {{ namespace }}; operation: {{ operation }}",
+          "legendFormat": "[Java/Go-SDK] long_request: namespace: {{ namespace }}; operation: {{ operation }}",
           "range": true,
           "refId": "A"
         },
@@ -863,7 +863,7 @@
           "editorMode": "code",
           "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_completed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK] namespace:{{namespace}}; WorkflowType {{workflow_type}}",
+          "legendFormat": "[Java/Go-SDK] namespace:{{namespace}}; WorkflowType {{workflow_type}}",
           "range": true,
           "refId": "A"
         },
@@ -977,7 +977,7 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type, le) (rate(temporal_workflow_endtoend_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace:{{namespace}}; WorkflowType {{workflow_type}}",
+          "legendFormat": "[Java/Go-SDK]: namespace:{{namespace}}; WorkflowType {{workflow_type}}",
           "range": true,
           "refId": "A"
         },
@@ -1090,7 +1090,7 @@
           "editorMode": "code",
           "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_failed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace:{{namespace}}; WorkflowType {{workflow_type}}",
+          "legendFormat": "[Java/Go-SDK]: namespace:{{namespace}}; WorkflowType {{workflow_type}}",
           "range": true,
           "refId": "A"
         },
@@ -1216,7 +1216,7 @@
           "editorMode": "code",
           "expr": "sum by (namespace, task_queue) (rate(temporal_workflow_task_queue_poll_succeed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "A"
         },
@@ -1329,7 +1329,7 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, task_queue,  le) (rate(temporal_workflow_task_schedule_to_start_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "A"
         },
@@ -1443,7 +1443,7 @@
           "editorMode": "code",
           "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_task_execution_failed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
           "range": true,
           "refId": "A"
         },
@@ -1556,7 +1556,7 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type,  le) (rate(temporal_workflow_task_execution_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
           "range": true,
           "refId": "A"
         },
@@ -1669,7 +1669,7 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type, le) (rate(temporal_workflow_task_replay_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
           "range": true,
           "refId": "A"
         },
@@ -1782,7 +1782,7 @@
           "editorMode": "code",
           "expr": "sum by (namespace, task_queue) (rate(temporal_workflow_task_queue_poll_empty_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "A"
         },
@@ -1908,7 +1908,7 @@
           "editorMode": "code",
           "expr": "sum by (namespace, activity_type) (rate(temporal_local_activity_execution_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval]))",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
         }
@@ -2009,7 +2009,7 @@
           "expr": "sum by (namespace, activity_type) (rate(temporal_local_activity_execution_failed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
         }
@@ -2109,7 +2109,7 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_local_activity_execution_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
         }
@@ -2209,7 +2209,7 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_local_activity_succeed_endtoend_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
         }
@@ -2322,7 +2322,7 @@
           "editorMode": "code",
           "expr": "sum by (namespace) (rate(temporal_activity_schedule_to_start_latency_seconds_count {namespace=~\"$namespace\"}[$__rate_interval]))",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}",
           "range": true,
           "refId": "A"
         },
@@ -2435,7 +2435,7 @@
           "editorMode": "code",
           "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_failed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
         },
@@ -2548,7 +2548,7 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_activity_execution_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
         },
@@ -2661,7 +2661,7 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_activity_succeed_endtoend_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
         },
@@ -2776,7 +2776,7 @@
           "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_cancelled_total{namespace=~\"$namespace\"}[$__rate_interval]))",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
         },
@@ -2902,7 +2902,7 @@
           "editorMode": "code",
           "expr": "sum by (namespace, task_queue) (rate(temporal_activity_poll_no_task_total{namespace=~\"$namespace\"}[$__rate_interval]))",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "A"
         },
@@ -2915,7 +2915,7 @@
           "expr": "sum by (namespace, task_queue) (rate(temporal_activity_poll_no_task{namespace=~\"$namespace\"}[$__rate_interval]))",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "B"
         }
@@ -3015,7 +3015,7 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, task_queue , le) (rate(temporal_activity_schedule_to_start_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "A"
         },
@@ -3141,7 +3141,7 @@
           "editorMode": "code",
           "expr": "temporal_worker_task_slots_available{namespace=~\"$namespace\"}",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; worker_type:{{worker_type}}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; worker_type:{{worker_type}}",
           "range": true,
           "refId": "A"
         },
@@ -3267,7 +3267,7 @@
           "editorMode": "code",
           "expr": "temporal_sticky_cache_size{namespace=~\"$namespace\"}",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; task_queue: {{task_queue}}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue: {{task_queue}}",
           "range": true,
           "refId": "A"
         },
@@ -3380,7 +3380,7 @@
           "editorMode": "code",
           "expr": "sum by (namespace) (rate(temporal_sticky_cache_forced_eviction_total{namespace=~\"$namespace\"}[$__rate_interval]))",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }};",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }};",
           "range": true,
           "refId": "A"
         },
@@ -3493,7 +3493,7 @@
           "editorMode": "code",
           "expr": "sum by (namespace) (rate(temporal_sticky_cache_hit_total{namespace=~\"$namespace\"}[$__rate_interval]))",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }};",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }};",
           "range": true,
           "refId": "A"
         },
@@ -3606,7 +3606,7 @@
           "editorMode": "code",
           "expr": "sum by (namespace, task_queue) (rate(temporal_sticky_cache_miss_total{namespace=~\"$namespace\"}[$__rate_interval]))",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "A"
         },
@@ -3685,8 +3685,8 @@
   },
   "timepicker": {},
   "timezone": "utc",
-  "title": "Temporal SDKs Copy",
-  "uid": "uvNCObMHz",
-  "version": 4,
+  "title": "Temporal SDKs",
+  "uid": "uvNCObMHzd",
+  "version": 2,
   "weekStart": ""
 }
