@@ -1,7 +1,6 @@
 
-# About this project
+See [start-env.md](../start-env.md)
 
-[Main README](../README.md)
 
 
 ## Configuration
@@ -13,13 +12,6 @@ See
 
 
 
-## Start environment
-
-- `1-create-network.sh`
-
-- `2-start-grafana_prometheus.sh`
-
-  Navigate to the [dashboard](http://localhost:3000/)
 
 
 ## Run the worker

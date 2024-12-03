@@ -1,9 +1,12 @@
 ### Steps to run this sample:
 
+See [start-env.md](../start-env.md)
+
 
 ```bash
 go mod tidy
 ```
+
 
 - Start the client
 

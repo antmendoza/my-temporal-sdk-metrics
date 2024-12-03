@@ -1,12 +1,6 @@
 
-Demo project for metrics and scaling workers on different SDKs
+# SDK Metrics
 
-
-
-[WIP] Building for now the enviroment for different SDKs
-
-- [Java](./java-sdk-metrics/README.md)
-
-- WIP [Typescript](./ts-sdk-metrics/README.md)
-
-
+- [GO](go-sdk-metrics/README.md)
+- [Java](java-sdk-metrics/README.md)
+- [Python](python-sdk-metrics/README.md)

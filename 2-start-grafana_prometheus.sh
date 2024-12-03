@@ -1,7 +1,7 @@
 #!/bin/sh
 
 
-cd ../grafana
+cd ./grafana
 
 docker compose down --remove-orphans
 
