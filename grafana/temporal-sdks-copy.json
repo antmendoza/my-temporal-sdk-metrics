@@ -1908,7 +1908,7 @@
           "editorMode": "code",
           "expr": "sum by (namespace, activity_type) (rate(temporal_local_activity_execution_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval]))",
           "intervalFactor": 2,
-          "legendFormat": "{{namespace}} - {{activity_type}}\n",
+          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
         }
@@ -2009,7 +2009,7 @@
           "expr": "sum by (namespace, activity_type) (rate(temporal_local_activity_execution_failed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "{{namespace}} - {{activity_type}}\n",
+          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
         }
@@ -2109,7 +2109,7 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_local_activity_execution_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "{{namespace}} - {{activity_type}}\n",
+          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
         }
@@ -2209,7 +2209,7 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_local_activity_succeed_endtoend_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "{{namespace}} - {{activity_type}}\n",
+          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
         }
@@ -2320,9 +2320,9 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_latency_seconds_count {namespace=~\"$namespace\"}[$__rate_interval]))",
+          "expr": "sum by (namespace) (rate(temporal_activity_schedule_to_start_latency_seconds_count {namespace=~\"$namespace\"}[$__rate_interval]))",
           "intervalFactor": 2,
-          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "[Java-SDK]: namespace: {{ namespace }}",
           "range": true,
           "refId": "A"
         },
@@ -2332,10 +2332,10 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_latency_count{namespace=~\"$namespace\"}[$__rate_interval]))",
+          "expr": "sum by (namespace) (rate(temporal_activity_schedule_to_start_latency_count{namespace=~\"$namespace\"}[$__rate_interval]))",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}",
           "range": true,
           "refId": "B"
         }
@@ -3687,6 +3687,6 @@
   "timezone": "utc",
   "title": "Temporal SDKs Copy",
   "uid": "uvNCObMHz",
-  "version": 21,
+  "version": 4,
   "weekStart": ""
 }

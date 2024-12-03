@@ -13,6 +13,35 @@ class GreetingWorkflow:
     @workflow.run
     async def run(self, name: str) -> str:
 
+        result = await workflow.execute_local_activity(
+            compose_greeting,
+            name,
+            start_to_close_timeout=timedelta(seconds=3),
+            retry_policy=RetryPolicy(
+                maximum_attempts=1,
+            )
+        )
+
+        await workflow.execute_local_activity(
+            compose_greeting,
+            name,
+            start_to_close_timeout=timedelta(seconds=3),
+            retry_policy=RetryPolicy(
+                maximum_attempts=1,
+            )
+        )
+
+
+        result = await workflow.execute_activity(
+            compose_greeting,
+            name,
+            start_to_close_timeout=timedelta(seconds=3),
+            retry_policy=RetryPolicy(
+                maximum_attempts=1,
+            )
+        )
+
+
         result = await workflow.execute_activity(
             compose_greeting,
             name,
@@ -29,7 +58,7 @@ class GreetingWorkflow:
 
 @activity.defn
 async def compose_greeting(name: str) -> str:
-    await asyncio.sleep(0.5)
+    await asyncio.sleep(1.2)
     return f"Hello, {name}!"
 
 
