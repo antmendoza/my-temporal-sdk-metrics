@@ -11,9 +11,6 @@ See
 
 
 
-
-
-
 ## Run the worker
 
 - `3-start-java-worker.sh`
