@@ -15,6 +15,7 @@ scrape_configs:
     static_configs:
       - targets:
           - 'host.docker.internal:8079'
+          - 'host.docker.internal:8071'
   - job_name: 'python_core_metrics'
     static_configs:
       - targets:
