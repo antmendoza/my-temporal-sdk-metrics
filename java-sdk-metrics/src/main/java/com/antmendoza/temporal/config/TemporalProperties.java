@@ -7,16 +7,13 @@ import java.util.Properties;
 public class TemporalProperties {
 
 
-    public String temporal_key_location;
-    public String temporal_cert_location;
-    public String temporal_namespace;
-    public String temporal_target_endpoint;
+    private boolean temporalServerLocalhost;
+    private String temporalKeyLocation;
+    private String temporalCertLocation;
+    private String temporalNamespace = "default";
+    private String temporalTargetEndpoint= "localhost:7233";
 
     public TemporalProperties() {
-        this.read();
-    }
-
-    private void read() {
 
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("temporal.properties")) {
 
@@ -25,15 +22,46 @@ public class TemporalProperties {
             // load a properties file
             prop.load(input);
 
-            this.temporal_key_location = prop.getProperty("temporal_key_location");
-            this.temporal_cert_location = prop.getProperty("temporal_cert_location");
-            this.temporal_namespace = prop.getProperty("temporal_namespace");
-            this.temporal_target_endpoint = prop.getProperty("temporal_target_endpoint");
+
+            this.temporalServerLocalhost = Boolean.parseBoolean(prop.getProperty("temporal_server_localhost"));
+
+
+            System.out.println(">>>>> temporalServerLocalhost: " + prop.getProperty("temporal_server_localhost"));
+            System.out.println(">>>>> temporalServerLocalhost: " + this.temporalServerLocalhost);
+
+            if(!this.temporalServerLocalhost){
+
+                this.temporalKeyLocation = prop.getProperty("temporal_key_location");
+                this.temporalCertLocation = prop.getProperty("temporal_cert_location");
+                this.temporalNamespace = prop.getProperty("temporal_namespace");
+                this.temporalTargetEndpoint = prop.getProperty("temporal_target_endpoint");
+            }
 
         } catch (IOException ex) {
 
             new RuntimeException(ex);
         }
 
+    }
+
+
+    public String getTemporalKeyLocation() {
+        return temporalKeyLocation;
+    }
+
+    public String getTemporalCertLocation() {
+        return temporalCertLocation;
+    }
+
+    public String getTemporalNamespace() {
+        return temporalNamespace;
+    }
+
+    public String getTemporalTargetEndpoint() {
+        return temporalTargetEndpoint;
+    }
+
+    public boolean isTemporalServerLocalhost() {
+        return temporalServerLocalhost;
     }
 }

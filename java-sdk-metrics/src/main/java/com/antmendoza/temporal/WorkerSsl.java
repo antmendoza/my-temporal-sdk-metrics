@@ -49,20 +49,24 @@ public class WorkerSsl {
         metricsScope.gauge("MAX_WORKFLOW_THREAD_COUNT").update(FromEnv.getMaxWorkflowThreadCount());
         metricsScope.gauge("CONCURRENT_WORKFLOW_EXECUTION_SIZE").update(FromEnv.getConcurrentWorkflowExecutionSize());
 
+        final WorkflowServiceStubsOptions.Builder builder = WorkflowServiceStubsOptions.newBuilder()
+                // Add metrics scope to workflow service stub options
+                //or it is a better option to have the rate limit on workflow code itself?
+                .setMetricsScope(metricsScope)
+                .setTarget(sslContextBuilderProvider.getTargetEndpoint());
+
+        if(sslContextBuilderProvider.getSslContext() != null) {
+            builder.setSslContext(sslContextBuilderProvider.getSslContext());
+        }
+
+
         WorkflowServiceStubs service =
                 WorkflowServiceStubs.newServiceStubs(
-                        WorkflowServiceStubsOptions.newBuilder()
-                                // Add metrics scope to workflow service stub options
-                                //or it is a better option to have the rate limit on workflow code itself?
-                                .setMetricsScope(metricsScope)
-                                .setSslContext(sslContextBuilderProvider.getSslContext())
-                                .setTarget(sslContextBuilderProvider.getTargetEndpoint())
+                        builder
                                 .build());
 
 
-        // Now setup and start workflow worker, which uses SSL enabled gRPC service to communicate with
-        // backend.
-        // client that can be used to start and signal workflows.
+
         WorkflowClient client =
                 WorkflowClient.newInstance(
                         service, WorkflowClientOptions.newBuilder()
@@ -70,16 +74,12 @@ public class WorkerSsl {
                                 .build());
 
 
-//        System.out.println(">>> " + client.getWorkflowServiceStubs().healthCheck().getStatus());
-        // worker factory that can be used to create workers for specific task queues
+
         WorkerFactoryOptions build = WorkerFactoryOptions.newBuilder()
                 .setWorkflowCacheSize(FromEnv.getCacheSize())
                 .setMaxWorkflowThreadCount(FromEnv.getMaxWorkflowThreadCount())
                 .build();
         WorkerFactory factory = WorkerFactory.newInstance(client, build);
-
-        //       for (int i = 0; i <= 2; i++) {
-        // Worker that listens on a task queue and hosts both workflow and activslity implementations.
 
 
         WorkerOptions build1 = WorkerOptions.newBuilder()

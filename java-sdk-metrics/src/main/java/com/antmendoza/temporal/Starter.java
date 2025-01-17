@@ -58,13 +58,18 @@ public class Starter {
                 "ClientSsl_" + port)
         );
 
+        final WorkflowServiceStubsOptions.Builder builder = WorkflowServiceStubsOptions.newBuilder()
+                .setMetricsScope(metricsScope)
+//                                .setRpcTimeout(Duration.ofMillis(167))
+                .setTarget(sslContextBuilderProvider.getTargetEndpoint());
+
+        if(sslContextBuilderProvider.getSslContext() != null) {
+            builder.setSslContext(sslContextBuilderProvider.getSslContext());
+        }
+
         WorkflowServiceStubs service =
                 WorkflowServiceStubs.newServiceStubs(
-                        WorkflowServiceStubsOptions.newBuilder()
-                                .setMetricsScope(metricsScope)
-//                                .setRpcTimeout(Duration.ofMillis(167))
-                                .setSslContext(sslContextBuilderProvider.getSslContext())
-                                .setTarget(sslContextBuilderProvider.getTargetEndpoint())
+                        builder
                                 .build());
 
 
@@ -157,18 +162,6 @@ public class Starter {
                     System.out.println(workflowId + "init " + new Date());
                     WorkflowExecution execution = WorkflowClient.start(workflow::run, "" + andIncrement);
                     System.out.println(workflowId + "end " + new Date());
-
-//                    workflow.run("");
-
-//                    client.newUntypedWorkflowStub(execution.getWorkflowId()).signal("test", "test");
-//                    CompletableFuture.runAsync(() -> {
-//
-//                        String updateResult = client.newUntypedWorkflowStub(execution.getWorkflowId()).update("update", String.class);
-//                        System.out.println("updateResult= " + updateResult);
-//
-//
-//                        System.out.println("workflow.update();= " + workflow.update());
-//                    });
 
 
                 } catch (Exception e) {

@@ -24,7 +24,7 @@ processors:
     spike_limit_percentage: 30
 
 exporters:
-  logging:
+  debug:
     verbosity: detailed
   prometheusremotewrite:
     endpoint: "http://prometheus:9090/api/v1/write"

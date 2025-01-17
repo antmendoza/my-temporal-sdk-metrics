@@ -16,9 +16,15 @@ public class SslContextBuilderProvider {
 
     public SslContext getSslContext() {
 
+
+        if(properties.isTemporalServerLocalhost()){
+            return null;
+        }
+
+
         try {
-            InputStream clientCert = getClass().getResourceAsStream(properties.temporal_cert_location);
-            InputStream clientKey = getClass().getResourceAsStream(properties.temporal_key_location);
+            InputStream clientCert = getClass().getResourceAsStream(properties.getTemporalCertLocation());
+            InputStream clientKey = getClass().getResourceAsStream(properties.getTemporalKeyLocation());
             return SimpleSslContextBuilder.forPKCS8(clientCert, clientKey).build();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -28,14 +34,14 @@ public class SslContextBuilderProvider {
     }
 
     public String getTargetEndpoint() {
-        String targetEndpoint = properties.temporal_target_endpoint;
+        String targetEndpoint = properties.getTemporalTargetEndpoint();
         return targetEndpoint;
     }
 
     public String getNamespace() {
         // Your registered namespace.
         // String namespace = System.getenv("TEMPORAL_NAMESPACE");
-        String namespace = properties.temporal_namespace;
+        String namespace = properties.getTemporalNamespace();
 
         return namespace;
     }
