@@ -2,3 +2,5 @@
 */target
 java-sdk-metrics/target/**
 */node_modules
+
+*/__pycache__/
