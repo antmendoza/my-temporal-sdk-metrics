@@ -2,8 +2,8 @@
 
 This project contains submodules. To clone the project with submodule use the following command:
 
-```
-git clone --recurse-submodules <repo-url>
+``` 
+git clone https://github.com/antmendoza/my-temporal-sdk-metrics --remote-submodules --recursive
 ```
 
 ## Description
