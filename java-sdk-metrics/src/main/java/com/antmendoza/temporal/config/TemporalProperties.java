@@ -7,11 +7,12 @@ import java.util.Properties;
 public class TemporalProperties {
 
 
-    private boolean temporalServerLocalhost;
+    private boolean temporalLocalServer;
     private String temporalKeyLocation;
     private String temporalCertLocation;
     private String temporalNamespace = "default";
-    private String temporalTargetEndpoint= "localhost:7233";
+    private String temporalWorkerTargetEndpoint = "localhost:7233";
+    private String temporalStarterTargetEndpoint = "localhost:7233";
 
     public TemporalProperties() {
 
@@ -23,18 +24,30 @@ public class TemporalProperties {
             prop.load(input);
 
 
-            this.temporalServerLocalhost = Boolean.parseBoolean(prop.getProperty("temporal_server_localhost"));
+            this.temporalLocalServer = Boolean.parseBoolean(prop.getProperty("temporal_local_server"));
 
 
-            System.out.println(">>>>> temporalServerLocalhost: " + prop.getProperty("temporal_server_localhost"));
-            System.out.println(">>>>> temporalServerLocalhost: " + this.temporalServerLocalhost);
+            System.out.println(">>>>> temporalServerLocalhost: " + prop.getProperty("temporal_local_server"));
+            System.out.println(">>>>> temporalServerLocalhost: " + this.temporalLocalServer);
 
-            if(!this.temporalServerLocalhost){
+            if (prop.getProperty("temporal_namespace") != null) {
+                this.temporalNamespace = prop.getProperty("temporal_namespace");
+            }
+
+
+            if (prop.getProperty("temporal_worker_target_endpoint") != null) {
+                this.temporalWorkerTargetEndpoint = prop.getProperty("temporal_worker_target_endpoint");
+            }
+
+
+            if (prop.getProperty("temporal_starter_target_endpoint") != null) {
+                this.temporalStarterTargetEndpoint = prop.getProperty("temporal_starter_target_endpoint");
+            }
+
+            if (!this.temporalLocalServer) {
 
                 this.temporalKeyLocation = prop.getProperty("temporal_key_location");
                 this.temporalCertLocation = prop.getProperty("temporal_cert_location");
-                this.temporalNamespace = prop.getProperty("temporal_namespace");
-                this.temporalTargetEndpoint = prop.getProperty("temporal_target_endpoint");
             }
 
         } catch (IOException ex) {
@@ -57,11 +70,15 @@ public class TemporalProperties {
         return temporalNamespace;
     }
 
-    public String getTemporalTargetEndpoint() {
-        return temporalTargetEndpoint;
+    public String getTemporalWorkerTargetEndpoint() {
+        return temporalWorkerTargetEndpoint;
     }
 
-    public boolean isTemporalServerLocalhost() {
-        return temporalServerLocalhost;
+    public String getTemporalStarterTargetEndpoint() {
+        return temporalStarterTargetEndpoint;
+    }
+
+    public boolean isTemporalLocalServer() {
+        return temporalLocalServer;
     }
 }

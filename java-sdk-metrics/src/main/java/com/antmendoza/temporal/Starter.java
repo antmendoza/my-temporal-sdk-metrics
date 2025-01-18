@@ -61,7 +61,7 @@ public class Starter {
         final WorkflowServiceStubsOptions.Builder builder = WorkflowServiceStubsOptions.newBuilder()
                 .setMetricsScope(metricsScope)
 //                                .setRpcTimeout(Duration.ofMillis(167))
-                .setTarget(sslContextBuilderProvider.getTargetEndpoint());
+                .setTarget(sslContextBuilderProvider.properties.getTemporalStarterTargetEndpoint());
 
         if(sslContextBuilderProvider.getSslContext() != null) {
             builder.setSslContext(sslContextBuilderProvider.getSslContext());
@@ -133,7 +133,7 @@ public class Starter {
         };
         WorkflowClientOptions clientOptions =
                 WorkflowClientOptions.newBuilder()
-                        .setNamespace(sslContextBuilderProvider.getNamespace())
+                        .setNamespace(sslContextBuilderProvider.properties.getTemporalNamespace())
 //                        .setDataConverter(dataConverter)
                         .build();
         WorkflowClient client = WorkflowClient.newInstance(service, clientOptions);

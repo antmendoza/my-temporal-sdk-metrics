@@ -1,7 +1,7 @@
 
+# Temporal Java SDK Metrics
+
 See [start-env.md](../start-env.md)
-
-
 
 ## Configuration
 
@@ -10,16 +10,19 @@ See
 - [env](./.env) file.
 
 
-
 ## Run the worker
 
-- `3-start-java-worker.sh`
+```bash
+./start-java-worker.sh
+
+```
 Start one worker with the given [env](./.env) variables.
 
 
 ## Start workflows
 
-- `4-create-backlog.sh`
-
+```bash
+./create-backlog.sh
+```
 
 The Java dashboard in [dashboard](http://localhost:3000/) will start showing data.

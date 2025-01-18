@@ -8,7 +8,7 @@ import java.io.InputStream;
 public class SslContextBuilderProvider {
 
 
-    private final TemporalProperties properties;
+    public final TemporalProperties properties;
 
     public SslContextBuilderProvider() {
         this.properties = new TemporalProperties();
@@ -17,7 +17,7 @@ public class SslContextBuilderProvider {
     public SslContext getSslContext() {
 
 
-        if(properties.isTemporalServerLocalhost()){
+        if(properties.isTemporalLocalServer()){
             return null;
         }
 
@@ -33,18 +33,6 @@ public class SslContextBuilderProvider {
 
     }
 
-    public String getTargetEndpoint() {
-        String targetEndpoint = properties.getTemporalTargetEndpoint();
-        return targetEndpoint;
-    }
-
-    public String getNamespace() {
-        // Your registered namespace.
-        // String namespace = System.getenv("TEMPORAL_NAMESPACE");
-        String namespace = properties.getTemporalNamespace();
-
-        return namespace;
-    }
 
 
 }

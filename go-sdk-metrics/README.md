@@ -2,20 +2,18 @@
 
 See [start-env.md](../start-env.md)
 
-
-- Start temporal server in localhost https://docs.temporal.io/cli
-
-
+- Install dependencies
 ```bash
 go mod tidy
 ```
-
 
 - Start the client
 
 ```bash
 go run starter/main.go
 ```
+
+
 - Start the worker
 
 ```bash

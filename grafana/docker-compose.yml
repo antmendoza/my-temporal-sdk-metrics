@@ -15,7 +15,7 @@ services:
     depends_on:
       - prometheus
     networks:
-      - temporal_network
+      - temporal-network
 
   prometheus:
     container_name: prometheus
@@ -30,8 +30,8 @@ services:
         source: ./deployment/prometheus/config.yml
         target: /etc/prometheus/prometheus.yml
     networks:
-      - temporal_network
+      - temporal-network
 
 networks:
-  temporal_network:
+  temporal-network:
     external: true

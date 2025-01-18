@@ -17,7 +17,7 @@ services:
       - DISABLE_EAGER_DISPATCH=${DISABLE_EAGER_DISPATCH}
       - SLEEP_ACTIVITY_IN_MS=${SLEEP_ACTIVITY_IN_MS}
     networks:
-      - temporal_network
+      - temporal-network
 
   otel-collector:
     image: otel/opentelemetry-collector-contrib
@@ -34,7 +34,7 @@ services:
     depends_on:
       - java-worker
     networks:
-      - temporal_network
+      - temporal-network
 
 
 
@@ -53,8 +53,8 @@ services:
 #    ports:
 #      - '8085:8080'
 #    networks:
-#      - temporal_network
+#      - temporal-network
 
 networks:
-  temporal_network:
+  temporal-network:
     external: true

@@ -53,7 +53,7 @@ public class WorkerSsl {
                 // Add metrics scope to workflow service stub options
                 //or it is a better option to have the rate limit on workflow code itself?
                 .setMetricsScope(metricsScope)
-                .setTarget(sslContextBuilderProvider.getTargetEndpoint());
+                .setTarget(sslContextBuilderProvider.properties.getTemporalWorkerTargetEndpoint());
 
         if(sslContextBuilderProvider.getSslContext() != null) {
             builder.setSslContext(sslContextBuilderProvider.getSslContext());
@@ -70,7 +70,7 @@ public class WorkerSsl {
         WorkflowClient client =
                 WorkflowClient.newInstance(
                         service, WorkflowClientOptions.newBuilder()
-                                .setNamespace(sslContextBuilderProvider.getNamespace())
+                                .setNamespace(sslContextBuilderProvider.properties.getTemporalNamespace())
                                 .build());
 
 
