@@ -7,7 +7,6 @@ cd ./temporal_server
 
 docker compose down --remove-orphans
 
-docker compose up --remove-orphans
-
+docker compose -f docker-compose.yml -f ../docker-compose-temporal_server-override.yml up --remove-orphans
 
 
