@@ -17,10 +17,6 @@ public class SslContextBuilderProvider {
     public SslContext getSslContext() {
 
 
-        if(properties.isTemporalLocalServer()){
-            return null;
-        }
-
 
         try {
             InputStream clientCert = getClass().getResourceAsStream(properties.getTemporalCertLocation());
