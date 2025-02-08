@@ -1,9 +1,9 @@
 package com.antmendoza.temporal.config;
 
 public class FromEnv {
-    private static String workerPort;
-    private static String activitiesPerSecondPerTQ;
-    private static String activityLatency;
+    private static String workerPort = "8081";
+    private static String activitiesPerSecondPerTQ = "0";
+    private static String activityLatencyMs = "100";
 
     public static String getWorkerPort() {
         return FromEnv.workerPort == null ? System.getenv("PQL_PORT") : FromEnv.workerPort;
@@ -15,9 +15,9 @@ public class FromEnv {
 
     }
 
-    public static String getActivityLatency() {
+    public static String getActivityLatencyMs() {
 
-        return FromEnv.activityLatency == null ? System.getenv("SLEEP_ACTIVITY_IN_MS") : FromEnv.activityLatency;
+        return FromEnv.activityLatencyMs == null ? System.getenv("SLEEP_ACTIVITY_IN_MS") : FromEnv.activityLatencyMs;
 
 
     }
@@ -70,7 +70,7 @@ public class FromEnv {
     }
 
     public FromEnv withActivityLatencyMS(String activityLatency) {
-        FromEnv.activityLatency = activityLatency;
+        FromEnv.activityLatencyMs = activityLatency;
         return this;
 
     }

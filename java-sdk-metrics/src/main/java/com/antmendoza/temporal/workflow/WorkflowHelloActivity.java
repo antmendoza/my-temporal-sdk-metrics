@@ -58,7 +58,7 @@ public class WorkflowHelloActivity {
     // Define the workflow implementation which implements our getGreeting workflow method.
     public static class MyWorkflowImpl implements MyWorkflow1 {
 
-        final int starToClose = Integer.parseInt(FromEnv.getActivityLatency());
+        final int starToClose = Integer.parseInt(FromEnv.getActivityLatencyMs());
         private final Logger logger = Workflow.getLogger(MyWorkflowImpl.class.getName());
         private final MyActivities activities = Workflow.newActivityStub(
                 MyActivities.class,
@@ -148,7 +148,7 @@ public class WorkflowHelloActivity {
             Activity.getExecutionContext().getMetricsScope().counter("custom_activity_retries").inc(1);
 
 
-            String sleep_activity_in_ms = FromEnv.getActivityLatency();
+            String sleep_activity_in_ms = FromEnv.getActivityLatencyMs();
             int i = Integer.parseInt(sleep_activity_in_ms);
             log.info("SLEEP_ACTIVITY_IN_MS : " + i);
 
