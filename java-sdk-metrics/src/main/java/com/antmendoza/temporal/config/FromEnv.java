@@ -1,9 +1,9 @@
 package com.antmendoza.temporal.config;
 
 public class FromEnv {
-    private static String workerPort = "8081";
-    private static String activitiesPerSecondPerTQ = "0";
-    private static String activityLatencyMs = "100";
+    private static String workerPort;
+    private static String activitiesPerSecondPerTQ;
+    private static String activityLatencyMs;
 
     public static String getWorkerPort() {
         return FromEnv.workerPort == null ? System.getenv("PQL_PORT") : FromEnv.workerPort;
