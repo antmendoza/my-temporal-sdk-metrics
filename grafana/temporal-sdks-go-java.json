@@ -3055,7 +3055,7 @@
           "editorMode": "code",
           "expr": "temporal_sticky_cache_size{namespace=~\"$namespace\"}",
           "intervalFactor": 2,
-          "legendFormat": "namespace: {{ namespace }}; task_queue: {{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}",
           "range": true,
           "refId": "A"
         }
