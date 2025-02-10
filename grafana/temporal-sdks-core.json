@@ -25,7 +25,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 1,
+  "id": 9,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -413,7 +413,7 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -628,7 +628,7 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -844,7 +844,7 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -1160,7 +1160,7 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -1363,7 +1363,7 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -1464,7 +1464,7 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -1617,7 +1617,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 85
+        "y": 68
       },
       "id": 23,
       "panels": [],
@@ -1687,7 +1687,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 86
+        "y": 69
       },
       "id": 24,
       "interval": "5s",
@@ -1788,7 +1788,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 86
+        "y": 69
       },
       "id": 59,
       "interval": "5s",
@@ -1881,7 +1881,7 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -1889,7 +1889,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 94
+        "y": 77
       },
       "id": 26,
       "interval": "5s",
@@ -1928,215 +1928,12 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "decimals": 0,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 94
-      },
-      "id": 62,
-      "interval": "5s",
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "v10.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_activity_succeed_endtoend_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "B"
-        }
-      ],
-      "title": "Activity Success E2E Latencies (p95)",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "decimals": 0,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 102
-      },
-      "id": 48,
-      "interval": "5s",
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "v10.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_cancelled{namespace=~\"$namespace\"}[$__rate_interval]))",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "B"
-        }
-      ],
-      "title": "Activity Cancelled",
-      "type": "timeseries"
-    },
-    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 110
+        "y": 93
       },
       "id": 40,
       "panels": [],
@@ -2206,7 +2003,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 111
+        "y": 94
       },
       "id": 36,
       "interval": "5s",
@@ -2299,7 +2096,7 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -2307,7 +2104,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 111
+        "y": 94
       },
       "id": 27,
       "interval": "5s",
@@ -2351,7 +2148,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 119
+        "y": 102
       },
       "id": 54,
       "panels": [],
@@ -2421,7 +2218,7 @@
         "h": 11,
         "w": 12,
         "x": 0,
-        "y": 120
+        "y": 103
       },
       "id": 44,
       "interval": "5s",
@@ -2521,7 +2318,7 @@
         "h": 11,
         "w": 12,
         "x": 12,
-        "y": 120
+        "y": 103
       },
       "id": 68,
       "interval": "5s",
@@ -2564,7 +2361,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 131
+        "y": 114
       },
       "id": 38,
       "panels": [],
@@ -2634,7 +2431,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 132
+        "y": 115
       },
       "id": 42,
       "interval": "5s",
@@ -2734,7 +2531,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 132
+        "y": 115
       },
       "id": 63,
       "interval": "5s",
@@ -2761,7 +2558,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (namespace) (rate(temporal_sticky_cache_forced_eviction{namespace=~\"$namespace\"}[$__rate_interval]))",
+          "expr": "sum by (namespace) (rate(temporal_sticky_cache_total_forced_eviction{namespace=~\"$namespace\"}[$__rate_interval]))",
           "hide": false,
           "intervalFactor": 2,
           "legendFormat": "namespace: {{ namespace }}; ",
@@ -2835,7 +2632,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 140
+        "y": 123
       },
       "id": 45,
       "interval": "5s",
@@ -2936,7 +2733,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 140
+        "y": 123
       },
       "id": 43,
       "interval": "5s",
@@ -3033,7 +2830,7 @@
   "timepicker": {},
   "timezone": "utc",
   "title": "Temporal Core SDK Metrics",
-  "uid": "uvNCObMHzdssss",
-  "version": 3,
+  "uid": "",
+  "version": 2,
   "weekStart": ""
 }

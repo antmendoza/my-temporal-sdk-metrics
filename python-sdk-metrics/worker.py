@@ -30,11 +30,12 @@ class GreetingWorkflow:
                 maximum_attempts=1,
             )
         )
+        await asyncio.sleep(5)
 
 
         result = await workflow.execute_activity(
             compose_greeting,
-            name,
+            "name",
             start_to_close_timeout=timedelta(seconds=3),
             retry_policy=RetryPolicy(
                 maximum_attempts=1,
@@ -59,6 +60,8 @@ class GreetingWorkflow:
 @activity.defn
 async def compose_greeting(name: str) -> str:
     await asyncio.sleep(1.2)
+    if name == "name":
+        raise ValueError("name is not allowed")
     return f"Hello, {name}!"
 
 
@@ -71,7 +74,6 @@ def init_runtime_with_prometheus(port: int) -> Runtime:
         telemetry=TelemetryConfig(
             metrics=PrometheusConfig(
                 bind_address=f"127.0.0.1:{port}",
-                durations_as_seconds=True
             )
         )
     )
@@ -92,6 +94,7 @@ async def main():
             task_queue="prometheus-task-queue",
             workflows=[GreetingWorkflow],
             activities=[compose_greeting],
+            max_cached_workflows=30,
     ):
         # Wait until interrupted
         print("Worker started")

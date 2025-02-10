@@ -1,4 +1,5 @@
 import asyncio
+import random
 
 from temporalio.client import Client
 
@@ -21,21 +22,24 @@ async def main():
     )
 
     while True:
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.1)
         try:
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.1)
             await client.get_workflow_handle("prometheus-workflow-id").signal("test","test")
         except Exception:
             pass
 
-        # Run workflow
-        result = await client.execute_workflow(
-            GreetingWorkflow.run,
-            "Temporal",
-            id="prometheus-workflow-id",
-            task_queue="prometheus-task-queue",
-        )
-        print(f"Workflow result: {result}")
+        try:
+            # Run workflow
+            result = await client.start_workflow(
+                GreetingWorkflow.run,
+                "Temporal",
+                id="prometheus-workflow-id" + str(random.randint(0, 1000)),
+                task_queue="prometheus-task-queue",
+            )
+            print(f"Workflow result: {result}")
+        except Exception:
+            pass
 
 
 
