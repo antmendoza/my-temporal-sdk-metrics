@@ -135,7 +135,7 @@
           "expr": "sum(rate(temporal_request{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] request: namespace: {{ namespace }}",
+          "legendFormat": "[request] namespace: {{ namespace }}",
           "range": true,
           "refId": "C"
         },
@@ -148,7 +148,7 @@
           "expr": "sum(rate(temporal_request_failure{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] failure: namespace: {{ namespace }}",
+          "legendFormat": "[failure] namespace: {{ namespace }}",
           "range": true,
           "refId": "D"
         }
@@ -249,7 +249,7 @@
           "expr": "sum(rate(temporal_request_failure{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] failure: namespace: {{ namespace }}; operation:{{operation}}",
+          "legendFormat": "namespace: {{ namespace }}; operation:{{operation}}",
           "range": true,
           "refId": "D"
         }
@@ -350,7 +350,7 @@
           "expr": "sum(rate(temporal_request{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] request: namespace: {{ namespace }}; operation:{{operation}}",
+          "legendFormat": "namespace: {{ namespace }}; operation:{{operation}}",
           "range": true,
           "refId": "D"
         }
@@ -451,7 +451,7 @@
           "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_request_latency_bucket{namespace=~\"$namespace\" }[$__rate_interval])))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] request: namespace: {{ namespace }}; operation: {{ operation }}",
+          "legendFormat": "namespace: {{ namespace }}; operation: {{ operation }}",
           "range": true,
           "refId": "B"
         }
@@ -565,7 +565,7 @@
           "expr": "sum(rate(temporal_long_request_failure{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] long_request: namespace: {{ namespace }}; operation:{{operation}}",
+          "legendFormat": "namespace: {{ namespace }}; operation:{{operation}}",
           "range": true,
           "refId": "D"
         }
@@ -666,7 +666,7 @@
           "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_long_request_latency_bucket{namespace=~\"$namespace\" }[$__rate_interval])))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] long_request: namespace: {{ namespace }}; operation: {{ operation }}",
+          "legendFormat": "namespace: {{ namespace }}; operation: {{ operation }}",
           "range": true,
           "refId": "B"
         }
@@ -780,7 +780,7 @@
           "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_completed{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] namespace:{{namespace}}; WorkflowType {{workflow_type}}",
+          "legendFormat": "namespace:{{namespace}}; WorkflowType {{workflow_type}}",
           "range": true,
           "refId": "B"
         }
@@ -882,7 +882,7 @@
           "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type, le) (rate(temporal_workflow_endtoend_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace:{{namespace}}; WorkflowType {{workflow_type}}",
+          "legendFormat": "namespace:{{namespace}}; WorkflowType {{workflow_type}}",
           "range": true,
           "refId": "B"
         }
@@ -983,7 +983,7 @@
           "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_failed{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace:{{namespace}}; WorkflowType {{workflow_type}}",
+          "legendFormat": "namespace:{{namespace}}; WorkflowType {{workflow_type}}",
           "range": true,
           "refId": "B"
         }
@@ -1097,7 +1097,7 @@
           "expr": "sum by (namespace, task_queue) (rate(temporal_workflow_task_queue_poll_succeed{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "B"
         }
@@ -1198,7 +1198,7 @@
           "expr": "histogram_quantile(0.95, sum by (namespace, task_queue,  le) (rate(temporal_workflow_task_schedule_to_start_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "B"
         }
@@ -1300,7 +1300,7 @@
           "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_task_execution_failed{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
+          "legendFormat": "namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
           "range": true,
           "refId": "B"
         }
@@ -1401,7 +1401,7 @@
           "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type,  le) (rate(temporal_workflow_task_execution_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
+          "legendFormat": "namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
           "range": true,
           "refId": "B"
         }
@@ -1502,7 +1502,7 @@
           "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type, le) (rate(temporal_workflow_task_replay_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
+          "legendFormat": "namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
           "range": true,
           "refId": "B"
         }
@@ -1603,426 +1603,12 @@
           "expr": "sum by (namespace, task_queue) (rate(temporal_workflow_task_queue_poll_empty{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "B"
         }
       ],
       "title": "Workflow Task Empty Polls",
-      "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 68
-      },
-      "id": 57,
-      "panels": [],
-      "title": "Local Activities",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "decimals": 0,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 69
-      },
-      "id": 58,
-      "interval": "5s",
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "v10.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, activity_type) (rate(temporal_local_activity_execution_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval]))",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Local Activity Throughput",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "decimals": 0,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 69
-      },
-      "id": 25,
-      "interval": "5s",
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "v10.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, activity_type) (rate(temporal_local_activity_execution_failed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Local Activity Failed",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "decimals": 0,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 77
-      },
-      "id": 60,
-      "interval": "5s",
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "v10.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_local_activity_execution_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Local Activity Execution Latencies (p95)",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "decimals": 0,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 77
-      },
-      "id": 61,
-      "interval": "5s",
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "v10.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_local_activity_succeed_endtoend_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Local Activity Success E2E Latencies (p95)",
       "type": "timeseries"
     },
     {
@@ -2131,7 +1717,7 @@
           "expr": "sum by (namespace) (rate(temporal_activity_schedule_to_start_latency_count{namespace=~\"$namespace\"}[$__rate_interval]))",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}",
+          "legendFormat": "namespace: {{ namespace }}",
           "range": true,
           "refId": "B"
         }
@@ -2232,7 +1818,7 @@
           "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_failed{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "B"
         }
@@ -2333,7 +1919,7 @@
           "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_activity_execution_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "B"
         }
@@ -2434,7 +2020,7 @@
           "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_activity_succeed_endtoend_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "B"
         }
@@ -2536,7 +2122,7 @@
           "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_cancelled{namespace=~\"$namespace\"}[$__rate_interval]))",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "B"
         }
@@ -2751,7 +2337,7 @@
           "expr": "histogram_quantile(0.95, sum by (namespace, task_queue , le) (rate(temporal_activity_schedule_to_start_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "B"
         }
@@ -3178,7 +2764,7 @@
           "expr": "sum by (namespace) (rate(temporal_sticky_cache_forced_eviction{namespace=~\"$namespace\"}[$__rate_interval]))",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; ",
+          "legendFormat": "namespace: {{ namespace }}; ",
           "range": true,
           "refId": "B"
         }
@@ -3279,7 +2865,7 @@
           "expr": "sum by (namespace) (rate(temporal_sticky_cache_hit{namespace=~\"$namespace\"}[$__rate_interval]))",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }};",
+          "legendFormat": "namespace: {{ namespace }}",
           "range": true,
           "refId": "B"
         }
@@ -3380,7 +2966,7 @@
           "expr": "sum by (namespace, task_queue) (rate(temporal_sticky_cache_miss{namespace=~\"$namespace\"}[$__rate_interval]))",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "B"
         }
