@@ -22,7 +22,7 @@ public class SslContextBuilderProvider {
         }
 
         try {
-            InputStream clientCert = getClass().getResourceAsStream(properties.getTemporalCertLocation());
+                InputStream clientCert = getClass().getResourceAsStream(properties.getTemporalCertLocation());
             InputStream clientKey = getClass().getResourceAsStream(properties.getTemporalKeyLocation());
             return SimpleSslContextBuilder.forPKCS8(clientCert, clientKey).build();
         } catch (Exception e) {

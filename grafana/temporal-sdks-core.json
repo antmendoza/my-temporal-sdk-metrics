@@ -1499,18 +1499,6 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type, le) (rate(temporal_workflow_task_replay_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type, le) (rate(temporal_workflow_task_replay_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "hide": false,
           "intervalFactor": 2,
@@ -1606,18 +1594,6 @@
       },
       "pluginVersion": "v10.4.0",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, task_queue) (rate(temporal_workflow_task_queue_poll_empty_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
-          "range": true,
-          "refId": "A"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -2152,18 +2128,6 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (namespace) (rate(temporal_activity_schedule_to_start_latency_seconds_count {namespace=~\"$namespace\"}[$__rate_interval]))",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
           "expr": "sum by (namespace) (rate(temporal_activity_schedule_to_start_latency_count{namespace=~\"$namespace\"}[$__rate_interval]))",
           "hide": false,
           "intervalFactor": 2,
@@ -2259,18 +2223,6 @@
       },
       "pluginVersion": "v10.4.0",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_failed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "A"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -2378,18 +2330,6 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_activity_execution_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_activity_execution_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "hide": false,
           "intervalFactor": 2,
@@ -2485,18 +2425,6 @@
       },
       "pluginVersion": "v10.4.0",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_activity_succeed_endtoend_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "A"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -2599,19 +2527,6 @@
       },
       "pluginVersion": "v10.4.0",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_cancelled_total{namespace=~\"$namespace\"}[$__rate_interval]))",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "A"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -2732,22 +2647,10 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (namespace, task_queue) (rate(temporal_activity_poll_no_task_total{namespace=~\"$namespace\"}[$__rate_interval]))",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
           "expr": "sum by (namespace, task_queue) (rate(temporal_activity_poll_no_task{namespace=~\"$namespace\"}[$__rate_interval]))",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "B"
         }
@@ -2839,18 +2742,6 @@
       },
       "pluginVersion": "v10.4.0",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, task_queue , le) (rate(temporal_activity_schedule_to_start_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
-          "range": true,
-          "refId": "A"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -2973,7 +2864,7 @@
           "editorMode": "code",
           "expr": "temporal_worker_task_slots_available{namespace=~\"$namespace\"}",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go/Core-SDK]: namespace: {{ namespace }}; worker_type:{{worker_type}}",
+          "legendFormat": "namespace: {{ namespace }}; worker_type:{{worker_type}}",
           "range": true,
           "refId": "A"
         }
@@ -3073,7 +2964,7 @@
           "editorMode": "code",
           "expr": "temporal_worker_task_slots_used{namespace=~\"$namespace\"}",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go/Core-SDK]: namespace: {{ namespace }}; worker_type:{{worker_type}}",
+          "legendFormat": "namespace: {{ namespace }}; worker_type:{{worker_type}}",
           "range": true,
           "refId": "A"
         }
@@ -3186,7 +3077,7 @@
           "editorMode": "code",
           "expr": "temporal_sticky_cache_size{namespace=~\"$namespace\"}",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go/Core-SDK]: namespace: {{ namespace }}; task_queue: {{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue: {{task_queue}}",
           "range": true,
           "refId": "A"
         }
@@ -3278,18 +3169,6 @@
       },
       "pluginVersion": "v10.4.0",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace) (rate(temporal_sticky_cache_forced_eviction_total{namespace=~\"$namespace\"}[$__rate_interval]))",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }};",
-          "range": true,
-          "refId": "A"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -3397,18 +3276,6 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (namespace) (rate(temporal_sticky_cache_hit_total{namespace=~\"$namespace\"}[$__rate_interval]))",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }};",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
           "expr": "sum by (namespace) (rate(temporal_sticky_cache_hit{namespace=~\"$namespace\"}[$__rate_interval]))",
           "hide": false,
           "intervalFactor": 2,
@@ -3510,18 +3377,6 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (namespace, task_queue) (rate(temporal_sticky_cache_miss_total{namespace=~\"$namespace\"}[$__rate_interval]))",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
           "expr": "sum by (namespace, task_queue) (rate(temporal_sticky_cache_miss{namespace=~\"$namespace\"}[$__rate_interval]))",
           "hide": false,
           "intervalFactor": 2,
@@ -3591,8 +3446,8 @@
   },
   "timepicker": {},
   "timezone": "utc",
-  "title": "Temporal SDKs",
-  "uid": "uvNCObMHzd",
+  "title": "Temporal Core SDK Metrics",
+  "uid": "uvNCObMHzdssss",
   "version": 3,
   "weekStart": ""
 }
