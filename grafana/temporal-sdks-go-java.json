@@ -134,7 +134,7 @@
           "editorMode": "code",
           "expr": "sum(rate(temporal_request_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
           "intervalFactor": 2,
-          "legendFormat": "request: namespace: {{ namespace }}",
+          "legendFormat": "[request] namespace: {{ namespace }}",
           "range": true,
           "refId": "A"
         },
@@ -146,7 +146,7 @@
           "editorMode": "code",
           "expr": "sum(rate(temporal_request_failure_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
           "intervalFactor": 2,
-          "legendFormat": "failure: namespace: {{ namespace }}",
+          "legendFormat": "[failure] namespace: {{ namespace }}",
           "range": true,
           "refId": "B"
         }
@@ -246,7 +246,7 @@
           "editorMode": "code",
           "expr": "sum(rate(temporal_request_failure_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
           "intervalFactor": 2,
-          "legendFormat": "failure: namespace: {{ namespace }}; operation:{{operation}}",
+          "legendFormat": "namespace: {{ namespace }}; operation:{{operation}}",
           "range": true,
           "refId": "B"
         }
@@ -346,7 +346,7 @@
           "editorMode": "code",
           "expr": "sum(rate(temporal_request_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
           "intervalFactor": 2,
-          "legendFormat": "request: namespace: {{ namespace }}; operation:{{operation}}",
+          "legendFormat": "namespace: {{ namespace }}; operation:{{operation}}",
           "range": true,
           "refId": "B"
         }
@@ -446,7 +446,7 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_request_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "request: namespace: {{ namespace }}; operation: {{ operation }}",
+          "legendFormat": "namespace: {{ namespace }}; operation: {{ operation }}",
           "range": true,
           "refId": "A"
         }
@@ -559,7 +559,7 @@
           "editorMode": "code",
           "expr": "sum(rate(temporal_long_request_failure_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
           "intervalFactor": 2,
-          "legendFormat": "long_request: namespace: {{ namespace }}; operation:{{operation}}",
+          "legendFormat": "namespace: {{ namespace }}; operation:{{operation}}",
           "range": true,
           "refId": "B"
         }
@@ -659,7 +659,7 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_long_request_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "long_request: namespace: {{ namespace }}; operation: {{ operation }}",
+          "legendFormat": "namespace: {{ namespace }}; operation: {{ operation }}",
           "range": true,
           "refId": "A"
         }
@@ -3255,7 +3255,7 @@
           "editorMode": "code",
           "expr": "sum by (namespace) (rate(temporal_sticky_cache_hit_total{namespace=~\"$namespace\"}[$__rate_interval]))",
           "intervalFactor": 2,
-          "legendFormat": "namespace: {{ namespace }};",
+          "legendFormat": "namespace: {{ namespace }}",
           "range": true,
           "refId": "A"
         }

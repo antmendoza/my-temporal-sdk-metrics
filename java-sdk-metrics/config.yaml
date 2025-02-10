@@ -5,18 +5,18 @@ receivers:
         endpoint: 0.0.0.0:4318
       grpc:
         endpoint: 0.0.0.0:4317
-#  prometheus:
-#    config:
-#      scrape_configs:
-#        - job_name: 'otel-collector'
-#          scrape_interval: 10s
-#          static_configs:
-#            - targets: ['java-worker:8071']
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'otel-collector'
+          scrape_interval: 10s
+          static_configs:
+            - targets: [ 'java-worker:80711' ]
 processors:
   batch:
     send_batch_max_size: 1000
     timeout: 30s
-    send_batch_size : 800
+    send_batch_size: 800
 
   memory_limiter:
     check_interval: 1s
@@ -30,9 +30,9 @@ exporters:
     endpoint: "http://prometheus:9090/api/v1/write"
 
 service:
-  extensions: []
+  extensions: [ ]
   pipelines:
     metrics:
-      receivers: [prometheus]
-      processors: [memory_limiter,batch]
-      exporters: [prometheusremotewrite]
+      receivers: [ prometheus ]
+      processors: [ memory_limiter,batch ]
+      exporters: [ prometheusremotewrite ]
