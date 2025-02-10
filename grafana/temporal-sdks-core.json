@@ -132,30 +132,6 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(temporal_request_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] request: namespace: {{ namespace }}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum(rate(temporal_request_failure_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] failure: namespace: {{ namespace }}",
-          "range": true,
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
           "expr": "sum(rate(temporal_request{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
           "hide": false,
           "intervalFactor": 2,
@@ -270,18 +246,6 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(temporal_request_failure_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] failure: namespace: {{ namespace }}; operation:{{operation}}",
-          "range": true,
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
           "expr": "sum(rate(temporal_request_failure{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
           "hide": false,
           "intervalFactor": 2,
@@ -383,18 +347,6 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(temporal_request_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] request: namespace: {{ namespace }}; operation:{{operation}}",
-          "range": true,
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
           "expr": "sum(rate(temporal_request{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
           "hide": false,
           "intervalFactor": 2,
@@ -490,18 +442,6 @@
       },
       "pluginVersion": "v10.4.0",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_request_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] request: namespace: {{ namespace }}; operation: {{ operation }}",
-          "range": true,
-          "refId": "A"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -622,18 +562,6 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(temporal_long_request_failure_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] long_request: namespace: {{ namespace }}; operation:{{operation}}",
-          "range": true,
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
           "expr": "sum(rate(temporal_long_request_failure{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
           "hide": false,
           "intervalFactor": 2,
@@ -729,18 +657,6 @@
       },
       "pluginVersion": "v10.4.0",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_long_request_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] long_request: namespace: {{ namespace }}; operation: {{ operation }}",
-          "range": true,
-          "refId": "A"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -861,18 +777,6 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_completed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] namespace:{{namespace}}; WorkflowType {{workflow_type}}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
           "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_completed{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "hide": false,
           "intervalFactor": 2,
@@ -975,18 +879,6 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type, le) (rate(temporal_workflow_endtoend_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace:{{namespace}}; WorkflowType {{workflow_type}}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type, le) (rate(temporal_workflow_endtoend_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "hide": false,
           "intervalFactor": 2,
@@ -1082,18 +974,6 @@
       },
       "pluginVersion": "v10.4.0",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_failed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace:{{namespace}}; WorkflowType {{workflow_type}}",
-          "range": true,
-          "refId": "A"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -1214,18 +1094,6 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (namespace, task_queue) (rate(temporal_workflow_task_queue_poll_succeed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
           "expr": "sum by (namespace, task_queue) (rate(temporal_workflow_task_queue_poll_succeed{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "hide": false,
           "intervalFactor": 2,
@@ -1321,18 +1189,6 @@
       },
       "pluginVersion": "v10.4.0",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, task_queue,  le) (rate(temporal_workflow_task_schedule_to_start_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
-          "range": true,
-          "refId": "A"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -1441,18 +1297,6 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_task_execution_failed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
           "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_task_execution_failed{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "hide": false,
           "intervalFactor": 2,
@@ -1548,18 +1392,6 @@
       },
       "pluginVersion": "v10.4.0",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type,  le) (rate(temporal_workflow_task_execution_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
-          "range": true,
-          "refId": "A"
-        },
         {
           "datasource": {
             "type": "prometheus",

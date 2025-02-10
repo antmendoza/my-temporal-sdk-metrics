@@ -134,7 +134,7 @@
           "editorMode": "code",
           "expr": "sum(rate(temporal_request_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] request: namespace: {{ namespace }}",
+          "legendFormat": "request: namespace: {{ namespace }}",
           "range": true,
           "refId": "A"
         },
@@ -146,35 +146,9 @@
           "editorMode": "code",
           "expr": "sum(rate(temporal_request_failure_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] failure: namespace: {{ namespace }}",
+          "legendFormat": "failure: namespace: {{ namespace }}",
           "range": true,
           "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum(rate(temporal_request{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] request: namespace: {{ namespace }}",
-          "range": true,
-          "refId": "C"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum(rate(temporal_request_failure{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] failure: namespace: {{ namespace }}",
-          "range": true,
-          "refId": "D"
         }
       ],
       "title": "RPC Requests Vs Failures",
@@ -272,22 +246,9 @@
           "editorMode": "code",
           "expr": "sum(rate(temporal_request_failure_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] failure: namespace: {{ namespace }}; operation:{{operation}}",
+          "legendFormat": "failure: namespace: {{ namespace }}; operation:{{operation}}",
           "range": true,
           "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum(rate(temporal_request_failure{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] failure: namespace: {{ namespace }}; operation:{{operation}}",
-          "range": true,
-          "refId": "D"
         }
       ],
       "title": "RPC Failures Per Operation",
@@ -385,22 +346,9 @@
           "editorMode": "code",
           "expr": "sum(rate(temporal_request_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] request: namespace: {{ namespace }}; operation:{{operation}}",
+          "legendFormat": "request: namespace: {{ namespace }}; operation:{{operation}}",
           "range": true,
           "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum(rate(temporal_request{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] request: namespace: {{ namespace }}; operation:{{operation}}",
-          "range": true,
-          "refId": "D"
         }
       ],
       "title": "RPC Requests Per Operation",
@@ -498,22 +446,9 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_request_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] request: namespace: {{ namespace }}; operation: {{ operation }}",
+          "legendFormat": "request: namespace: {{ namespace }}; operation: {{ operation }}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_request_latency_bucket{namespace=~\"$namespace\" }[$__rate_interval])))\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] request: namespace: {{ namespace }}; operation: {{ operation }}",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "RPC Latencies (p95)",
@@ -624,22 +559,9 @@
           "editorMode": "code",
           "expr": "sum(rate(temporal_long_request_failure_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] long_request: namespace: {{ namespace }}; operation:{{operation}}",
+          "legendFormat": "long_request: namespace: {{ namespace }}; operation:{{operation}}",
           "range": true,
           "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum(rate(temporal_long_request_failure{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] long_request: namespace: {{ namespace }}; operation:{{operation}}",
-          "range": true,
-          "refId": "D"
         }
       ],
       "title": "Long RPC Failures Per Operation",
@@ -737,22 +659,9 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_long_request_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] long_request: namespace: {{ namespace }}; operation: {{ operation }}",
+          "legendFormat": "long_request: namespace: {{ namespace }}; operation: {{ operation }}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_long_request_latency_bucket{namespace=~\"$namespace\" }[$__rate_interval])))\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] long_request: namespace: {{ namespace }}; operation: {{ operation }}",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Long RPC Latencies (p95)",
@@ -863,22 +772,9 @@
           "editorMode": "code",
           "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_completed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] namespace:{{namespace}}; WorkflowType {{workflow_type}}",
+          "legendFormat": "namespace:{{namespace}}; WorkflowType {{workflow_type}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_completed{namespace=~\"$namespace\"}[$__rate_interval]))\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] namespace:{{namespace}}; WorkflowType {{workflow_type}}",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Workflow Completion",
@@ -977,22 +873,9 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type, le) (rate(temporal_workflow_endtoend_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace:{{namespace}}; WorkflowType {{workflow_type}}",
+          "legendFormat": "namespace:{{namespace}}; WorkflowType {{workflow_type}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type, le) (rate(temporal_workflow_endtoend_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace:{{namespace}}; WorkflowType {{workflow_type}}",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Workflow End-To-End Latencies",
@@ -1090,22 +973,9 @@
           "editorMode": "code",
           "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_failed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace:{{namespace}}; WorkflowType {{workflow_type}}",
+          "legendFormat": "namespace:{{namespace}}; WorkflowType {{workflow_type}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_failed{namespace=~\"$namespace\"}[$__rate_interval]))\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace:{{namespace}}; WorkflowType {{workflow_type}}",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Workflow Failures By Type",
@@ -1216,22 +1086,9 @@
           "editorMode": "code",
           "expr": "sum by (namespace, task_queue) (rate(temporal_workflow_task_queue_poll_succeed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, task_queue) (rate(temporal_workflow_task_queue_poll_succeed{namespace=~\"$namespace\"}[$__rate_interval]))\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Workflow Task Throughput",
@@ -1329,22 +1186,9 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, task_queue,  le) (rate(temporal_workflow_task_schedule_to_start_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, task_queue,  le) (rate(temporal_workflow_task_schedule_to_start_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Workflow Task Schedule To Start (p95)",
@@ -1443,22 +1287,9 @@
           "editorMode": "code",
           "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_task_execution_failed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
+          "legendFormat": "namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_task_execution_failed{namespace=~\"$namespace\"}[$__rate_interval]))\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Workflow Task Failed ",
@@ -1556,22 +1387,9 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type,  le) (rate(temporal_workflow_task_execution_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
+          "legendFormat": "namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type,  le) (rate(temporal_workflow_task_execution_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Workflow Task Execution Latency (p95)",
@@ -1669,22 +1487,9 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type, le) (rate(temporal_workflow_task_replay_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
+          "legendFormat": "namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type, le) (rate(temporal_workflow_task_replay_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Workflow Task Replay Latency (p95)",
@@ -1782,22 +1587,9 @@
           "editorMode": "code",
           "expr": "sum by (namespace, task_queue) (rate(temporal_workflow_task_queue_poll_empty_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, task_queue) (rate(temporal_workflow_task_queue_poll_empty{namespace=~\"$namespace\"}[$__rate_interval]))\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Workflow Task Empty Polls",
@@ -1908,7 +1700,7 @@
           "editorMode": "code",
           "expr": "sum by (namespace, activity_type) (rate(temporal_local_activity_execution_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval]))",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
         }
@@ -2009,7 +1801,7 @@
           "expr": "sum by (namespace, activity_type) (rate(temporal_local_activity_execution_failed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
         }
@@ -2109,7 +1901,7 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_local_activity_execution_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
         }
@@ -2209,7 +2001,7 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_local_activity_succeed_endtoend_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
         }
@@ -2322,22 +2114,9 @@
           "editorMode": "code",
           "expr": "sum by (namespace) (rate(temporal_activity_schedule_to_start_latency_seconds_count {namespace=~\"$namespace\"}[$__rate_interval]))",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}",
+          "legendFormat": "namespace: {{ namespace }}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace) (rate(temporal_activity_schedule_to_start_latency_count{namespace=~\"$namespace\"}[$__rate_interval]))",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Activity Throughput",
@@ -2435,22 +2214,9 @@
           "editorMode": "code",
           "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_failed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_failed{namespace=~\"$namespace\"}[$__rate_interval]))\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Activity Failed",
@@ -2548,22 +2314,9 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_activity_execution_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_activity_execution_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Activity Execution Latencies (p95)",
@@ -2661,22 +2414,9 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_activity_succeed_endtoend_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_activity_succeed_endtoend_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Activity Success E2E Latencies (p95)",
@@ -2776,22 +2516,9 @@
           "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_cancelled_total{namespace=~\"$namespace\"}[$__rate_interval]))",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_cancelled{namespace=~\"$namespace\"}[$__rate_interval]))",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Activity Cancelled",
@@ -2902,22 +2629,9 @@
           "editorMode": "code",
           "expr": "sum by (namespace, task_queue) (rate(temporal_activity_poll_no_task_total{namespace=~\"$namespace\"}[$__rate_interval]))",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, task_queue) (rate(temporal_activity_poll_no_task{namespace=~\"$namespace\"}[$__rate_interval]))",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Empty Activity Polls ",
@@ -3015,22 +2729,9 @@
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, task_queue , le) (rate(temporal_activity_schedule_to_start_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, task_queue , le) (rate(temporal_activity_schedule_to_start_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Activity Schedule To Start (p95)",
@@ -3141,7 +2842,7 @@
           "editorMode": "code",
           "expr": "temporal_worker_task_slots_available{namespace=~\"$namespace\"}",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go/Core-SDK]: namespace: {{ namespace }}; worker_type:{{worker_type}}",
+          "legendFormat": "namespace: {{ namespace }}; worker_type:{{worker_type}}",
           "range": true,
           "refId": "A"
         }
@@ -3241,7 +2942,7 @@
           "editorMode": "code",
           "expr": "temporal_worker_task_slots_used{namespace=~\"$namespace\"}",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go/Core-SDK]: namespace: {{ namespace }}; worker_type:{{worker_type}}",
+          "legendFormat": "namespace: {{ namespace }}; worker_type:{{worker_type}}",
           "range": true,
           "refId": "A"
         }
@@ -3354,7 +3055,7 @@
           "editorMode": "code",
           "expr": "temporal_sticky_cache_size{namespace=~\"$namespace\"}",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go/Core-SDK]: namespace: {{ namespace }}; task_queue: {{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue: {{task_queue}}",
           "range": true,
           "refId": "A"
         }
@@ -3454,22 +3155,9 @@
           "editorMode": "code",
           "expr": "sum by (namespace) (rate(temporal_sticky_cache_forced_eviction_total{namespace=~\"$namespace\"}[$__rate_interval]))",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }};",
+          "legendFormat": "namespace: {{ namespace }};",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace) (rate(temporal_sticky_cache_forced_eviction{namespace=~\"$namespace\"}[$__rate_interval]))",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; ",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Sticky Cache Forced Eviction",
@@ -3567,22 +3255,9 @@
           "editorMode": "code",
           "expr": "sum by (namespace) (rate(temporal_sticky_cache_hit_total{namespace=~\"$namespace\"}[$__rate_interval]))",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }};",
+          "legendFormat": "namespace: {{ namespace }};",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace) (rate(temporal_sticky_cache_hit{namespace=~\"$namespace\"}[$__rate_interval]))",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }};",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Sticky Cache Hit",
@@ -3680,22 +3355,9 @@
           "editorMode": "code",
           "expr": "sum by (namespace, task_queue) (rate(temporal_sticky_cache_miss_total{namespace=~\"$namespace\"}[$__rate_interval]))",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, task_queue) (rate(temporal_sticky_cache_miss{namespace=~\"$namespace\"}[$__rate_interval]))",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Sticky Cache Miss",
@@ -3759,7 +3421,7 @@
   },
   "timepicker": {},
   "timezone": "utc",
-  "title": "Temporal SDKs",
+  "title": "Temporal Java/Go SDK metrics",
   "uid": "uvNCObMHzd",
   "version": 3,
   "weekStart": ""
