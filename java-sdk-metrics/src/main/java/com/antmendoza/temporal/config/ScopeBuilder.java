@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpServer;
 import com.uber.m3.tally.RootScopeBuilder;
 import com.uber.m3.tally.Scope;
 import com.uber.m3.util.ImmutableMap;
+import io.micrometer.core.instrument.logging.LoggingMeterRegistry;
 import io.micrometer.prometheus.PrometheusConfig;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
 import io.temporal.common.reporter.MicrometerClientStatsReporter;

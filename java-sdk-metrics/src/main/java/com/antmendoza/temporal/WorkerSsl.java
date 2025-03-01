@@ -4,10 +4,20 @@ import com.antmendoza.temporal.config.FromEnv;
 import com.antmendoza.temporal.config.ScopeBuilder;
 import com.antmendoza.temporal.config.SslContextBuilderProvider;
 import com.antmendoza.temporal.workflow.WorkflowHelloActivity;
+import com.uber.m3.tally.RootScopeBuilder;
 import com.uber.m3.tally.Scope;
+import com.uber.m3.tally.StatsReporter;
 import com.uber.m3.util.ImmutableMap;
+import io.micrometer.prometheus.PrometheusConfig;
+import io.micrometer.prometheus.PrometheusMeterRegistry;
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.metrics.Meter;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
+import io.temporal.common.reporter.MicrometerClientStatsReporter;
+import io.temporal.opentracing.OpenTracingClientInterceptor;
+import io.temporal.opentracing.OpenTracingWorkerInterceptor;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 import io.temporal.worker.Worker;
@@ -15,12 +25,17 @@ import io.temporal.worker.WorkerFactory;
 import io.temporal.worker.WorkerFactoryOptions;
 import io.temporal.worker.WorkerOptions;
 
+import static com.antmendoza.temporal.OpenTelemetryConfig.initTracer;
+
 
 public class WorkerSsl {
 
     public static final String TASK_QUEUE = "MyTaskQueue_";
 
     public static void main(String[] args) throws Exception {
+
+
+        initTracer();
 
 
         // Create SSL enabled client by passing SslContext, created by SimpleSslContextBuilder.
@@ -66,18 +81,27 @@ public class WorkerSsl {
                                 .build());
 
 
-
         WorkflowClient client =
                 WorkflowClient.newInstance(
                         service, WorkflowClientOptions.newBuilder()
                                 .setNamespace(sslContextBuilderProvider.properties.getTemporalNamespace())
-                                .build());
+                                .setInterceptors(
+                                        new OpenTracingClientInterceptor(
+//                                                //OpenTracingOptions.newBuilder().setTracer(tracer).build()
+                                        )
 
+                                )
+                                .build());
 
 
         WorkerFactoryOptions build = WorkerFactoryOptions.newBuilder()
                 .setWorkflowCacheSize(FromEnv.getCacheSize())
                 .setMaxWorkflowThreadCount(FromEnv.getMaxWorkflowThreadCount())
+                .setWorkerInterceptors(
+                        new OpenTracingWorkerInterceptor(
+                        //OpenTracingOptions.newBuilder().setTracer(tracer).build()
+                        )
+                )
                 .build();
         WorkerFactory factory = WorkerFactory.newInstance(client, build);
 
