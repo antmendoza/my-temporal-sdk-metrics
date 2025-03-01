@@ -3564,8 +3564,8 @@
   },
   "timepicker": {},
   "timezone": "utc",
-  "title": "Temporal Go/Java Otel SDK Metrics",
-  "uid": "feei205l014aob",
+  "title": "Temporal Go SDK (OTel) Metrics",
+  "uid": "",
   "version": 2,
   "weekStart": ""
 }
