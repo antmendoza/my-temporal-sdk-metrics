@@ -25,9 +25,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 1,
+  "id": 2,
   "links": [],
-  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
@@ -53,11 +52,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -66,6 +67,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -120,36 +122,13 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum(rate(temporal_request_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] request: namespace: {{ namespace }}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum(rate(temporal_request_failure_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] failure: namespace: {{ namespace }}",
-          "range": true,
-          "refId": "B"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -159,7 +138,7 @@
           "expr": "sum(rate(temporal_request{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] request: namespace: {{ namespace }}",
+          "legendFormat": "[request] namespace: {{ namespace }}",
           "range": true,
           "refId": "C"
         },
@@ -172,7 +151,7 @@
           "expr": "sum(rate(temporal_request_failure{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace)\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] failure: namespace: {{ namespace }}",
+          "legendFormat": "[failure] namespace: {{ namespace }}",
           "range": true,
           "refId": "D"
         }
@@ -191,11 +170,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -204,6 +185,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -258,24 +240,13 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum(rate(temporal_request_failure_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] failure: namespace: {{ namespace }}; operation:{{operation}}",
-          "range": true,
-          "refId": "B"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -285,7 +256,7 @@
           "expr": "sum(rate(temporal_request_failure{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] failure: namespace: {{ namespace }}; operation:{{operation}}",
+          "legendFormat": "namespace: {{ namespace }}; operation:{{operation}}",
           "range": true,
           "refId": "D"
         }
@@ -304,11 +275,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -317,6 +290,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -371,24 +345,13 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum(rate(temporal_request_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] request: namespace: {{ namespace }}; operation:{{operation}}",
-          "range": true,
-          "refId": "B"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -398,7 +361,7 @@
           "expr": "sum(rate(temporal_request{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] request: namespace: {{ namespace }}; operation:{{operation}}",
+          "legendFormat": "namespace: {{ namespace }}; operation:{{operation}}",
           "range": true,
           "refId": "D"
         }
@@ -417,11 +380,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -430,6 +395,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -484,11 +450,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
@@ -496,22 +463,10 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_request_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] request: namespace: {{ namespace }}; operation: {{ operation }}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_request_latency_bucket{namespace=~\"$namespace\" }[$__rate_interval])))\n",
+          "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_request_latency_seconds_bucket{namespace=~\"$namespace\" }[$__rate_interval])))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] request: namespace: {{ namespace }}; operation: {{ operation }}",
+          "legendFormat": "namespace: {{ namespace }}; operation: {{ operation }}",
           "range": true,
           "refId": "B"
         }
@@ -543,11 +498,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -556,6 +513,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -610,24 +568,13 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum(rate(temporal_long_request_failure_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] long_request: namespace: {{ namespace }}; operation:{{operation}}",
-          "range": true,
-          "refId": "B"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -637,7 +584,7 @@
           "expr": "sum(rate(temporal_long_request_failure{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] long_request: namespace: {{ namespace }}; operation:{{operation}}",
+          "legendFormat": "namespace: {{ namespace }}; operation:{{operation}}",
           "range": true,
           "refId": "D"
         }
@@ -656,11 +603,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -669,6 +618,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -723,11 +673,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
@@ -735,22 +686,10 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_long_request_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] long_request: namespace: {{ namespace }}; operation: {{ operation }}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_long_request_latency_bucket{namespace=~\"$namespace\" }[$__rate_interval])))\n",
+          "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_long_request_latency_seconds_bucket{namespace=~\"$namespace\" }[$__rate_interval])))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] long_request: namespace: {{ namespace }}; operation: {{ operation }}",
+          "legendFormat": "namespace: {{ namespace }}; operation: {{ operation }}",
           "range": true,
           "refId": "B"
         }
@@ -782,11 +721,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -795,6 +736,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -849,24 +791,13 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_completed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK] namespace:{{namespace}}; WorkflowType {{workflow_type}}",
-          "range": true,
-          "refId": "A"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -876,7 +807,7 @@
           "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_completed{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK] namespace:{{namespace}}; WorkflowType {{workflow_type}}",
+          "legendFormat": "namespace:{{namespace}}; WorkflowType {{workflow_type}}",
           "range": true,
           "refId": "B"
         }
@@ -896,11 +827,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -909,6 +842,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -963,11 +897,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
@@ -976,21 +911,9 @@
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type, le) (rate(temporal_workflow_endtoend_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace:{{namespace}}; WorkflowType {{workflow_type}}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type, le) (rate(temporal_workflow_endtoend_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace:{{namespace}}; WorkflowType {{workflow_type}}",
+          "legendFormat": "namespace:{{namespace}}; WorkflowType {{workflow_type}}",
           "range": true,
           "refId": "B"
         }
@@ -1009,11 +932,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -1022,6 +947,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1076,24 +1002,13 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_failed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace:{{namespace}}; WorkflowType {{workflow_type}}",
-          "range": true,
-          "refId": "A"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -1103,7 +1018,7 @@
           "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_failed{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace:{{namespace}}; WorkflowType {{workflow_type}}",
+          "legendFormat": "namespace:{{namespace}}; WorkflowType {{workflow_type}}",
           "range": true,
           "refId": "B"
         }
@@ -1135,11 +1050,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -1148,6 +1065,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1202,24 +1120,13 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, task_queue) (rate(temporal_workflow_task_queue_poll_succeed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
-          "range": true,
-          "refId": "A"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -1229,7 +1136,7 @@
           "expr": "sum by (namespace, task_queue) (rate(temporal_workflow_task_queue_poll_succeed{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "B"
         }
@@ -1248,11 +1155,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -1261,6 +1170,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1315,11 +1225,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
@@ -1328,21 +1239,9 @@
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, task_queue,  le) (rate(temporal_workflow_task_schedule_to_start_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, task_queue,  le) (rate(temporal_workflow_task_schedule_to_start_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "B"
         }
@@ -1362,11 +1261,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -1375,6 +1276,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1429,24 +1331,13 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_task_execution_failed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
-          "range": true,
-          "refId": "A"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -1456,7 +1347,7 @@
           "expr": "sum by (namespace, workflow_type) (rate(temporal_workflow_task_execution_failed{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
+          "legendFormat": "namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
           "range": true,
           "refId": "B"
         }
@@ -1475,11 +1366,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -1488,6 +1381,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1542,11 +1436,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
@@ -1555,21 +1450,9 @@
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type,  le) (rate(temporal_workflow_task_execution_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type,  le) (rate(temporal_workflow_task_execution_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
+          "legendFormat": "namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
           "range": true,
           "refId": "B"
         }
@@ -1588,11 +1471,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -1601,6 +1486,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1655,11 +1541,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
@@ -1668,21 +1555,9 @@
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type, le) (rate(temporal_workflow_task_replay_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, workflow_type, le) (rate(temporal_workflow_task_replay_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
+          "legendFormat": "namespace: {{ namespace }}; workflow_type:{{workflow_type}}",
           "range": true,
           "refId": "B"
         }
@@ -1701,11 +1576,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -1714,6 +1591,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1768,24 +1646,13 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, task_queue) (rate(temporal_workflow_task_queue_poll_empty_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
-          "range": true,
-          "refId": "A"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -1795,7 +1662,7 @@
           "expr": "sum by (namespace, task_queue) (rate(temporal_workflow_task_queue_poll_empty{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "B"
         }
@@ -1827,11 +1694,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -1840,6 +1709,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1894,11 +1764,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
@@ -1908,7 +1779,7 @@
           "editorMode": "code",
           "expr": "sum by (namespace, activity_type) (rate(temporal_local_activity_execution_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval]))",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
         }
@@ -1927,11 +1798,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -1940,6 +1813,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1994,11 +1868,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
@@ -2009,7 +1884,7 @@
           "expr": "sum by (namespace, activity_type) (rate(temporal_local_activity_execution_failed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
         }
@@ -2028,11 +1903,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -2041,6 +1918,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -2081,219 +1959,6 @@
         "w": 12,
         "x": 0,
         "y": 77
-      },
-      "id": 60,
-      "interval": "5s",
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "v10.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_local_activity_execution_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Local Activity Execution Latencies (p95)",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "decimals": 0,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 77
-      },
-      "id": 61,
-      "interval": "5s",
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "v10.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_local_activity_succeed_endtoend_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Local Activity Success E2E Latencies (p95)",
-      "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 85
-      },
-      "id": 23,
-      "panels": [],
-      "title": "Activities",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "decimals": 0,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 86
       },
       "id": 24,
       "interval": "5s",
@@ -2308,11 +1973,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
@@ -2320,22 +1986,10 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (namespace) (rate(temporal_activity_schedule_to_start_latency_seconds_count {namespace=~\"$namespace\"}[$__rate_interval]))",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace) (rate(temporal_activity_schedule_to_start_latency_count{namespace=~\"$namespace\"}[$__rate_interval]))",
+          "expr": "sum by (namespace) (rate(temporal_activity_schedule_to_start_latency_seconds_count{namespace=~\"$namespace\"}[$__rate_interval]))",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}",
+          "legendFormat": "namespace: {{ namespace }}",
           "range": true,
           "refId": "B"
         }
@@ -2354,11 +2008,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -2367,6 +2023,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -2406,7 +2063,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 86
+        "y": 77
       },
       "id": 59,
       "interval": "5s",
@@ -2421,24 +2078,13 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_failed_total{namespace=~\"$namespace\"}[$__rate_interval]))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "A"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -2448,7 +2094,7 @@
           "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_failed{namespace=~\"$namespace\"}[$__rate_interval]))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "B"
         }
@@ -2467,11 +2113,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -2480,233 +2128,7 @@
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "decimals": 0,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 94
-      },
-      "id": 26,
-      "interval": "5s",
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "v10.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_activity_execution_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_activity_execution_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "B"
-        }
-      ],
-      "title": "Activity Execution Latencies (p95)",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "decimals": 0,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 94
-      },
-      "id": 62,
-      "interval": "5s",
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "v10.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_activity_succeed_endtoend_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_activity_succeed_endtoend_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
-          "range": true,
-          "refId": "B"
-        }
-      ],
-      "title": "Activity Success E2E Latencies (p95)",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -2746,9 +2168,9 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 102
+        "y": 85
       },
-      "id": 48,
+      "id": 60,
       "interval": "5s",
       "options": {
         "legend": {
@@ -2761,11 +2183,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
@@ -2773,28 +2196,223 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_cancelled_total{namespace=~\"$namespace\"}[$__rate_interval]))",
-          "hide": false,
+          "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_local_activity_execution_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "A"
+        }
+      ],
+      "title": "Local Activity Execution Latencies (p95)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
         },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 85
+      },
+      "id": 61,
+      "interval": "5s",
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.5.2",
+      "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_cancelled{namespace=~\"$namespace\"}[$__rate_interval]))",
+          "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_local_activity_succeed_endtoend_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
+          "intervalFactor": 2,
+          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Local Activity Success E2E Latencies (p95)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 93
+      },
+      "id": 26,
+      "interval": "5s",
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_activity_execution_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
           "range": true,
           "refId": "B"
         }
       ],
-      "title": "Activity Cancelled",
+      "title": "Activity Execution Latencies (p95)",
       "type": "timeseries"
     },
     {
@@ -2803,7 +2421,20 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 110
+        "y": 101
+      },
+      "id": 23,
+      "panels": [],
+      "title": "Activities",
+      "type": "row"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 102
       },
       "id": 40,
       "panels": [],
@@ -2821,11 +2452,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -2834,6 +2467,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -2873,7 +2507,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 111
+        "y": 103
       },
       "id": 36,
       "interval": "5s",
@@ -2888,24 +2522,13 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, task_queue) (rate(temporal_activity_poll_no_task_total{namespace=~\"$namespace\"}[$__rate_interval]))",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
-          "range": true,
-          "refId": "A"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -2915,7 +2538,7 @@
           "expr": "sum by (namespace, task_queue) (rate(temporal_activity_poll_no_task{namespace=~\"$namespace\"}[$__rate_interval]))",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "B"
         }
@@ -2934,11 +2557,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -2947,6 +2572,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -2986,7 +2612,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 111
+        "y": 103
       },
       "id": 27,
       "interval": "5s",
@@ -3001,11 +2627,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
@@ -3014,21 +2641,9 @@
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum by (namespace, task_queue , le) (rate(temporal_activity_schedule_to_start_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, task_queue , le) (rate(temporal_activity_schedule_to_start_latency_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "B"
         }
@@ -3042,7 +2657,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 119
+        "y": 111
       },
       "id": 54,
       "panels": [],
@@ -3060,11 +2675,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -3073,6 +2690,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -3112,7 +2730,7 @@
         "h": 11,
         "w": 12,
         "x": 0,
-        "y": 120
+        "y": 112
       },
       "id": 44,
       "interval": "5s",
@@ -3127,11 +2745,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
@@ -3141,7 +2760,7 @@
           "editorMode": "code",
           "expr": "temporal_worker_task_slots_available{namespace=~\"$namespace\"}",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go/Core-SDK]: namespace: {{ namespace }}; worker_type:{{worker_type}}",
+          "legendFormat": "namespace: {{ namespace }}; worker_type:{{worker_type}}",
           "range": true,
           "refId": "A"
         }
@@ -3160,11 +2779,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -3173,6 +2794,111 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 112
+      },
+      "id": 62,
+      "interval": "5s",
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.95, sum by (namespace, activity_type , le) (rate(temporal_activity_succeed_endtoend_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
+          "intervalFactor": 2,
+          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Activity Success E2E Latencies (p95)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -3227,11 +2953,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
@@ -3241,12 +2968,118 @@
           "editorMode": "code",
           "expr": "temporal_worker_task_slots_used{namespace=~\"$namespace\"}",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go/Core-SDK]: namespace: {{ namespace }}; worker_type:{{worker_type}}",
+          "legendFormat": "namespace: {{ namespace }}; worker_type:{{worker_type}}",
           "range": true,
           "refId": "A"
         }
       ],
       "title": "Slots Used",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 123
+      },
+      "id": 48,
+      "interval": "5s",
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "sum by (namespace, activity_type) (rate(temporal_activity_execution_cancelled{namespace=~\"$namespace\"}[$__rate_interval]))",
+          "hide": false,
+          "intervalFactor": 2,
+          "legendFormat": "namespace: {{ namespace }}; activity_type:{{activity_type}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Activity Cancelled",
       "type": "timeseries"
     },
     {
@@ -3273,11 +3106,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -3286,6 +3121,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -3340,11 +3176,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
@@ -3354,7 +3191,7 @@
           "editorMode": "code",
           "expr": "temporal_sticky_cache_size{namespace=~\"$namespace\"}",
           "intervalFactor": 2,
-          "legendFormat": "[Java/Go/Core-SDK]: namespace: {{ namespace }}; task_queue: {{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}",
           "range": true,
           "refId": "A"
         }
@@ -3373,11 +3210,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -3386,6 +3225,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -3440,11 +3280,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
@@ -3452,22 +3293,10 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (namespace) (rate(temporal_sticky_cache_forced_eviction_total{namespace=~\"$namespace\"}[$__rate_interval]))",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }};",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace) (rate(temporal_sticky_cache_forced_eviction{namespace=~\"$namespace\"}[$__rate_interval]))",
+          "expr": "sum by (namespace) (rate(temporal_sticky_cache_total_forced_eviction{namespace=~\"$namespace\"}[$__rate_interval]))",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; ",
+          "legendFormat": "namespace: {{ namespace }}; ",
           "range": true,
           "refId": "B"
         }
@@ -3486,11 +3315,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -3499,6 +3330,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -3553,24 +3385,13 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace) (rate(temporal_sticky_cache_hit_total{namespace=~\"$namespace\"}[$__rate_interval]))",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }};",
-          "range": true,
-          "refId": "A"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -3580,7 +3401,7 @@
           "expr": "sum by (namespace) (rate(temporal_sticky_cache_hit{namespace=~\"$namespace\"}[$__rate_interval]))",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }};",
+          "legendFormat": "namespace: {{ namespace }}",
           "range": true,
           "refId": "B"
         }
@@ -3599,11 +3420,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -3612,6 +3435,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -3666,24 +3490,13 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "v10.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "editorMode": "code",
-          "expr": "sum by (namespace, task_queue) (rate(temporal_sticky_cache_miss_total{namespace=~\"$namespace\"}[$__rate_interval]))",
-          "intervalFactor": 2,
-          "legendFormat": "[Java/Go-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
-          "range": true,
-          "refId": "A"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -3693,7 +3506,7 @@
           "expr": "sum by (namespace, task_queue) (rate(temporal_sticky_cache_miss{namespace=~\"$namespace\"}[$__rate_interval]))",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "[Core-SDK]: namespace: {{ namespace }}; task_queue:{{task_queue}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue:{{task_queue}}",
           "range": true,
           "refId": "B"
         }
@@ -3702,32 +3515,27 @@
       "type": "timeseries"
     }
   ],
-  "refresh": false,
-  "schemaVersion": 37,
-  "style": "dark",
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 40,
   "tags": [],
   "templating": {
     "list": [
       {
         "current": {
-          "selected": false,
           "text": "prometheus",
-          "value": "prometheus"
+          "value": "aeei20np6iqdcc"
         },
-        "hide": 0,
         "includeAll": false,
-        "multi": false,
         "name": "datasource",
         "options": [],
         "query": "prometheus",
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
         "type": "datasource"
       },
       {
         "current": {
-          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -3736,7 +3544,6 @@
           "uid": "${datasource}"
         },
         "definition": "",
-        "hide": 0,
         "includeAll": true,
         "multi": true,
         "name": "namespace",
@@ -3747,20 +3554,18 @@
         },
         "refresh": 2,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
         "type": "query"
       }
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "utc",
-  "title": "Temporal SDKs",
-  "uid": "uvNCObMHzd",
-  "version": 3,
+  "title": "Temporal Go/Java Otel SDK Metrics",
+  "uid": "feei205l014aob",
+  "version": 2,
   "weekStart": ""
 }

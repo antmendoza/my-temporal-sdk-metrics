@@ -18,14 +18,8 @@ processors:
     timeout: 30s
     send_batch_size: 800
 
-  memory_limiter:
-    check_interval: 1s
-    limit_percentage: 70
-    spike_limit_percentage: 30
 
 exporters:
-  debug:
-    verbosity: detailed
   prometheus:
     endpoint: "0.0.0.0:8889"
 
@@ -33,6 +27,6 @@ service:
   extensions: [ ]
   pipelines:
     metrics:
-      receivers: [ prometheus ]
-      processors: [ memory_limiter,batch ]
+      receivers: [ otlp ]
+      processors: [ batch ]
       exporters: [ prometheus ]

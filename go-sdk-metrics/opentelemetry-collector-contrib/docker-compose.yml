@@ -8,8 +8,8 @@ services:
 #      - "14250"
     # Collector
 
-  prometheus:
-    container_name: prometheus
+  prometheus_go:
+    container_name: prometheus_go
     image: prom/prometheus:v2.37.0
     ports:
       - 9091:9090
@@ -17,6 +17,11 @@ services:
       - type: bind
         source: ./prometheus/config.yml
         target: /etc/prometheus/prometheus.yml
+    networks:
+      - temporal-network
+
+
+
   otel-collector:
     image: otel/opentelemetry-collector-contrib
     volumes:
@@ -30,4 +35,10 @@ services:
       - 4318:4318 # OTLP http receiver
       - 55679:55679 # zpages extension
     depends_on:
-      - prometheus
+      - prometheus_go
+    networks:
+      - temporal-network
+
+networks:
+  temporal-network:
+    external: true

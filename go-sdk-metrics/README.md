@@ -16,7 +16,7 @@ docker-compose down -v
 docker-compose up 
 ```
 
-http://localhost:9091
+http://localhostock:9091
 
 
 

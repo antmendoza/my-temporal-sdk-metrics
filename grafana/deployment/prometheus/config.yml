@@ -30,3 +30,10 @@ scrape_configs:
           - 'host.docker.internal:9096'
         labels:
           source: 'python_metric'
+
+  - job_name: 'collector'
+    static_configs:
+      - targets:
+          - 'host.docker.internal:8889'
+        labels:
+          source: 'collector_8889'

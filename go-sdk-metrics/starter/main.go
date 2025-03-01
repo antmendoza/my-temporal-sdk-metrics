@@ -2,23 +2,18 @@ package main
 
 import (
 	"context"
-	"github.com/uber-go/tally/v4/prometheus"
-	sdktally "go.temporal.io/sdk/contrib/tally"
 	"log"
 	"sample_5888"
+	"strconv"
+	"time"
 
 	"go.temporal.io/sdk/client"
 )
 
 func main() {
-	// The client is a heavyweight object that should be created once per process.
-	tallyHandler := sdktally.NewMetricsHandler(sample_5888.NewPrometheusScope(prometheus.Configuration{
-		ListenAddress: "0.0.0.0:9096",
-		TimerType:     "histogram",
-	}))
 
 	c, err := client.Dial(client.Options{
-		MetricsHandler: tallyHandler,
+		MetricsHandler: sample_5888.GetMetricsHandler("9096"),
 	})
 	if err != nil {
 		log.Fatalln("Unable to create client.", err)
@@ -27,7 +22,7 @@ func main() {
 
 	for i := 0; i < 1000; i++ {
 		workflowOptions := client.StartWorkflowOptions{
-			ID:        "metrics_workflowID",
+			ID:        strconv.Itoa(i),
 			TaskQueue: "metrics",
 		}
 
@@ -38,11 +33,13 @@ func main() {
 
 		log.Println("Started workflow.", "WorkflowID", we.GetID(), "RunID", we.GetRunID())
 
+		time.Sleep(100 * time.Millisecond)
+
 		// Synchronously wait for the workflow completion.
-		err = we.Get(context.Background(), nil)
-		if err != nil {
-			log.Fatalln("Unable to wait for workflow completion.", err)
-		}
+		//err = we.Get(context.Background(), nil)
+		//if err != nil {
+		//	log.Fatalln("Unable to wait for workflow completion.", err)
+		//}
 
 	}
 
