@@ -1,40 +1,26 @@
 version: "3.5"
 services:
 
-
-  otel-collector:
-    image: otel/opentelemetry-collector-contrib
-    volumes:
-      - ./config.yaml:/etc/otelcol-contrib/config.yaml
+  java-worker:
+    image: java-worker
+    container_name: java-worker
+    build:
+      dockerfile: Dockerfile
     ports:
-      - 1888:1888 # pprof extension
-      - 8888:8888 # Prometheus metrics exposed by the Collector
-      - 8889:8889 # Prometheus exporter metrics
-      - 13133:13133 # health_check extension
-      - 4317:4317 # OTLP gRPC receiver
-      - 4318:4318 # OTLP http receiver
-      - 55679:55679 # zpages extension
+      - ${PQL_PORT}:${PQL_PORT} # pprof extension
+    environment:
+      - MAX_TASKQUEUE_ACTIVITIES_PER_SECOND=${MAX_TASKQUEUE_ACTIVITIES_PER_SECOND}
+      - PQL_PORT=${PQL_PORT}
+      - CONCURRENT_ACTIVITY_EXECUTION_SIZE=${CONCURRENT_ACTIVITY_EXECUTION_SIZE}
+      - CONCURRENT_WORKFLOW_EXECUTION_SIZE=${CONCURRENT_WORKFLOW_EXECUTION_SIZE}
+      - MAX_WORKFLOW_THREAD_COUNT=${MAX_WORKFLOW_THREAD_COUNT}
+      - CACHE_SIZE=${CACHE_SIZE}
+      - DISABLE_EAGER_DISPATCH=${DISABLE_EAGER_DISPATCH}
+      - SLEEP_ACTIVITY_IN_MS=${SLEEP_ACTIVITY_IN_MS}
     networks:
       - temporal-network
 
 
-
-#
-#  cadvisor:
-#    image: gcr.io/cadvisor/cadvisor:v0.50.0 # m1/m2 mac
-##    image: 'google/cadvisor:latest'
-#    container_name: cadvisor
-#    platform: linux/aarch64 # m1/m2 mac
-#    volumes:
-#      - /:/rootfs:ro
-#      - /var/run:/var/run:ro
-#      - /sys:/sys:ro
-#      - /var/lib/docker/:/var/lib/docker:ro
-#      - /dev/disk:/dev/disk/:ro
-#    ports:
-#      - '8085:8080'
-#    networks:
-#      - temporal-network
 
 networks:
   temporal-network:

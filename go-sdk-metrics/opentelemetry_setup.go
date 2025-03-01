@@ -9,6 +9,7 @@ import (
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
 	"go.opentelemetry.io/otel/propagation"
+	"go.opentelemetry.io/otel/sdk/instrumentation"
 	"go.opentelemetry.io/otel/sdk/metric"
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
@@ -81,9 +82,26 @@ func GetMetricsHandler(port string) client.MetricsHandler {
 		if err != nil {
 			panic(err)
 		}
-		meterProvider := metric.NewMeterProvider(metric.WithReader(
-			metric.NewPeriodicReader(exp, metric.WithInterval(1*time.Second)),
-		))
+
+		customBuckets := []float64{0, 0.2, 0.5, 1, 2, 3, 4, 5, 10, 25, 50, 75, 100,
+			200, 300, 400, 500, 1000, 2000, 5000, 10000}
+
+		// Create a MeterProvider with explicit bucket histogram configuration
+		view := metric.NewView(
+			metric.Instrument{
+				Name:  "*",
+				Scope: instrumentation.Scope{Name: "temporal-sdk-go"},
+			},
+			metric.Stream{
+				Aggregation: metric.AggregationExplicitBucketHistogram{
+					Boundaries: customBuckets,
+				},
+			},
+		)
+		meterProvider := metric.NewMeterProvider(
+			metric.WithReader(metric.NewPeriodicReader(exp, metric.WithInterval(1*time.Second))),
+			metric.WithView(view),
+		)
 
 		metricsHandler = opentelemetry.NewMetricsHandler(
 			opentelemetry.MetricsHandlerOptions{
@@ -99,5 +117,6 @@ func GetMetricsHandler(port string) client.MetricsHandler {
 		}))
 
 	}
+
 	return metricsHandler
 }

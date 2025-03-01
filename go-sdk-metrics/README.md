@@ -9,17 +9,6 @@ See [start-env.md](../start-env.md)
 go mod tidy
 ```
 
-
-```bash
-cd opentelemetry-collector-contrib
-docker-compose down -v
-docker-compose up 
-```
-
-http://localhostock:9091
-
-
-
 - Start the client
 
 ```bash
