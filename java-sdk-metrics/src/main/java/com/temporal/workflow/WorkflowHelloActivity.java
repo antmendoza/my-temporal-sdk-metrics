@@ -17,21 +17,22 @@
  *  permissions and limitations under the License.
  */
 
-package com.antmendoza.temporal.workflow;
+package com.temporal.workflow;
 
-import com.antmendoza.temporal.WorkerSsl;
-import com.antmendoza.temporal.config.FromEnv;
+import com.temporal.WorkerSsl;
+import com.temporal.config.FromEnv;
 import io.temporal.activity.*;
 import io.temporal.common.RetryOptions;
 import io.temporal.failure.ApplicationFailure;
+import io.temporal.workflow.Async;
+import io.temporal.workflow.ChildWorkflowOptions;
+import io.temporal.workflow.Promise;
 import io.temporal.workflow.Workflow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static io.temporal.activity.ActivityCancellationType.WAIT_CANCELLATION_COMPLETED;
 
@@ -58,8 +59,11 @@ public class WorkflowHelloActivity {
     // Define the workflow implementation which implements our getGreeting workflow method.
     public static class MyWorkflowImpl implements MyWorkflow1 {
 
+
         final int starToClose = Integer.parseInt(FromEnv.getActivityLatencyMs());
         private final Logger logger = Workflow.getLogger(MyWorkflowImpl.class.getName());
+
+
         private final MyActivities activities = Workflow.newActivityStub(
                 MyActivities.class,
                 ActivityOptions.newBuilder()
@@ -95,24 +99,38 @@ public class WorkflowHelloActivity {
         }
 
         public String run(String name) {
+            {
+                List<Promise<String>> promises = new ArrayList<>();
+                for (int i = 0; i < 100; i++) {
+                    promises.add(Async.function(activities::sleep));
+                }
 
-
-
-            localActivity.dontSleep();
-            localActivity.dontSleep();
-            localActivity.dontSleep();
-            try {
-
-                activities.exception();
-            } catch (Exception e) {
-
+                Promise.allOf(promises).get();
             }
 
-            activities.dontSleep();
-            activities.dontSleep();
-            activities.dontSleep();
+
+            {
+                List<Promise<String>> promises = new ArrayList<>();
+                for (int i = 0; i < 100; i++) {
+
+                    final int index = i;
+                    promises.add(Async.function(() -> {
+
+                        final ChildMyWorkflow1 childWF = Workflow.newChildWorkflowStub(ChildMyWorkflow1.class,
+                                ChildWorkflowOptions.newBuilder()
+//                                    .setParentClosePolicy(ParentClosePolicy.PARENT_CLOSE_POLICY_ABANDON)
+                                        .build());
+                        return childWF.run(name + "-" + index);
+
+                    }));
+
+                }
 
 
+                Promise.allOf(promises).get();
+
+
+            }
             return "done";
 
         }
@@ -167,7 +185,7 @@ public class WorkflowHelloActivity {
                 Activity.getExecutionContext().heartbeat("iteration number  " + j + " of " + iteration);
 
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(1_000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

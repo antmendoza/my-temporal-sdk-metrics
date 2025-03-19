@@ -7,22 +7,30 @@ See [start-env.md](../start-env.md)
 
 See 
 - [temporal.properties](./src/main/resources/temporal.properties) file.
-- [env](./.env) file.
 
 
 ## Run the worker
+``` bash
+ps aux | grep com.temporal.Worker_1
 
-```bash
-./start-java-worker.sh
+pkill -f "com.temporal.Worker_1"
 
+for i in {8061..8061}; do export PQL_PORT=$i; ./mvnw compile exec:java -Dexec.mainClass="com.temporal.Worker_1" & done
 ```
-Start one worker with the given [env](./.env) variables.
 
 
 ## Start workflows
 
-```bash
-./create-backlog.sh
+
+
+``` bash
+ps aux | grep com.temporal.Starter
+
+pkill -f "com.temporal.Starter"
+
+for i in {8071..8071}; do export PQL_PORT=$i; ./mvnw compile exec:java -Dexec.mainClass="com.temporal.Starter" & done
 ```
+
+
 
 The Java dashboard in [dashboard](http://localhost:3000/) will start showing data.

@@ -1,4 +1,4 @@
-package com.antmendoza.temporal;
+package com.temporal;
 
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;

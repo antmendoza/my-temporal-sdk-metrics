@@ -14,8 +14,27 @@ scrape_configs:
   - job_name: 'client-java'
     static_configs:
       - targets:
-          - 'host.docker.internal:8079'
           - 'host.docker.internal:8071'
+          - 'host.docker.internal:8072'
+          - 'host.docker.internal:8073'
+          - 'host.docker.internal:8074'
+          - 'host.docker.internal:8075'
+          - 'host.docker.internal:8076'
+          - 'host.docker.internal:8077'
+          - 'host.docker.internal:8078'
+          - 'host.docker.internal:8079'
+  - job_name: 'client-java_worker'
+    static_configs:
+      - targets:
+          - 'host.docker.internal:8061'
+          - 'host.docker.internal:8062'
+          - 'host.docker.internal:8063'
+          - 'host.docker.internal:8064'
+          - 'host.docker.internal:8065'
+          - 'host.docker.internal:8066'
+          - 'host.docker.internal:8067'
+          - 'host.docker.internal:8068'
+          - 'host.docker.internal:8069'
   - job_name: 'python_core_metrics'
     static_configs:
       - targets:

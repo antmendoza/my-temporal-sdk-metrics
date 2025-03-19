@@ -1,10 +1,10 @@
-package com.antmendoza.temporal.config;
+package com.temporal.config;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class TemporalProperties {
+public class WorkerProperties {
 
 
     private boolean temporalLocalServer;
@@ -14,7 +14,7 @@ public class TemporalProperties {
     private String temporalWorkerTargetEndpoint = "localhost:7233";
     private String temporalStarterTargetEndpoint = "localhost:7233";
 
-    public TemporalProperties() {
+    public WorkerProperties() {
 
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("temporal.properties")) {
 

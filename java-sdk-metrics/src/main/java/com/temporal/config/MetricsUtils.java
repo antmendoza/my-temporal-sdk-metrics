@@ -17,7 +17,7 @@
  *  permissions and limitations under the License.
  */
 
-package com.antmendoza.temporal.config;
+package com.temporal.config;
 
 import com.sun.net.httpserver.HttpServer;
 import io.micrometer.prometheus.PrometheusMeterRegistry;

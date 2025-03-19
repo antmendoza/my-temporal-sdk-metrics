@@ -1,4 +1,4 @@
-package com.antmendoza.temporal.config;
+package com.temporal.config;
 
 import io.grpc.netty.shaded.io.netty.handler.ssl.SslContext;
 import io.temporal.serviceclient.SimpleSslContextBuilder;

@@ -1,21 +1,14 @@
-package com.antmendoza.temporal;
+package com.temporal;
 
-import com.antmendoza.temporal.config.FromEnv;
-import com.antmendoza.temporal.config.ScopeBuilder;
-import com.antmendoza.temporal.config.SslContextBuilderProvider;
-import com.antmendoza.temporal.workflow.WorkflowHelloActivity;
-import com.uber.m3.tally.RootScopeBuilder;
+import com.temporal.config.FromEnv;
+import com.temporal.config.ScopeBuilder;
+import com.temporal.config.SslContextBuilderProvider;
+import com.temporal.workflow.ChildMyWorkflow1Impl;
+import com.temporal.workflow.WorkflowHelloActivity;
 import com.uber.m3.tally.Scope;
-import com.uber.m3.tally.StatsReporter;
 import com.uber.m3.util.ImmutableMap;
-import io.micrometer.prometheus.PrometheusConfig;
-import io.micrometer.prometheus.PrometheusMeterRegistry;
-import io.opentelemetry.api.OpenTelemetry;
-import io.opentelemetry.api.metrics.Meter;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
-import io.temporal.common.reporter.MicrometerClientStatsReporter;
 import io.temporal.opentracing.OpenTracingClientInterceptor;
 import io.temporal.opentracing.OpenTracingWorkerInterceptor;
 import io.temporal.serviceclient.WorkflowServiceStubs;
@@ -25,18 +18,12 @@ import io.temporal.worker.WorkerFactory;
 import io.temporal.worker.WorkerFactoryOptions;
 import io.temporal.worker.WorkerOptions;
 
-import static com.antmendoza.temporal.OpenTelemetryConfig.initTracer;
 
+public class Worker_1 {
 
-public class WorkerSsl {
-
-    public static final String TASK_QUEUE = "MyTaskQueue_";
+    public static final String TASK_QUEUE = "MyTaskQueue_2";
 
     public static void main(String[] args) throws Exception {
-
-
-        initTracer();
-
 
         // Create SSL enabled client by passing SslContext, created by SimpleSslContextBuilder.
         SslContextBuilderProvider sslContextBuilderProvider = new SslContextBuilderProvider();
@@ -58,15 +45,8 @@ public class WorkerSsl {
         );
 
 
-        metricsScope.gauge("MAX_TASKQUEUE_ACTIVITIES_PER_SECOND").update(actions);
-        metricsScope.gauge("CONCURRENT_ACTIVITY_EXECUTION_SIZE").update(FromEnv.getConcurrentActivityExecutionSize());
-        metricsScope.gauge("CACHE_SIZE").update(FromEnv.getCacheSize());
-        metricsScope.gauge("MAX_WORKFLOW_THREAD_COUNT").update(FromEnv.getMaxWorkflowThreadCount());
-        metricsScope.gauge("CONCURRENT_WORKFLOW_EXECUTION_SIZE").update(FromEnv.getConcurrentWorkflowExecutionSize());
 
         final WorkflowServiceStubsOptions.Builder builder = WorkflowServiceStubsOptions.newBuilder()
-                // Add metrics scope to workflow service stub options
-                //or it is a better option to have the rate limit on workflow code itself?
                 .setMetricsScope(metricsScope)
                 .setTarget(sslContextBuilderProvider.properties.getTemporalWorkerTargetEndpoint());
 
@@ -95,8 +75,13 @@ public class WorkerSsl {
 
 
         WorkerFactoryOptions build = WorkerFactoryOptions.newBuilder()
+
+
                 .setWorkflowCacheSize(FromEnv.getCacheSize())
                 .setMaxWorkflowThreadCount(FromEnv.getMaxWorkflowThreadCount())
+//                .setUsingVirtualWorkflowThreads(true)
+
+
                 .setWorkerInterceptors(
                         new OpenTracingWorkerInterceptor(
                         //OpenTracingOptions.newBuilder().setTracer(tracer).build()
@@ -107,29 +92,24 @@ public class WorkerSsl {
 
 
         WorkerOptions build1 = WorkerOptions.newBuilder()
-                .setMaxTaskQueueActivitiesPerSecond(actions)
-                .setMaxConcurrentActivityExecutionSize(FromEnv.getConcurrentActivityExecutionSize())
-                .setMaxConcurrentWorkflowTaskExecutionSize(FromEnv.getConcurrentWorkflowExecutionSize())
+//                .setMaxTaskQueueActivitiesPerSecond(actions)
+                .setMaxConcurrentActivityExecutionSize(20)
+ //               .setMaxConcurrentWorkflowTaskExecutionSize(FromEnv.getConcurrentWorkflowExecutionSize())
                 //.setStickyQueueScheduleToStartTimeout()
                 //.setMaxConcurrentActivityTaskPollers()
-                .setMaxConcurrentActivityTaskPollers(FromEnv.getConcurrentActivityPollers())
-                .setMaxConcurrentWorkflowTaskPollers(FromEnv.getConcurrentWorkflowPollers())
+                .setMaxConcurrentActivityTaskPollers(10)
+                .setMaxConcurrentWorkflowTaskPollers(10)
                 //.setMaxConcurrentWorkflowTaskPollers()
                 .setDisableEagerExecution(FromEnv.getDisableEagerDispatch())
                 .build();
 
         Worker worker = factory.newWorker(TASK_QUEUE, build1);
 
-        worker.registerWorkflowImplementationTypes(WorkflowHelloActivity.MyWorkflowImpl.class
-                //,
-                // HelloActivity2.GreetingWorkflowImpl2.class,
-                //        HelloActivity3.GreetingWorkflowImpl3.class
+
+        worker.registerWorkflowImplementationTypes(WorkflowHelloActivity.MyWorkflowImpl.class,
+                ChildMyWorkflow1Impl.class
         );
         worker.registerActivitiesImplementations(new WorkflowHelloActivity.MyActivitiesImpl());
-        //       }
-//
-
-        // timeouts, retry & heartbeat impact
         factory.start();
     }
 
