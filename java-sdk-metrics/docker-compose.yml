@@ -19,8 +19,11 @@ services:
       - SLEEP_ACTIVITY_IN_MS=${SLEEP_ACTIVITY_IN_MS}
     networks:
       - temporal-network
-
-
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
 
 networks:
   temporal-network:

@@ -99,6 +99,10 @@ public class WorkflowHelloActivity {
         }
 
         public String run(String name) {
+
+            //Create a variable with 1MB size
+            name = new byte[1024 * 1024].toString();
+
             {
                 List<Promise<String>> promises = new ArrayList<>();
                 for (int i = 0; i < 100; i++) {
@@ -114,13 +118,14 @@ public class WorkflowHelloActivity {
                 for (int i = 0; i < 100; i++) {
 
                     final int index = i;
+                    final String finalName = name;
                     promises.add(Async.function(() -> {
 
                         final ChildMyWorkflow1 childWF = Workflow.newChildWorkflowStub(ChildMyWorkflow1.class,
                                 ChildWorkflowOptions.newBuilder()
 //                                    .setParentClosePolicy(ParentClosePolicy.PARENT_CLOSE_POLICY_ABANDON)
                                         .build());
-                        return childWF.run(name + "-" + index);
+                        return childWF.run(finalName + "-" + index);
 
                     }));
 
@@ -156,6 +161,7 @@ public class WorkflowHelloActivity {
         @Override
         public String sleep() {
 
+
             log.info("Start ******* ");
 
             Date date = new Date();
@@ -174,7 +180,7 @@ public class WorkflowHelloActivity {
             //if(Activity.getExecutionContext().getInfo().getAttempt() < 6){
 
             if (activity % 2 == 0) {
-                throw new RuntimeException("fake failure");
+              //  throw new RuntimeException("fake failure");
             }
 
 

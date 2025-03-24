@@ -1,3 +1,3 @@
 #!/bin/sh
 
-./mvnw compile exec:java -Dexec.mainClass="com.antmendoza.temporal.Starter"
+./mvnw compile exec:java -Dexec.mainClass="com.temporal.Starter"
