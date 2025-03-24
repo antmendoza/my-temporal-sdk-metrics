@@ -39,12 +39,16 @@ import static io.temporal.activity.ActivityCancellationType.WAIT_CANCELLATION_CO
 
 public class WorkflowHelloActivity {
 
+
+    public static String global_name = new String(new char[100_000]);
+
+
     @ActivityInterface
     public interface MyActivities {
 
         // Define your activity method which can be called during workflow execution
         @ActivityMethod
-        String sleep();
+        String sleep(String input);
 
 
         // Define your activity method which can be called during workflow execution
@@ -100,13 +104,12 @@ public class WorkflowHelloActivity {
 
         public String run(String name) {
 
-            //Create a variable with 1MB size
-            name = new byte[1024 * 1024].toString();
+            name = global_name;
 
             {
                 List<Promise<String>> promises = new ArrayList<>();
-                for (int i = 0; i < 100; i++) {
-                    promises.add(Async.function(activities::sleep));
+                for (int i = 0; i < 5; i++) {
+                    promises.add(Async.function(activities::sleep, name));
                 }
 
                 Promise.allOf(promises).get();
@@ -115,7 +118,7 @@ public class WorkflowHelloActivity {
 
             {
                 List<Promise<String>> promises = new ArrayList<>();
-                for (int i = 0; i < 100; i++) {
+                for (int i = 0; i < 5; i++) {
 
                     final int index = i;
                     final String finalName = name;
@@ -159,7 +162,7 @@ public class WorkflowHelloActivity {
         int activity = 0;
 
         @Override
-        public String sleep() {
+        public String sleep(String input) {
 
 
             //log.info("Start ******* ");

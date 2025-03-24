@@ -23,7 +23,7 @@ import static com.temporal.OpenTelemetryConfig.initTracer;
 
 public class WorkerSsl {
 
-    public static final String TASK_QUEUE = "MyTaskQueue_2";
+    public static final String TASK_QUEUE = "MyTaskQueue_3";
 
     public static void main(String[] args) throws Exception {
 
