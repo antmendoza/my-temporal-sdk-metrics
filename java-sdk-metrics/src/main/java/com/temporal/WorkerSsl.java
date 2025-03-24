@@ -101,11 +101,8 @@ public class WorkerSsl {
                 .setMaxTaskQueueActivitiesPerSecond(actions)
                 .setMaxConcurrentActivityExecutionSize(FromEnv.getConcurrentActivityExecutionSize())
                 .setMaxConcurrentWorkflowTaskExecutionSize(FromEnv.getConcurrentWorkflowExecutionSize())
-                //.setStickyQueueScheduleToStartTimeout()
-                //.setMaxConcurrentActivityTaskPollers()
                 .setMaxConcurrentActivityTaskPollers(FromEnv.getConcurrentActivityPollers())
                 .setMaxConcurrentWorkflowTaskPollers(FromEnv.getConcurrentWorkflowPollers())
-                //.setMaxConcurrentWorkflowTaskPollers()
                 .setDisableEagerExecution(FromEnv.getDisableEagerDispatch())
                 .build();
 
@@ -116,6 +113,12 @@ public class WorkerSsl {
         );
         worker.registerActivitiesImplementations(new WorkflowHelloActivity.MyActivitiesImpl());
         factory.start();
+
+        System.getenv().forEach((k, v) -> {
+            System.out.println(k + ":" + v);
+        });
+
+
     }
 
 }

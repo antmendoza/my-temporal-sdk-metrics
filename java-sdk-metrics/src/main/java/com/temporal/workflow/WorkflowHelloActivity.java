@@ -162,19 +162,19 @@ public class WorkflowHelloActivity {
         public String sleep() {
 
 
-            log.info("Start ******* ");
+            //log.info("Start ******* ");
 
             Date date = new Date();
             String second_ = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
             int counter = map.get(second_) == null ? 1 : map.get(second_) + 1;
             map.put(second_, counter);
-            log.info("Adding metric " + second_ + " : " + counter);
+            //log.info("Adding metric " + second_ + " : " + counter);
             Activity.getExecutionContext().getMetricsScope().counter("custom_activity_retries").inc(1);
 
 
             String sleep_activity_in_ms = FromEnv.getActivityLatencyMs();
             int i = Integer.parseInt(sleep_activity_in_ms);
-            log.info("SLEEP_ACTIVITY_IN_MS : " + i);
+            //log.info("SLEEP_ACTIVITY_IN_MS : " + i);
 
             activity++;
             //if(Activity.getExecutionContext().getInfo().getAttempt() < 6){
