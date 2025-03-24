@@ -75,10 +75,10 @@ public class Starter {
         WorkflowClient client = WorkflowClient.newInstance(service, clientOptions);
 
 
-        final int millisSleep = 500;
+        final int millisSleep = 0;
 
         final AtomicInteger input = new AtomicInteger();
-        while (input.get() < 100) {
+        while (input.get() < 20) {
 
 
             final int andIncrement = input.getAndIncrement();

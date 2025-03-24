@@ -133,13 +133,46 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sort_desc(sum(rate(container_cpu_user_seconds_total{image!=\"\", name=~\".+worker\"}[1m])) by (name))",
+          "expr": "sum(rate(  container_cpu_system_seconds_total {image!=\"\", name=~\".+worker\"}[$__rate_interval])) by (name)",
+          "hide": true,
           "interval": "10s",
           "intervalFactor": 1,
-          "legendFormat": "{{ name }}",
+          "legendFormat": "container_cpu_system_seconds_total {{ name }}",
           "metric": "container_cpu_user_seconds_total",
           "range": true,
           "refId": "A",
+          "step": 10
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate( container_cpu_usage_seconds_total {image!=\"\", name=~\".+worker\"}[$__rate_interval])) by (name)",
+          "hide": false,
+          "interval": "10s",
+          "intervalFactor": 1,
+          "legendFormat": "container_cpu_usage_seconds_total {{ name }}",
+          "metric": "container_cpu_user_seconds_total",
+          "range": true,
+          "refId": "B",
+          "step": 10
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(  container_cpu_user_seconds_total {image!=\"\", name=~\".+worker\"}[$__rate_interval])) by (name)",
+          "hide": true,
+          "interval": "10s",
+          "intervalFactor": 1,
+          "legendFormat": "container_cpu_user_seconds_total {{ name }}",
+          "metric": "container_cpu_user_seconds_total",
+          "range": true,
+          "refId": "C",
           "step": 10
         }
       ],
@@ -241,13 +274,13 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "sum by(name) (container_memory_working_set_bytes {image!=\"\", name=~\".+worker\"})",
+          "expr": "max by(name, container_label_restartcount) ( container_memory_rss {image!=\"\", name=~\".+worker\"})",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
           "interval": "10s",
           "intervalFactor": 1,
-          "legendFormat": "Usage: {{ name }}",
+          "legendFormat": "container_memory_rss: restartcount {{container_label_restartcount}} /  {{ name }} ",
           "metric": "container_memory_usage:sort_desc",
           "range": true,
           "refId": "A",
@@ -263,9 +296,29 @@
           "expr": "sum by(name) (  container_spec_memory_limit_bytes {image!=\"\", name=~\".+worker\"})",
           "hide": false,
           "instant": false,
-          "legendFormat": "container_memory_cache : {{ name }}",
+          "legendFormat": "container_spec_memory_limit_bytes : {{ name }}",
           "range": true,
           "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "max by(name, container_label_restartcount) (container_memory_working_set_bytes {image!=\"\", name=~\".+worker\"})",
+          "fullMetaSearch": false,
+          "hide": true,
+          "includeNullMetadata": true,
+          "interval": "10s",
+          "intervalFactor": 1,
+          "legendFormat": "container_memory_working_set_bytes: restartcount {{container_label_restartcount}} /  {{ name }} ",
+          "metric": "container_memory_usage:sort_desc",
+          "range": true,
+          "refId": "C",
+          "step": 10,
+          "useBackend": false
         }
       ],
       "title": "Container Memory Usage",
@@ -3743,7 +3796,7 @@
       {
         "current": {
           "text": "prometheus",
-          "value": "eegsqk91fhmo0f"
+          "value": "eegttxyprqvb4c"
         },
         "includeAll": false,
         "name": "datasource",
@@ -3778,13 +3831,13 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "utc",
   "title": "Temporal Java/Go SDK (Tally) Metrics",
   "uid": "begsidy81y8e8a",
-  "version": 8,
+  "version": 6,
   "weekStart": ""
 }

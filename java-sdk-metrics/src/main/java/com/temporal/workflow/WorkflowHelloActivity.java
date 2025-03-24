@@ -40,7 +40,7 @@ import static io.temporal.activity.ActivityCancellationType.WAIT_CANCELLATION_CO
 public class WorkflowHelloActivity {
 
 
-    public static String global_name = new String(new char[100_000]);
+    public static String halfMBString = SomeKBString.get();
 
 
     @ActivityInterface
@@ -74,7 +74,7 @@ public class WorkflowHelloActivity {
                         .setTaskQueue(WorkerSsl.TASK_QUEUE)
                         .setStartToCloseTimeout(
                                 //setting to a very large value for demo purpose.
-                                Duration.ofMillis(starToClose + 1000)
+                                Duration.ofMillis(starToClose + 5000)
                         )
                         .setCancellationType(WAIT_CANCELLATION_COMPLETED)
 //                        .setHeartbeatTimeout(Duration.ofMillis(starToClose / 2))
@@ -104,7 +104,7 @@ public class WorkflowHelloActivity {
 
         public String run(String name) {
 
-            name = global_name;
+            //name  = halfMBString;
 
             {
                 List<Promise<String>> promises = new ArrayList<>();
@@ -187,22 +187,44 @@ public class WorkflowHelloActivity {
             }
 
 
-            final int iteration = i / 1000;
-            for (int j = 0; j < iteration; j++) {
+            try {
+               Thread.sleep(i);
 
+               // findPrimes(100_000);
 
-                Activity.getExecutionContext().heartbeat("iteration number  " + j + " of " + iteration);
-
-                try {
-                    Thread.sleep(1_000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
 
 
+//            final int iteration = i / 1_000;
+//            for (int j = 0; j < iteration; j++) {
+//
+//
+//                Activity.getExecutionContext().heartbeat("iteration number  " + j + " of " + iteration);
+//
+//                try {
+//                    Thread.sleep(1_000);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+//
+//            }
+
+
             return null;
+        }
+
+        public void findPrimes(int max) {
+            for (int number = 2; number <= max; number++) {
+                boolean isPrime = true;
+                for (int divisor = 2; divisor <= Math.sqrt(number); divisor++) {
+                    if (number % divisor == 0) {
+                        isPrime = false;
+                        break;
+                    }
+                }
+            }
         }
 
         @Override
@@ -230,5 +252,20 @@ public class WorkflowHelloActivity {
 
     }
 
+
+
+
+    public static class SomeKBString {
+        public static String get() {
+            int sizeInChars = 100_000;
+            StringBuilder sb = new StringBuilder(sizeInChars);
+
+            for (int i = 0; i < sizeInChars; i++) {
+                sb.append('A'); // Or any other character
+            }
+            String halfMBString = sb.toString();
+            return halfMBString;
+        }
+    }
 
 }
