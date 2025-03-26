@@ -19,7 +19,7 @@
 
 package com.temporal.query_can_workflow;
 
-import com.temporal.workflow.Client;
+import com.temporal.Client;
 import io.temporal.api.common.v1.WorkflowExecution;
 import io.temporal.api.enums.v1.WorkflowIdConflictPolicy;
 import io.temporal.api.workflowservice.v1.DescribeWorkflowExecutionRequest;
@@ -36,7 +36,6 @@ import static com.temporal.WorkerSsl.TASK_QUEUE;
 
 public class Starter {
 
-
     public static void main(String[] args) throws InterruptedException {
 
         WorkflowClient client = new Client().getWorkflowClient();
@@ -49,16 +48,8 @@ public class Starter {
 
 
         CompletableFuture.runAsync(() -> {
-
-            try {
-
             final String workflowIdentifier = MyWorkflowCAN.class.getSimpleName();
             executeAndQueryWorkflow(client, workflowIdentifier);
-            }catch (Exception e) {
-                e.printStackTrace();
-
-            }
-
         });
 
 

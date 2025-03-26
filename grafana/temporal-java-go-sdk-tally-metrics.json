@@ -547,9 +547,9 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(temporal_request_failure_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
+          "expr": "sum(rate(temporal_request_failure_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation, status_code)\n",
           "intervalFactor": 2,
-          "legendFormat": "namespace: {{ namespace }}; operation:{{operation}}",
+          "legendFormat": "namespace: {{ namespace }}; operation:{{operation}}; status_code:{{status_code}}",
           "range": true,
           "refId": "B"
         }
@@ -3955,6 +3955,6 @@
   "timezone": "utc",
   "title": "Temporal Java/Go SDK (Tally) Metrics",
   "uid": "begsidy81y8e8a",
-  "version": 3,
+  "version": 4,
   "weekStart": ""
 }

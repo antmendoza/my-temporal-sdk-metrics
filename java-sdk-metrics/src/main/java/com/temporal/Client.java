@@ -1,4 +1,4 @@
-package com.temporal.workflow;
+package com.temporal;
 
 import com.temporal.config.FromEnv;
 import com.temporal.config.ScopeBuilder;

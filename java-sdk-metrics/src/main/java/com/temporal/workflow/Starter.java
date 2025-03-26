@@ -19,6 +19,7 @@
 
 package com.temporal.workflow;
 
+import com.temporal.Client;
 import io.temporal.api.common.v1.WorkflowExecution;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;

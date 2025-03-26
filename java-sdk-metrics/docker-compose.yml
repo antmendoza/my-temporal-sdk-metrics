@@ -21,8 +21,8 @@ services:
       - SLEEP_ACTIVITY_IN_MS=${SLEEP_ACTIVITY_IN_MS}
     networks:
       - temporal-network
-    mem_limit: 512M
-    memswap_limit: 512M
+    mem_limit: 1024M
+    memswap_limit: 1024M
     cpus: 1
     restart:
       always

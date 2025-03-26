@@ -18,6 +18,9 @@ public class MyWorkflowRunForeverImpl implements MyWorkflowRunForever {
     @Override
     public String run(final String name) {
 
+        //Simulate object stored as workflow variable
+        //final String result = new String(_1MB);
+
         if(WorkflowUnsafe.isReplaying()){
            // System.out.println(Workflow.getInfo().getWorkflowId() +  ":  Replaying workflow ");
         }

@@ -15,7 +15,7 @@ that add a small latency converting payloads to simulate a real-world scenario.
 The activity [MyActivityImpl.java](MyActivityImpl.java) sleeps for 100 ms.
 
 The starter starts 10 workflows (5 of each type) and then query the workflows in a loop and prints
-the query latency if the latency exceeds a threshold (500ms).
+the query latency if the latency exceeds a threshold.
 
 
 ### Expected Result

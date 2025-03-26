@@ -5,8 +5,12 @@ import io.temporal.workflow.Workflow;
 import io.temporal.workflow.unsafe.WorkflowUnsafe;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyWorkflowCANImpl implements MyWorkflowCAN {
+
+
 
     private final MyActivity activity = Workflow.newActivityStub(MyActivity.class,
             ActivityOptions.newBuilder()
@@ -16,6 +20,9 @@ public class MyWorkflowCANImpl implements MyWorkflowCAN {
 
     @Override
     public String run(final String name) {
+
+        //Simulate object stored as workflow variable
+        //final String result = new String(_1MB);
 
         if(WorkflowUnsafe.isReplaying()){
             // System.out.println(Workflow.getInfo().getWorkflowId() +  ":  Replaying workflow ");
