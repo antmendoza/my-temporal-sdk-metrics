@@ -18,10 +18,11 @@ import io.temporal.worker.WorkerFactory;
 import io.temporal.worker.WorkerFactoryOptions;
 import io.temporal.worker.WorkerOptions;
 
+import static com.temporal.WorkerSsl.TASK_QUEUE;
+
 
 public class Worker_1 {
 
-    public static final String TASK_QUEUE = "MyTaskQueue_2";
 
     public static void main(String[] args) throws Exception {
 

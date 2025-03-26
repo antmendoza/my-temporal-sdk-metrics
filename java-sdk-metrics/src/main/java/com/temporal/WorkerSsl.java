@@ -3,6 +3,10 @@ package com.temporal;
 import com.temporal.config.FromEnv;
 import com.temporal.config.ScopeBuilder;
 import com.temporal.config.SslContextBuilderProvider;
+import com.temporal.query_can_workflow.MyActivityImpl;
+import com.temporal.query_can_workflow.MyDataConverter;
+import com.temporal.query_can_workflow.MyWorkflowCANImpl;
+import com.temporal.query_can_workflow.MyWorkflowRunForeverImpl;
 import com.temporal.workflow.ChildMyWorkflow1Impl;
 import com.temporal.workflow.WorkflowHelloActivity;
 import com.uber.m3.tally.Scope;
@@ -23,7 +27,7 @@ import static com.temporal.OpenTelemetryConfig.initTracer;
 
 public class WorkerSsl {
 
-    public static final String TASK_QUEUE = "MyTaskQueue_3";
+    public static final String TASK_QUEUE = "MyTaskQueue";
 
     public static void main(String[] args) throws Exception {
 
@@ -61,7 +65,7 @@ public class WorkerSsl {
                 .setMetricsScope(metricsScope)
                 .setTarget(sslContextBuilderProvider.properties.getTemporalWorkerTargetEndpoint());
 
-        if(sslContextBuilderProvider.getSslContext() != null) {
+        if (sslContextBuilderProvider.getSslContext() != null) {
             builder.setSslContext(sslContextBuilderProvider.getSslContext());
         }
 
@@ -82,6 +86,7 @@ public class WorkerSsl {
                                         )
 
                                 )
+                                .setDataConverter(new MyDataConverter())
                                 .build());
 
 
@@ -90,7 +95,7 @@ public class WorkerSsl {
                 .setMaxWorkflowThreadCount(FromEnv.getMaxWorkflowThreadCount())
                 .setWorkerInterceptors(
                         new OpenTracingWorkerInterceptor(
-                        //OpenTracingOptions.newBuilder().setTracer(tracer).build()
+                                //OpenTracingOptions.newBuilder().setTracer(tracer).build()
                         )
                 )
                 .build();
@@ -108,10 +113,21 @@ public class WorkerSsl {
 
         Worker worker = factory.newWorker(TASK_QUEUE, build1);
 
-        worker.registerWorkflowImplementationTypes(WorkflowHelloActivity.MyWorkflowImpl.class,
-                ChildMyWorkflow1Impl.class
+        worker.registerWorkflowImplementationTypes(
+
+                WorkflowHelloActivity.MyWorkflowImpl.class,
+                ChildMyWorkflow1Impl.class,
+
+                //Query CAN Workflow
+                MyWorkflowCANImpl.class,
+                MyWorkflowRunForeverImpl.class
         );
-        worker.registerActivitiesImplementations(new WorkflowHelloActivity.MyActivitiesImpl());
+        worker.registerActivitiesImplementations(
+                new WorkflowHelloActivity.MyActivitiesImpl(),
+
+                //Query CAN Workflow
+                new MyActivityImpl()
+        );
         factory.start();
 
         System.getenv().forEach((k, v) -> {

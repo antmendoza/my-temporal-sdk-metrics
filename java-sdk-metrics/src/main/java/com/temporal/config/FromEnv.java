@@ -56,6 +56,10 @@ public class FromEnv {
         return cache_size == null ? 0 : Integer.parseInt(cache_size);
     }
 
+    public static boolean isQueryCANWorkflow() {
+        return false;
+    }
+
     public FromEnv withWorkerPort(String workerPort) {
         FromEnv.workerPort = workerPort;
         return this;

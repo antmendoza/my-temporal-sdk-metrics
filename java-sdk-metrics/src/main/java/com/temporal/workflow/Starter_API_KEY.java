@@ -17,9 +17,8 @@
  *  permissions and limitations under the License.
  */
 
-package com.temporal;
+package com.temporal.workflow;
 
-import com.temporal.workflow.MyWorkflow1;
 import io.grpc.*;
 import io.temporal.api.common.v1.WorkflowExecution;
 import io.temporal.client.WorkflowClient;

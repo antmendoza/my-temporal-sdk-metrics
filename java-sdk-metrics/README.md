@@ -24,11 +24,11 @@ for i in {8061..8061}; do export PQL_PORT=$i; ./mvnw compile exec:java -Dexec.ma
 
 
 ``` bash
-ps aux | grep com.temporal.Starter
+ps aux | grep com.temporal.workflow.Starter
 
-pkill -f "com.temporal.Starter"
+pkill -f "com.temporal.workflow.Starter"
 
-for i in {8071..8071}; do export PQL_PORT=$i; ./mvnw compile exec:java -Dexec.mainClass="com.temporal.Starter" & done
+for i in {8071..8071}; do export PQL_PORT=$i; ./mvnw compile exec:java -Dexec.mainClass="com.temporal.workflow.Starter" & done
 ```
 
 

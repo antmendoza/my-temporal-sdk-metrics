@@ -17,21 +17,11 @@
  *  permissions and limitations under the License.
  */
 
-package com.temporal;
+package com.temporal.workflow;
 
-import com.temporal.config.FromEnv;
-import com.temporal.config.ScopeBuilder;
-import com.temporal.config.SslContextBuilderProvider;
-import com.temporal.workflow.MyWorkflow1;
-import com.uber.m3.tally.Scope;
-import com.uber.m3.util.ImmutableMap;
 import io.temporal.api.common.v1.WorkflowExecution;
-import io.temporal.api.workflowservice.v1.TerminateWorkflowExecutionRequest;
 import io.temporal.client.WorkflowClient;
-import io.temporal.client.WorkflowClientOptions;
 import io.temporal.client.WorkflowOptions;
-import io.temporal.serviceclient.WorkflowServiceStubs;
-import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 
 import java.util.Date;
 import java.util.concurrent.CompletableFuture;
@@ -44,35 +34,7 @@ public class Starter {
 
     public static void main(String[] args) throws InterruptedException {
 
-        SslContextBuilderProvider sslContextBuilderProvider = new SslContextBuilderProvider();
-
-
-        final int port = Integer.parseInt(FromEnv.getWorkerPort());
-        Scope metricsScope = new ScopeBuilder().create(port, ImmutableMap.of(
-                "client",
-                "ClientSsl_" + port)
-        );
-
-        final WorkflowServiceStubsOptions.Builder builder = WorkflowServiceStubsOptions.newBuilder()
-                .setMetricsScope(metricsScope)
-//                                .setRpcTimeout(Duration.ofMillis(167))
-                .setTarget(sslContextBuilderProvider.properties.getTemporalStarterTargetEndpoint());
-
-        if(sslContextBuilderProvider.getSslContext() != null) {
-            builder.setSslContext(sslContextBuilderProvider.getSslContext());
-        }
-
-        WorkflowServiceStubs service =
-                WorkflowServiceStubs.newServiceStubs(
-                        builder
-                                .build());
-
-        WorkflowClientOptions clientOptions =
-                WorkflowClientOptions.newBuilder()
-                        .setNamespace(sslContextBuilderProvider.properties.getTemporalNamespace())
-//                        .setDataConverter(dataConverter)
-                        .build();
-        WorkflowClient client = WorkflowClient.newInstance(service, clientOptions);
+        WorkflowClient client = new Client().getWorkflowClient();
 
 
         final int millisSleep = 0;
@@ -111,8 +73,6 @@ public class Starter {
 
 
         }
-
-
 
 
     }
