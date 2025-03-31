@@ -17,7 +17,7 @@ public class FromEnv {
 
     public static String getActivityLatencyMs() {
 
-        return FromEnv.activityLatencyMs == null ? System.getenv("SLEEP_ACTIVITY_IN_MS") : FromEnv.activityLatencyMs;
+        return System.getenv("SLEEP_ACTIVITY_IN_MS") == null ? FromEnv.activityLatencyMs :  System.getenv("SLEEP_ACTIVITY_IN_MS");
 
 
     }

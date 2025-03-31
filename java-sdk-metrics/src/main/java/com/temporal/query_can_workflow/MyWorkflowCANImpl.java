@@ -31,6 +31,7 @@ public class MyWorkflowCANImpl implements MyWorkflowCAN {
         //while (!Workflow.getInfo().isContinueAsNewSuggested()) {//isContinueAsNewSuggested 4k events or 4MB
         while(Workflow.getInfo().getHistoryLength() < 100){
             activity.doSomething(name);
+            Workflow.sleep(Duration.ofSeconds(1));
         }
 
         Workflow.continueAsNew(name);
