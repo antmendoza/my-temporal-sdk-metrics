@@ -21,6 +21,7 @@ import io.temporal.worker.Worker;
 import io.temporal.worker.WorkerFactory;
 import io.temporal.worker.WorkerFactoryOptions;
 import io.temporal.worker.WorkerOptions;
+import io.temporal.worker.tuning.*;
 
 import static com.temporal.OpenTelemetryConfig.initTracer;
 
@@ -90,6 +91,9 @@ public class WorkerSsl {
                                 .build());
 
 
+
+
+
         WorkerFactoryOptions build = WorkerFactoryOptions.newBuilder()
                 .setWorkflowCacheSize(FromEnv.getCacheSize())
                 .setMaxWorkflowThreadCount(FromEnv.getMaxWorkflowThreadCount())
@@ -99,17 +103,22 @@ public class WorkerSsl {
                         )
                 )
                 .build();
+
+
+
+
+
         WorkerFactory factory = WorkerFactory.newInstance(client, build);
 
 
-        WorkerOptions build1 = WorkerOptions.newBuilder()
-                .setMaxTaskQueueActivitiesPerSecond(actions)
-                .setMaxConcurrentActivityExecutionSize(FromEnv.getConcurrentActivityExecutionSize())
-                .setMaxConcurrentWorkflowTaskExecutionSize(FromEnv.getConcurrentWorkflowExecutionSize())
-                .setMaxConcurrentActivityTaskPollers(FromEnv.getConcurrentActivityPollers())
-                .setMaxConcurrentWorkflowTaskPollers(FromEnv.getConcurrentWorkflowPollers())
-                .setDisableEagerExecution(FromEnv.getDisableEagerDispatch())
-                .build();
+
+
+
+
+        WorkerOptions build1 = loadWorkerOptions();
+
+
+
 
         Worker worker = factory.newWorker(TASK_QUEUE, build1);
 
@@ -137,4 +146,75 @@ public class WorkerSsl {
 
     }
 
+    private static WorkerOptions loadWorkerOptions() {
+
+
+        if(FromEnv.fineTunner()){
+
+            return WorkerOptions.newBuilder()
+                    .setMaxTaskQueueActivitiesPerSecond(Double.parseDouble(FromEnv.getActivitiesPerSecondPerTQ()))
+                    .setMaxConcurrentActivityExecutionSize(FromEnv.getConcurrentActivityExecutionSize())
+                    .setMaxConcurrentWorkflowTaskExecutionSize(FromEnv.getConcurrentWorkflowExecutionSize())
+                    .setMaxConcurrentActivityTaskPollers(FromEnv.getConcurrentActivityPollers())
+                    .setMaxConcurrentWorkflowTaskPollers(FromEnv.getConcurrentWorkflowPollers())
+                    .setDisableEagerExecution(FromEnv.getDisableEagerDispatch())
+                    .build();
+
+        }
+
+        if(FromEnv.resourceBased()){
+            return WorkerOptions.newBuilder()
+                    .setWorkerTuner(
+                            ResourceBasedTuner.newBuilder()
+//                                .setWorkflowSlotOptions(
+//                                       ResourceBasedSlotOptions.newBuilder().setRampThrottle(20).build()
+//                                )
+                                    .setControllerOptions(
+                                            ResourceBasedControllerOptions.newBuilder(0.8, 0.9).build())
+                                    .build())
+                    .build();
+        }
+
+
+        if(FromEnv.fixedSlot()){
+
+            ResourceBasedController resourceController =
+                    ResourceBasedController.newSystemInfoController(
+                            ResourceBasedControllerOptions.newBuilder(0.8, 0.9).build());
+
+
+
+
+            // Combining different types
+            SlotSupplier<WorkflowSlotInfo> workflowTaskSlotSupplier = new FixedSizeSlotSupplier<>(1000);
+            SlotSupplier<ActivitySlotInfo> activityTaskSlotSupplier =
+                    new FixedSizeSlotSupplier<>(1000);
+
+//                    ResourceBasedSlotSupplier.createForActivity(
+//                            resourceController, ResourceBasedTuner.DEFAULT_ACTIVITY_SLOT_OPTIONS);
+            SlotSupplier<LocalActivitySlotInfo> localActivitySlotSupplier =
+                    ResourceBasedSlotSupplier.createForLocalActivity(
+                            resourceController, ResourceBasedTuner.DEFAULT_ACTIVITY_SLOT_OPTIONS);
+            SlotSupplier<NexusSlotInfo> nexusSlotSupplier = new FixedSizeSlotSupplier<>(10);
+
+
+
+
+            return WorkerOptions.newBuilder()
+                    .setWorkerTuner(
+                            new CompositeTuner(
+                                    workflowTaskSlotSupplier,
+                                    activityTaskSlotSupplier,
+                                    localActivitySlotSupplier,
+                                    nexusSlotSupplier))
+                    .build();
+
+
+
+
+        }
+
+
+        throw new RuntimeException("No tuner found");
+    }
 }

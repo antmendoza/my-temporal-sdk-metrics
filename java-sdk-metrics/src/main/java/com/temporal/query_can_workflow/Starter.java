@@ -43,7 +43,7 @@ public class Starter {
 
         CompletableFuture.runAsync(() -> {
             final String workflowIdentifier = MyWorkflowRunForever.class.getSimpleName();
-            executeAndQueryWorkflow(client, workflowIdentifier);
+            //executeAndQueryWorkflow(client, workflowIdentifier);
         });
 
 
@@ -60,7 +60,7 @@ public class Starter {
 
     private static void executeAndQueryWorkflow(final WorkflowClient client, final String workflowIdentifier) {
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 500; i++) {
 
             final String workflowId = workflowIdentifier + i;
 
@@ -85,44 +85,6 @@ public class Starter {
 
                 final int queryEvery = 500;
 
-                while (true) {
-
-                    try {
-
-                        Date date1 = new Date();
-                        client.newUntypedWorkflowStub(workflowId).query("status", Void.class);
-                        Date date2 = new Date();
-                        long difference = date2.getTime() - date1.getTime();
-
-
-                        int threshold = 500;
-                        if (difference > threshold) {
-
-                            DescribeWorkflowExecutionResponse executionDetails = client.getWorkflowServiceStubs().blockingStub()
-                                    .describeWorkflowExecution(DescribeWorkflowExecutionRequest.newBuilder()
-                                            .setNamespace(client.getOptions().getNamespace())
-                                            .setExecution(WorkflowExecution.newBuilder().setWorkflowId(workflowId).build())
-                                            .build());
-
-
-                            System.out.println("\n" + new Date() + " :: " + workflowId +
-                                    "\n    -------------" +
-                                    "\n    Printing if query takes > " + threshold + " ms; querying every " + queryEvery + " ms" +
-                                    "\n            > Query took [ " + difference + " ms]" +
-                                    "\n            > HistoryLength [ " + executionDetails.getWorkflowExecutionInfo().getHistoryLength() + " events]"
-                            );
-                        }
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }
-
-                    try {
-                        Thread.sleep(queryEvery);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                        throw new RuntimeException(e);
-                    }
-                }
             });
         }
     }

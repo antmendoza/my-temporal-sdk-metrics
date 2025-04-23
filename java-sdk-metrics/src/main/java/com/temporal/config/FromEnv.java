@@ -60,24 +60,28 @@ public class FromEnv {
         return false;
     }
 
-    public FromEnv withWorkerPort(String workerPort) {
-        FromEnv.workerPort = workerPort;
-        return this;
-    }
+    public static boolean fixedSlot() {
 
-    public FromEnv withActivitiesPerSecondPerTQ(String actionsPerSecond) {
-
-        FromEnv.activitiesPerSecondPerTQ = actionsPerSecond;
-        return this;
-
+        return getWorkerTunner() != null && getWorkerTunner().equalsIgnoreCase("fixed-slot");
 
     }
 
-    public FromEnv withActivityLatencyMS(String activityLatency) {
-        FromEnv.activityLatencyMs = activityLatency;
-        return this;
+    private static String getWorkerTunner() {
+        final String workerTunner = System.getenv("WORKER_TUNNER");
+        System.out.println(" WORKER_TUNNER >>>>> " + workerTunner);
+        return workerTunner;
+    }
+
+    public static boolean fineTunner() {
+        return getWorkerTunner() != null && getWorkerTunner().equalsIgnoreCase("fine-tunner");
 
     }
+
+    public static boolean resourceBased() {
+        return getWorkerTunner() != null && getWorkerTunner().equalsIgnoreCase("resource-based");
+    }
+
+
 
     public static boolean getDisableEagerDispatch() {
         return Boolean.valueOf(System.getenv("DISABLE_EAGER_DISPATCH"));

@@ -22,7 +22,7 @@ public class MyWorkflowCANImpl implements MyWorkflowCAN {
     public String run(final String name) {
 
         //Simulate object stored as workflow variable
-        //final String result = new String(_1MB);
+        String result = new String(_0_5MB);
 
         if(WorkflowUnsafe.isReplaying()){
             // System.out.println(Workflow.getInfo().getWorkflowId() +  ":  Replaying workflow ");
@@ -31,6 +31,7 @@ public class MyWorkflowCANImpl implements MyWorkflowCAN {
         //while (!Workflow.getInfo().isContinueAsNewSuggested()) {//isContinueAsNewSuggested 4k events or 4MB
         while(Workflow.getInfo().getHistoryLength() < 100){
             activity.doSomething(name);
+            result = result+name;
             Workflow.sleep(Duration.ofSeconds(1));
         }
 

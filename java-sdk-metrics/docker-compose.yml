@@ -19,11 +19,12 @@ services:
       - CACHE_SIZE=${CACHE_SIZE}
       - DISABLE_EAGER_DISPATCH=${DISABLE_EAGER_DISPATCH}
       - SLEEP_ACTIVITY_IN_MS=${SLEEP_ACTIVITY_IN_MS}
+      - WORKER_TUNNER=${WORKER_TUNNER}
     networks:
       - temporal-network
     mem_limit: 1024M
     memswap_limit: 1024M
-    cpus: 1
+    cpus: 2
     restart:
       always
 networks:
