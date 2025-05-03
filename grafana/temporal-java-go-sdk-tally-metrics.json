@@ -646,9 +646,9 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(temporal_request_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation)\n",
+          "expr": "sum(rate(temporal_request_total{namespace=~\"$namespace\", namespace!=\"none\"}[$__rate_interval])) by (namespace, operation, task_queue)\n",
           "intervalFactor": 2,
-          "legendFormat": "namespace: {{ namespace }}; operation:{{operation}}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue: {{task_queue}}; operation:{{operation}}",
           "range": true,
           "refId": "B"
         }
@@ -749,9 +749,9 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_request_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
+          "expr": "histogram_quantile(0.95, sum by (namespace, operation, task_queue, le) (rate(temporal_request_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "namespace: {{ namespace }}; operation: {{ operation }}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue: {{task_queue}}; operation: {{ operation }}",
           "range": true,
           "refId": "A"
         }
@@ -968,9 +968,9 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by (namespace, operation, le) (rate(temporal_long_request_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
+          "expr": "histogram_quantile(0.95, sum by (namespace, operation, task_queue, le) (rate(temporal_long_request_latency_seconds_bucket{namespace=~\"$namespace\"}[$__rate_interval])))\n",
           "intervalFactor": 2,
-          "legendFormat": "namespace: {{ namespace }}; operation: {{ operation }}",
+          "legendFormat": "namespace: {{ namespace }}; task_queue: {{task_queue}}; operation: {{ operation }}",
           "range": true,
           "refId": "A"
         }
@@ -2987,7 +2987,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
@@ -3090,7 +3090,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
@@ -3206,7 +3206,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
@@ -3216,7 +3216,7 @@
           "editorMode": "code",
           "expr": "temporal_worker_task_slots_available{namespace=~\"$namespace\"}",
           "intervalFactor": 2,
-          "legendFormat": "namespace: {{ namespace }}; worker_type:{{worker_type}}",
+          "legendFormat": "namespace: {{ namespace }}; worker_type:{{worker_type}}; task_queue: {{task_queue}}",
           "range": true,
           "refId": "A"
         }
@@ -3309,7 +3309,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
@@ -3319,7 +3319,7 @@
           "editorMode": "code",
           "expr": "temporal_worker_task_slots_used{namespace=~\"$namespace\"}",
           "intervalFactor": 2,
-          "legendFormat": "namespace: {{ namespace }}; worker_type:{{worker_type}}",
+          "legendFormat": "namespace: {{ namespace }}; worker_type:{{worker_type}}; task_queue: {{task_queue}}",
           "range": true,
           "refId": "A"
         }
@@ -3425,7 +3425,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
@@ -3528,7 +3528,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
@@ -3631,7 +3631,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
@@ -3734,7 +3734,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
@@ -3850,7 +3850,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
@@ -3920,5 +3920,5 @@
   "timezone": "utc",
   "title": "Temporal Java/Go SDK (Tally) Metrics",
   "uid": "begsidy81y8e8a",
-  "version": 2
+  "version": 3
 }
