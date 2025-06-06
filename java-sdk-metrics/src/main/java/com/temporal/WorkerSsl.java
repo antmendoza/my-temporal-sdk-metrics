@@ -91,9 +91,6 @@ public class WorkerSsl {
                                 .build());
 
 
-
-
-
         WorkerFactoryOptions build = WorkerFactoryOptions.newBuilder()
                 .setWorkflowCacheSize(FromEnv.getCacheSize())
                 .setMaxWorkflowThreadCount(FromEnv.getMaxWorkflowThreadCount())
@@ -105,19 +102,10 @@ public class WorkerSsl {
                 .build();
 
 
-
-
-
         WorkerFactory factory = WorkerFactory.newInstance(client, build);
 
 
-
-
-
-
         WorkerOptions build1 = loadWorkerOptions();
-
-
 
 
         Worker worker = factory.newWorker(TASK_QUEUE, build1);
@@ -149,7 +137,7 @@ public class WorkerSsl {
     private static WorkerOptions loadWorkerOptions() {
 
 
-        if(FromEnv.fineTunner()){
+        if (FromEnv.fineTunner()) {
 
             return WorkerOptions.newBuilder()
                     .setMaxTaskQueueActivitiesPerSecond(Double.parseDouble(FromEnv.getActivitiesPerSecondPerTQ()))
@@ -162,7 +150,7 @@ public class WorkerSsl {
 
         }
 
-        if(FromEnv.resourceBased()){
+        if (FromEnv.resourceBased()) {
             return WorkerOptions.newBuilder()
                     .setWorkerTuner(
                             ResourceBasedTuner.newBuilder()
@@ -176,13 +164,11 @@ public class WorkerSsl {
         }
 
 
-        if(FromEnv.fixedSlot()){
+        if (FromEnv.fixedSlot()) {
 
             ResourceBasedController resourceController =
                     ResourceBasedController.newSystemInfoController(
                             ResourceBasedControllerOptions.newBuilder(0.8, 0.9).build());
-
-
 
 
             // Combining different types
@@ -198,8 +184,6 @@ public class WorkerSsl {
             SlotSupplier<NexusSlotInfo> nexusSlotSupplier = new FixedSizeSlotSupplier<>(10);
 
 
-
-
             return WorkerOptions.newBuilder()
                     .setWorkerTuner(
                             new CompositeTuner(
@@ -208,8 +192,6 @@ public class WorkerSsl {
                                     localActivitySlotSupplier,
                                     nexusSlotSupplier))
                     .build();
-
-
 
 
         }

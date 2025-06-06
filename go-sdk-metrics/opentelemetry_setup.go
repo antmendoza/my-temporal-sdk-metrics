@@ -18,7 +18,6 @@ import (
 	"go.temporal.io/sdk/contrib/opentelemetry"
 	sdktally "go.temporal.io/sdk/contrib/tally"
 	"log"
-	"os"
 	"time"
 )
 
@@ -75,7 +74,9 @@ func NewPrometheusScope(c prometheus.Configuration) tally.Scope {
 
 func GetMetricsHandler(port string) client.MetricsHandler {
 	var metricsHandler client.MetricsHandler = nil
-	if os.Getenv("ENABLE_TELEMETRY") == "true" {
+
+	if false {
+		//os.Getenv("ENABLE_TELEMETRY") == "true"
 
 		ctx := context.Background()
 		exp, err := otlpmetrichttp.New(ctx, otlpmetrichttp.WithEndpointURL("http://localhost:4318"))

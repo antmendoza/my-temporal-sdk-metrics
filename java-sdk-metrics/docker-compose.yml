@@ -22,8 +22,8 @@ services:
       - WORKER_TUNNER=${WORKER_TUNNER}
     networks:
       - temporal-network
-    mem_limit: 1024M
-    memswap_limit: 1024M
+    mem_limit: 2048M
+    memswap_limit: 2048M
     cpus: 2
     restart:
       always

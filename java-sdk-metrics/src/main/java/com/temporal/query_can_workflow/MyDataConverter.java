@@ -11,7 +11,7 @@ import java.util.Optional;
 public class MyDataConverter implements io.temporal.common.converter.DataConverter {
 
 
-    private final int millis_5 = 5;
+    private final int millis_10 = 10;
 
     @Override
     public <T> Optional<Payload> toPayload(final T value) throws DataConverterException {
@@ -19,7 +19,7 @@ public class MyDataConverter implements io.temporal.common.converter.DataConvert
         if (isQuery_CAN_Workflow()) {
             return WorkflowUnsafe.deadlockDetectorOff(
                     () -> {
-                        sleep(millis_5);
+                        sleep(millis_10);
                         return Optional.empty();
                     });
 
@@ -38,7 +38,7 @@ public class MyDataConverter implements io.temporal.common.converter.DataConvert
         if (isQuery_CAN_Workflow()) {
             return WorkflowUnsafe.deadlockDetectorOff(
                     () -> {
-                        sleep(millis_5);
+                        sleep(millis_10);
                         return null;
                     });
 
@@ -54,7 +54,7 @@ public class MyDataConverter implements io.temporal.common.converter.DataConvert
         if (isQuery_CAN_Workflow()) {
             return WorkflowUnsafe.deadlockDetectorOff(
                     () -> {
-                        sleep(millis_5);
+                        sleep(millis_10);
                         return Optional.empty();
                     });
 
@@ -71,7 +71,7 @@ public class MyDataConverter implements io.temporal.common.converter.DataConvert
         if (isQuery_CAN_Workflow()) {
             return WorkflowUnsafe.deadlockDetectorOff(
                     () -> {
-                        sleep(millis_5);
+                        sleep(millis_10);
                         return null;
                     });
 
