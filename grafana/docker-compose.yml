@@ -12,6 +12,7 @@ services:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
     volumes:
       - ./deployment/grafana/provisioning:/etc/grafana/provisioning
+      - ./deployment/grafana/dashboards:/var/lib/grafana/dashboards
     depends_on:
       - prometheus
     networks:
