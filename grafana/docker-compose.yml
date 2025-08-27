@@ -17,6 +17,8 @@ services:
       - prometheus
     networks:
       - temporal-network
+    env_file:
+      - .env
 
   prometheus:
     container_name: prometheus
@@ -29,6 +31,9 @@ services:
         target: /etc/prometheus/prometheus.yml
     networks:
       - temporal-network
+    env_file:
+      - .env
+
 
   otel-collector:
     image: otel/opentelemetry-collector-contrib

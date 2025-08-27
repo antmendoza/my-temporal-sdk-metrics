@@ -60,3 +60,13 @@ scrape_configs:
           - 'host.docker.internal:8889'
         labels:
           source: 'collector_8889'
+
+  - job_name: "cloud-metrics"
+    scheme: https
+    metrics_path: /v1/metrics
+    static_configs:
+      - targets:
+          - 'metrics.temporal.io'
+    authorization:
+      type: Bearer
+      credentials: ${CLOUD_METRICS_API_KEY}

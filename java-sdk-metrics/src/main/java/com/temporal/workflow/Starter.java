@@ -38,10 +38,10 @@ public class Starter {
         WorkflowClient client = new Client().getWorkflowClient();
 
 
-        final int millisSleep = 0;
+        final int millisSleep = 500;
 
         final AtomicInteger input = new AtomicInteger();
-        while (input.get() < 20) {
+        while (millisSleep > 0) {
 
 
             final int andIncrement = input.getAndIncrement();
