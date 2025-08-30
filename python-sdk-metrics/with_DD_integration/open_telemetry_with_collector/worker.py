@@ -62,7 +62,7 @@ def init_runtime_with_telemetry() -> Runtime:
                     url="http://localhost:4317",
                                         metric_periodicity=timedelta(seconds=1),
                                         metric_temporality=OpenTelemetryMetricTemporality.DELTA,
-                                        durations_as_seconds=True
+                                       # durations_as_seconds=True
                 ),
                 global_tags={"anything": "worker_" + WORKER_ID,
                              "env": "worker_" + WORKER_ID,
@@ -90,6 +90,8 @@ async def main():
             task_queue="open_telemetry-task-queue",
             workflows=[GreetingWorkflow],
             activities=[compose_greeting],
+            max_concurrent_workflow_tasks=10,
+            max_concurrent_activities=10,
             #            max_concurrent_activities=100,
     ):
         # Wait until interrupted
