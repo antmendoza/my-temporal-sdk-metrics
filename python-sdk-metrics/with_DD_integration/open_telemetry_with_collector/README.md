@@ -22,12 +22,14 @@ docker-compose up
 
 Start one worker
 
+# export PROMETHEUS_PORT=9464
+
+
 ``` bash
 ps aux | grep worker.py
 
 pkill -f worker.py
 
-export PROMETHEUS_PORT=9464
 
 export WORKER_ID=100_WORKER___1 
 poetry run python3 worker.py
@@ -37,7 +39,12 @@ poetry run python3 worker.py
 
 Start 50K workflows
 
-``` 
+``` bash
+
+ps aux | grep starter.py
+
+pkill -f starter.py
+
 export WORKER_ID=CLIENT
 
 # Set the number of workflows to run

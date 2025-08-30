@@ -13,7 +13,7 @@ func main() {
 		MetricsHandler: sample_5888.GetMetricsHandler("9095"),
 	})
 	defer c.Close()
-	worker.SetStickyWorkflowCacheSize(2)
+	//worker.SetStickyWorkflowCacheSize(2)
 
 	w := worker.New(c, "metrics", worker.Options{})
 
