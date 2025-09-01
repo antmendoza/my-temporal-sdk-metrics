@@ -90,43 +90,6 @@ def init_runtime_with_telemetry() -> Runtime:
     root_logger = logging.getLogger()
     root_logger.addHandler(handler)
 
-    #   logging.basicConfig(level=logging.INFO)
-
-    #
-    # global _OTEL_LOG_EXPORTER_INITIALIZED
-    # try:
-    #     # Reuse existing provider if already set to avoid override errors
-    #     existing_lp = None
-    #     try:
-    #         existing_lp = get_logger_provider()
-    #     except Exception:
-    #         existing_lp = None
-    #
-    #     if isinstance(existing_lp, LoggerProvider):
-    #         logger_provider = existing_lp
-    #     else:
-    #         logger_provider = LoggerProvider(resource=resource)
-    #         try:
-    #             set_logger_provider(logger_provider)
-    #         except Exception:
-    #             # If setting fails due to an existing provider, continue with it
-    #             logger_provider = existing_lp if isinstance(existing_lp, LoggerProvider) else logger_provider
-    #
-    #     # Avoid double-registration
-    #     if not _OTEL_LOG_EXPORTER_INITIALIZED:
-    #         log_exporter = OTLPLogExporter(endpoint=endpoint, insecure=True)
-    #         #logger_provider.add_log_record_processor(BatchLogRecordProcessor(log_exporter))
-    #
-    #         # Bridge standard logging to OTel logs
-    #         handler = LoggingHandler(level=logging.NOTSET, logger_provider=logger_provider)
-    #         root_logger = logging.getLogger()
-    #         root_logger.addHandler(handler)
-    #         _OTEL_LOG_EXPORTER_INITIALIZED = True
-    # except Exception:
-    #     logging.getLogger(__name__).warning("Failed to initialize OTel log exporter; continuing without log export.")
-    #
-    #
-    #
 
     ## if env variable prometheus-port is not null setup prometheus
     prometheus_port = os.environ.get("PROMETHEUS_PORT")
