@@ -48,7 +48,7 @@ pkill -f starter.py
 export WORKER_ID=CLIENT
 
 # Set the number of workflows to run
-export WORKFLOW_COUNT=500
+export WORKFLOW_COUNT=1
 poetry run python3 starter.py
 ```
 

@@ -47,7 +47,13 @@ exporters:
 
 service:
   pipelines:
+
+    logs:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ debug, datadog/exporter ]
+
     metrics:
       receivers: [otlp]
       processors: [resource/custom, batch]
-      exporters: [debug,prometheusremotewrite, datadog/exporter]
+      exporters: [debug, datadog/exporter]

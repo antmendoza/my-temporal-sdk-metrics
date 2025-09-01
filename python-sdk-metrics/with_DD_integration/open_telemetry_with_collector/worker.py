@@ -1,13 +1,19 @@
 import asyncio
+import logging
 import os
 import random
 from datetime import timedelta
 
+from opentelemetry._logs import get_logger_provider, set_logger_provider
+from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
+from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
+from opentelemetry.sdk._logs._internal.export import BatchLogRecordProcessor
+from opentelemetry.sdk.resources import Resource
 from temporalio import activity, workflow
 from temporalio.client import Client
 from temporalio.contrib.opentelemetry import TracingInterceptor
 from temporalio.runtime import OpenTelemetryConfig, Runtime, TelemetryConfig, PrometheusConfig, \
-    OpenTelemetryMetricTemporality
+    OpenTelemetryMetricTemporality, LoggingConfig, TelemetryFilter, LogForwardingConfig
 from temporalio.worker import Worker
 
 
@@ -18,7 +24,11 @@ class GreetingWorkflow:
         seconds_ = await workflow.execute_activity(compose_greeting, name,
                                                    start_to_close_timeout=timedelta(seconds=60), )
 
-        print(f"Workflow completing")
+        workflow.logger.warning("Workflow input parameter: %s" % name)
+
+        # Emit test logs at various levels
+        await workflow.execute_activity(emit_test_logs, name, start_to_close_timeout=timedelta(seconds=30))
+
         return seconds_
 
 
@@ -30,10 +40,94 @@ async def compose_greeting(name: str) -> str:
     return f"Hello, {name}!"
 
 
+@activity.defn
+async def emit_test_logs(name: str) -> str:
+    """Emit log lines at multiple levels for validation in Datadog."""
+    logger = logging.getLogger("app")
+    logger.debug("debug: processing request for %s", name)
+    logger.info("info: starting work for %s", name)
+    logger.warning("warning: sample warning for %s", name)
+    logger.error("error: sample error for %s", name)
+    return f"emitted logs for {name}"
+
+
 interrupt_event = asyncio.Event()
 
 
 def init_runtime_with_telemetry() -> Runtime:
+    endpoint = os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4317")
+    service_name = os.getenv("OTEL_SERVICE_NAME", "temporal-worker")
+    service_version = os.getenv("OTEL_SERVICE_VERSION", "0.1.0")
+    deployment_env = os.getenv("DEPLOYMENT_ENV", "dev")
+
+    resource = Resource.create(
+        {
+            "service.name": service_name,
+            "service.version": service_version,
+            "deployment.environment": deployment_env,
+        }
+    )
+
+    existing_lp = get_logger_provider()
+    if isinstance(existing_lp, LoggerProvider):
+        logger_provider = existing_lp
+    else:
+        logger_provider = LoggerProvider(resource=resource)
+        set_logger_provider(logger_provider)
+
+
+    logger_provider.add_log_record_processor(
+        BatchLogRecordProcessor(
+            OTLPLogExporter(
+                endpoint=endpoint,
+                insecure=True
+            )
+        )
+    )
+
+    # Bridge standard logging to OTel logs
+    handler = LoggingHandler(level=logging.INFO, logger_provider=logger_provider)
+    root_logger = logging.getLogger()
+    root_logger.addHandler(handler)
+
+    #   logging.basicConfig(level=logging.INFO)
+
+    #
+    # global _OTEL_LOG_EXPORTER_INITIALIZED
+    # try:
+    #     # Reuse existing provider if already set to avoid override errors
+    #     existing_lp = None
+    #     try:
+    #         existing_lp = get_logger_provider()
+    #     except Exception:
+    #         existing_lp = None
+    #
+    #     if isinstance(existing_lp, LoggerProvider):
+    #         logger_provider = existing_lp
+    #     else:
+    #         logger_provider = LoggerProvider(resource=resource)
+    #         try:
+    #             set_logger_provider(logger_provider)
+    #         except Exception:
+    #             # If setting fails due to an existing provider, continue with it
+    #             logger_provider = existing_lp if isinstance(existing_lp, LoggerProvider) else logger_provider
+    #
+    #     # Avoid double-registration
+    #     if not _OTEL_LOG_EXPORTER_INITIALIZED:
+    #         log_exporter = OTLPLogExporter(endpoint=endpoint, insecure=True)
+    #         #logger_provider.add_log_record_processor(BatchLogRecordProcessor(log_exporter))
+    #
+    #         # Bridge standard logging to OTel logs
+    #         handler = LoggingHandler(level=logging.NOTSET, logger_provider=logger_provider)
+    #         root_logger = logging.getLogger()
+    #         root_logger.addHandler(handler)
+    #         _OTEL_LOG_EXPORTER_INITIALIZED = True
+    # except Exception:
+    #     logging.getLogger(__name__).warning("Failed to initialize OTel log exporter; continuing without log export.")
+    #
+    #
+    #
+
     ## if env variable prometheus-port is not null setup prometheus
     prometheus_port = os.environ.get("PROMETHEUS_PORT")
     print(f"PROMETHEUS_PORT={prometheus_port}")
@@ -42,6 +136,10 @@ def init_runtime_with_telemetry() -> Runtime:
         print("Using Prometheus")
         return Runtime(
             telemetry=TelemetryConfig(
+                logging=LoggingConfig(
+                    filter=TelemetryFilter(core_level="DEBUG", other_level="DEBUG"),
+                    forwarding=LogForwardingConfig(logger=logger)
+                ),
                 metrics=PrometheusConfig(
                     bind_address="127.0.0.1:" + prometheus_port,
                     histogram_bucket_overrides={
@@ -60,9 +158,10 @@ def init_runtime_with_telemetry() -> Runtime:
             telemetry=TelemetryConfig(
                 metrics=OpenTelemetryConfig(
                     url="http://localhost:4317",
-                                        metric_periodicity=timedelta(seconds=1),
-                                        metric_temporality=OpenTelemetryMetricTemporality.DELTA,
-                                       # durations_as_seconds=True
+                    metric_periodicity=timedelta(seconds=1),
+                    metric_temporality=OpenTelemetryMetricTemporality.DELTA,
+                    # headers={"x-honeycomb-dataset": "temporal-metrics",
+                    # durations_as_seconds=True
                 ),
                 global_tags={"anything": "worker_" + WORKER_ID,
                              "env": "worker_" + WORKER_ID,
@@ -89,7 +188,7 @@ async def main():
             client,
             task_queue="open_telemetry-task-queue",
             workflows=[GreetingWorkflow],
-            activities=[compose_greeting],
+            activities=[compose_greeting, emit_test_logs],
             max_concurrent_workflow_tasks=10,
             max_concurrent_activities=10,
             #            max_concurrent_activities=100,
