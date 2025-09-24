@@ -41,7 +41,11 @@ public class Starter {
         final int millisSleep = 500;
 
         final AtomicInteger input = new AtomicInteger();
-        while (millisSleep > 0) {
+        //while (millisSleep > 0) {
+
+
+        for (int i = 0; i < 1; i++) {
+
 
 
             final int andIncrement = input.getAndIncrement();

@@ -17,6 +17,8 @@ import io.temporal.worker.Worker;
 import io.temporal.worker.WorkerFactory;
 import io.temporal.worker.WorkerFactoryOptions;
 import io.temporal.worker.WorkerOptions;
+import com.temporal.grpc.GetSystemInfoLatencyInterceptor;
+import java.util.List;
 
 import static com.temporal.WorkerSsl.TASK_QUEUE;
 
@@ -49,7 +51,9 @@ public class Worker_1 {
 
         final WorkflowServiceStubsOptions.Builder builder = WorkflowServiceStubsOptions.newBuilder()
                 .setMetricsScope(metricsScope)
-                .setTarget(sslContextBuilderProvider.properties.getTemporalWorkerTargetEndpoint());
+                .setTarget(sslContextBuilderProvider.properties.getTemporalWorkerTargetEndpoint())
+                //.setGrpcClientInterceptors(List.of(new GetSystemInfoLatencyInterceptor()))
+                ;
 
         if(sslContextBuilderProvider.getSslContext() != null) {
             builder.setSslContext(sslContextBuilderProvider.getSslContext());

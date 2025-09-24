@@ -50,6 +50,10 @@ public class WorkflowHelloActivity {
         @ActivityMethod
         String sleep(String input);
 
+        // Define your activity method which can be called during workflow execution
+        @ActivityMethod
+        String sleep_time(int ms);
+
 
         // Define your activity method which can be called during workflow execution
         @ActivityMethod
@@ -90,7 +94,7 @@ public class WorkflowHelloActivity {
                 LocalActivityOptions.newBuilder()
                         .setStartToCloseTimeout(
                                 //setting to a very large value for demo purpose.
-                                Duration.ofMillis(starToClose + 1000)
+                                Duration.ofMillis(starToClose + 1000_000)
                         )
                         .setRetryOptions(RetryOptions.newBuilder()
                                 .setBackoffCoefficient(1)
@@ -213,6 +217,18 @@ public class WorkflowHelloActivity {
 
 
             return null;
+        }
+
+        @Override
+        public String sleep_time(int ms) {
+
+            try {
+                Thread.sleep(ms);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            return "";
         }
 
         public void findPrimes(int max) {

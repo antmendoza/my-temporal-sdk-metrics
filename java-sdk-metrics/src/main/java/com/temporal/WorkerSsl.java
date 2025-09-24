@@ -11,6 +11,7 @@ import com.temporal.workflow.ChildMyWorkflow1Impl;
 import com.temporal.workflow.WorkflowHelloActivity;
 import com.uber.m3.tally.Scope;
 import com.uber.m3.util.ImmutableMap;
+import io.temporal.api.workflowservice.v1.GetSystemInfoRequest;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.opentracing.OpenTracingClientInterceptor;
@@ -22,6 +23,10 @@ import io.temporal.worker.WorkerFactory;
 import io.temporal.worker.WorkerFactoryOptions;
 import io.temporal.worker.WorkerOptions;
 import io.temporal.worker.tuning.*;
+import com.temporal.grpc.GetSystemInfoLatencyInterceptor;
+
+import java.time.Duration;
+import java.util.List;
 
 import static com.temporal.OpenTelemetryConfig.initTracer;
 
@@ -64,7 +69,9 @@ public class WorkerSsl {
 
         final WorkflowServiceStubsOptions.Builder builder = WorkflowServiceStubsOptions.newBuilder()
                 .setMetricsScope(metricsScope)
-                .setTarget(sslContextBuilderProvider.properties.getTemporalWorkerTargetEndpoint());
+                .setTarget(sslContextBuilderProvider.properties.getTemporalWorkerTargetEndpoint())
+                //.setGrpcClientInterceptors(List.of(new GetSystemInfoLatencyInterceptor()))
+                ;
 
         if (sslContextBuilderProvider.getSslContext() != null) {
             builder.setSslContext(sslContextBuilderProvider.getSslContext());
@@ -87,7 +94,7 @@ public class WorkerSsl {
                                         )
 
                                 )
-                                .setDataConverter(new MyDataConverter())
+                              //  .setDataConverter(new MyDataConverter())
                                 .build());
 
 

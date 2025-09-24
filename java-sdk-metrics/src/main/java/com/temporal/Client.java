@@ -10,6 +10,8 @@ import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
+import com.temporal.grpc.GetSystemInfoLatencyInterceptor;
+import java.util.List;
 
 public class Client {
 
@@ -26,6 +28,7 @@ public class Client {
         );
 
         final WorkflowServiceStubsOptions.Builder builder = WorkflowServiceStubsOptions.newBuilder()
+//                .setGrpcClientInterceptors(List.of(new GetSystemInfoLatencyInterceptor()))
                 .setMetricsScope(metricsScope)
 //                                .setRpcTimeout(Duration.ofMillis(167))
                 .setTarget(sslContextBuilderProvider.properties.getTemporalStarterTargetEndpoint());
