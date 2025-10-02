@@ -34,6 +34,7 @@ import static com.temporal.OpenTelemetryConfig.initTracer;
 public class WorkerSsl {
 
     public static final String TASK_QUEUE = "MyTaskQueue";
+    public static final String TASK_QUEUE_2 = "MyTaskQueue_2";
 
     public static void main(String[] args) throws Exception {
 
@@ -94,7 +95,7 @@ public class WorkerSsl {
                                         )
 
                                 )
-                              //  .setDataConverter(new MyDataConverter())
+                                //  .setDataConverter(new MyDataConverter())
                                 .build());
 
 
@@ -113,25 +114,46 @@ public class WorkerSsl {
 
 
         WorkerOptions build1 = loadWorkerOptions();
+        {
 
+            Worker worker = factory.newWorker(TASK_QUEUE, build1);
+            worker.registerWorkflowImplementationTypes(
+                    WorkflowHelloActivity.MyWorkflowImpl.class,
+                    ChildMyWorkflow1Impl.class,
 
-        Worker worker = factory.newWorker(TASK_QUEUE, build1);
+                    //Query CAN Workflow
+                    MyWorkflowCANImpl.class,
+                    MyWorkflowRunForeverImpl.class
+            );
+            worker.registerActivitiesImplementations(
+                    new WorkflowHelloActivity.MyActivitiesImpl(),
 
-        worker.registerWorkflowImplementationTypes(
+                    //Query CAN Workflow
+                    new MyActivityImpl()
+            );
 
-                WorkflowHelloActivity.MyWorkflowImpl.class,
-                ChildMyWorkflow1Impl.class,
+        }
 
-                //Query CAN Workflow
-                MyWorkflowCANImpl.class,
-                MyWorkflowRunForeverImpl.class
-        );
-        worker.registerActivitiesImplementations(
-                new WorkflowHelloActivity.MyActivitiesImpl(),
+        {
 
-                //Query CAN Workflow
-                new MyActivityImpl()
-        );
+            Worker worker = factory.newWorker(TASK_QUEUE_2, build1);
+            worker.registerWorkflowImplementationTypes(
+                    WorkflowHelloActivity.MyWorkflowImpl.class,
+                    ChildMyWorkflow1Impl.class,
+
+                    //Query CAN Workflow
+                    MyWorkflowCANImpl.class,
+                    MyWorkflowRunForeverImpl.class
+            );
+            worker.registerActivitiesImplementations(
+                    new WorkflowHelloActivity.MyActivitiesImpl(),
+
+                    //Query CAN Workflow
+                    new MyActivityImpl()
+            );
+
+        }
+
         factory.start();
 
         System.getenv().forEach((k, v) -> {

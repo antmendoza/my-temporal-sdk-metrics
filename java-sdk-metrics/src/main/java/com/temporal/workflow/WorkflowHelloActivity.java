@@ -89,6 +89,24 @@ public class WorkflowHelloActivity {
                         //.setScheduleToStartTimeout(Duration.ofSeconds(2))
                         .build());
 
+
+        private final MyActivities activities_2 = Workflow.newActivityStub(
+                MyActivities.class,
+                ActivityOptions.newBuilder()
+                        .setTaskQueue(WorkerSsl.TASK_QUEUE_2)
+                        .setStartToCloseTimeout(
+                                //setting to a very large value for demo purpose.
+                                Duration.ofMillis(starToClose + 5000)
+                        )
+                        .setCancellationType(WAIT_CANCELLATION_COMPLETED)
+//                        .setHeartbeatTimeout(Duration.ofMillis(starToClose / 2))
+                        .setRetryOptions(RetryOptions.newBuilder()
+                                .setBackoffCoefficient(1)
+                                .setInitialInterval(Duration.ofSeconds(5))
+                                .build())
+                        //.setScheduleToStartTimeout(Duration.ofSeconds(2))
+                        .build());
+
         private final MyActivities localActivity = Workflow.newLocalActivityStub(
                 MyActivities.class,
                 LocalActivityOptions.newBuilder()
@@ -99,6 +117,7 @@ public class WorkflowHelloActivity {
                         .setRetryOptions(RetryOptions.newBuilder()
                                 .setBackoffCoefficient(1)
                                 .build())
+                        .setDoNotIncludeArgumentsIntoMarker(true)
                         //.setScheduleToStartTimeout(Duration.ofSeconds(2))
                         .build());
 
@@ -108,12 +127,25 @@ public class WorkflowHelloActivity {
 
         public String run(String name) {
 
+
+
+            localActivity.sleep_time(300);
+
+
             //name  = halfMBString;
 
             {
                 List<Promise<String>> promises = new ArrayList<>();
                 for (int i = 0; i < 5; i++) {
+
+                    if(i%2==0) {
+
+                        promises.add(Async.function(activities_2::sleep, name));
+
+                    }else {
+
                     promises.add(Async.function(activities::sleep, name));
+                    }
                 }
 
                 Promise.allOf(promises).get();
