@@ -4,37 +4,33 @@ import com.temporal.config.FromEnv;
 import com.temporal.config.ScopeBuilder;
 import com.temporal.config.SslContextBuilderProvider;
 import com.temporal.query_can_workflow.MyActivityImpl;
-import com.temporal.query_can_workflow.MyDataConverter;
 import com.temporal.query_can_workflow.MyWorkflowCANImpl;
 import com.temporal.query_can_workflow.MyWorkflowRunForeverImpl;
 import com.temporal.workflow.ChildMyWorkflow1Impl;
 import com.temporal.workflow.WorkflowHelloActivity;
 import com.uber.m3.tally.Scope;
 import com.uber.m3.util.ImmutableMap;
-import io.temporal.api.workflowservice.v1.GetSystemInfoRequest;
+import io.temporal.api.workflowservice.v1.SetWorkerDeploymentCurrentVersionRequest;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
+import io.temporal.common.VersioningBehavior;
+import io.temporal.common.WorkerDeploymentVersion;
 import io.temporal.opentracing.OpenTracingClientInterceptor;
 import io.temporal.opentracing.OpenTracingWorkerInterceptor;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
-import io.temporal.worker.Worker;
-import io.temporal.worker.WorkerFactory;
-import io.temporal.worker.WorkerFactoryOptions;
-import io.temporal.worker.WorkerOptions;
+import io.temporal.worker.*;
 import io.temporal.worker.tuning.*;
-import com.temporal.grpc.GetSystemInfoLatencyInterceptor;
 
-import java.time.Duration;
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static com.temporal.OpenTelemetryConfig.initTracer;
 
 
 public class WorkerSsl {
 
+    public static final String TASK_QUEUE_VERSIONING = "MyTaskQueue_versioning";
     public static final String TASK_QUEUE = "MyTaskQueue";
-    public static final String TASK_QUEUE_2 = "MyTaskQueue_2";
 
     public static void main(String[] args) throws Exception {
 
@@ -113,30 +109,55 @@ public class WorkerSsl {
         WorkerFactory factory = WorkerFactory.newInstance(client, build);
 
 
-        WorkerOptions build1 = loadWorkerOptions();
+        WorkerOptions.Builder build1 = loadWorkerOptions();
         {
 
-            Worker worker = factory.newWorker(TASK_QUEUE, build1);
-            worker.registerWorkflowImplementationTypes(
-                    WorkflowHelloActivity.MyWorkflowImpl.class,
-                    ChildMyWorkflow1Impl.class,
+            String deploymentName = "llm_srv";
+            String buildId = "1.0";
+            build1.setDeploymentOptions(WorkerDeploymentOptions.newBuilder()
+                    .setVersion(new WorkerDeploymentVersion(deploymentName, buildId))
+                    .setUseVersioning(true)
+                    .setDefaultVersioningBehavior(VersioningBehavior.AUTO_UPGRADE)
+                    .build());
 
-                    //Query CAN Workflow
-                    MyWorkflowCANImpl.class,
-                    MyWorkflowRunForeverImpl.class
+            Worker worker = factory.newWorker(TASK_QUEUE_VERSIONING, build1.build());
+            worker.registerWorkflowImplementationTypes(
+                    com.temporal.worker_versioning.WorkflowHelloActivity.MyWorkflowImplVersioning.class
             );
             worker.registerActivitiesImplementations(
-                    new WorkflowHelloActivity.MyActivitiesImpl(),
-
-                    //Query CAN Workflow
-                    new MyActivityImpl()
+                    new com.temporal.worker_versioning.WorkflowHelloActivity.MyActivitiesImplVersioning()
             );
+
+
+            CompletableFuture.runAsync(()-> {
+
+
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                // Once the version is available, set it as current
+                SetWorkerDeploymentCurrentVersionRequest setRequest =
+                        SetWorkerDeploymentCurrentVersionRequest.newBuilder()
+                                .setNamespace(client.getOptions().getNamespace())
+                                .setDeploymentName(deploymentName)
+                                .setBuildId(buildId)
+                                .build();
+
+                service.blockingStub().setWorkerDeploymentCurrentVersion(setRequest);
+
+
+            });
+
+
 
         }
 
         {
 
-            Worker worker = factory.newWorker(TASK_QUEUE_2, build1);
+            Worker worker = factory.newWorker(TASK_QUEUE, build1.build());
             worker.registerWorkflowImplementationTypes(
                     WorkflowHelloActivity.MyWorkflowImpl.class,
                     ChildMyWorkflow1Impl.class,
@@ -163,7 +184,7 @@ public class WorkerSsl {
 
     }
 
-    private static WorkerOptions loadWorkerOptions() {
+    private static WorkerOptions.Builder loadWorkerOptions() {
 
 
         if (FromEnv.fineTunner()) {
@@ -174,8 +195,7 @@ public class WorkerSsl {
                     .setMaxConcurrentWorkflowTaskExecutionSize(FromEnv.getConcurrentWorkflowExecutionSize())
                     .setMaxConcurrentActivityTaskPollers(FromEnv.getConcurrentActivityPollers())
                     .setMaxConcurrentWorkflowTaskPollers(FromEnv.getConcurrentWorkflowPollers())
-                    .setDisableEagerExecution(FromEnv.getDisableEagerDispatch())
-                    .build();
+                    .setDisableEagerExecution(FromEnv.getDisableEagerDispatch());
 
         }
 
@@ -188,8 +208,7 @@ public class WorkerSsl {
 //                                )
                                     .setControllerOptions(
                                             ResourceBasedControllerOptions.newBuilder(0.8, 0.9).build())
-                                    .build())
-                    .build();
+                                    .build());
         }
 
 
@@ -219,8 +238,7 @@ public class WorkerSsl {
                                     workflowTaskSlotSupplier,
                                     activityTaskSlotSupplier,
                                     localActivitySlotSupplier,
-                                    nexusSlotSupplier))
-                    .build();
+                                    nexusSlotSupplier));
 
 
         }

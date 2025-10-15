@@ -1,4 +1,4 @@
-package com.temporal.workflow;
+package com.temporal.worker_versioning;
 
 import io.temporal.workflow.SignalMethod;
 import io.temporal.workflow.UpdateMethod;
@@ -6,16 +6,10 @@ import io.temporal.workflow.WorkflowInterface;
 import io.temporal.workflow.WorkflowMethod;
 
 @WorkflowInterface
-public interface MyWorkflow1 {
+public interface MyWorkflowVersioning {
 
     @WorkflowMethod
-    String run(String name);
+    String run(int iterations);
 
 
-    @SignalMethod
-    void signal();
-
-
-    @UpdateMethod
-    String update();
 }

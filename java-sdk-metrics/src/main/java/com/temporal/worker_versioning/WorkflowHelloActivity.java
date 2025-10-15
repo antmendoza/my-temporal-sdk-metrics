@@ -1,14 +1,12 @@
-package com.temporal.workflow;
+package com.temporal.worker_versioning;
 
 import com.temporal.WorkerSsl;
 import com.temporal.config.FromEnv;
 import io.temporal.activity.*;
 import io.temporal.common.RetryOptions;
+import io.temporal.common.VersioningBehavior;
 import io.temporal.failure.ApplicationFailure;
-import io.temporal.workflow.Async;
-import io.temporal.workflow.ChildWorkflowOptions;
-import io.temporal.workflow.Promise;
-import io.temporal.workflow.Workflow;
+import io.temporal.workflow.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,22 +19,18 @@ import static io.temporal.activity.ActivityCancellationType.WAIT_CANCELLATION_CO
 public class WorkflowHelloActivity {
 
 
-    public static String halfMBString = SomeKBString.get();
 
 
     @ActivityInterface
-    public interface MyActivities {
+    public interface MyActivitiesVersioning {
 
-        // Define your activity method which can be called during workflow execution
         @ActivityMethod
         String sleep(String input);
 
-        // Define your activity method which can be called during workflow execution
         @ActivityMethod
         String sleep_time(int ms);
 
 
-        // Define your activity method which can be called during workflow execution
         @ActivityMethod
         String exception();
 
@@ -45,16 +39,14 @@ public class WorkflowHelloActivity {
     }
 
 
-    // Define the workflow implementation which implements our getGreeting workflow method.
-    public static class MyWorkflowImpl implements MyWorkflow1 {
+    public static class MyWorkflowImplVersioning implements MyWorkflowVersioning {
 
 
         final int starToClose = Integer.parseInt(FromEnv.getActivityLatencyMs());
-        private final Logger logger = Workflow.getLogger(MyWorkflowImpl.class.getName());
 
 
-        private final MyActivities activities = Workflow.newActivityStub(
-                MyActivities.class,
+        private final MyActivitiesVersioning activities = Workflow.newActivityStub(
+                MyActivitiesVersioning.class,
                 ActivityOptions.newBuilder()
                         .setTaskQueue(WorkerSsl.TASK_QUEUE)
                         .setStartToCloseTimeout(
@@ -71,8 +63,8 @@ public class WorkflowHelloActivity {
                         .build());
 
 
-        private final MyActivities localActivity = Workflow.newLocalActivityStub(
-                MyActivities.class,
+        private final MyActivitiesVersioning localActivity = Workflow.newLocalActivityStub(
+                MyActivitiesVersioning.class,
                 LocalActivityOptions.newBuilder()
                         .setStartToCloseTimeout(
                                 //setting to a very large value for demo purpose.
@@ -85,74 +77,45 @@ public class WorkflowHelloActivity {
                         //.setScheduleToStartTimeout(Duration.ofSeconds(2))
                         .build());
 
+        private boolean updated = false;
+        private boolean signaled = false;
 
-        public MyWorkflowImpl() {
-        }
 
-        public String run(String name) {
+      //  @WorkflowVersioningBehavior(VersioningBehavior.AUTO_UPGRADE)
+        public String run(int iterations) {
+
 
 
             localActivity.sleep_time(300);
 
-
-            //name  = halfMBString;
-
             {
                 List<Promise<String>> promises = new ArrayList<>();
                 for (int i = 0; i < 5; i++) {
-                    promises.add(Async.function(activities::sleep, name));
+                        promises.add(Async.function(activities::sleep, iterations+""));
                 }
 
                 Promise.allOf(promises).get();
             }
 
 
-            {
-                List<Promise<String>> promises = new ArrayList<>();
-                for (int i = 0; i < 5; i++) {
+            if(iterations < 0){
 
-                    final int index = i;
-                    final String finalName = name;
-                    promises.add(Async.function(() -> {
-
-                        final ChildMyWorkflow1 childWF = Workflow.newChildWorkflowStub(ChildMyWorkflow1.class,
-                                ChildWorkflowOptions.newBuilder()
-//                                    .setParentClosePolicy(ParentClosePolicy.PARENT_CLOSE_POLICY_ABANDON)
-                                        .build());
-                        return childWF.run(finalName + "-" + index);
-
-                    }));
-
-                }
-
-
-                Promise.allOf(promises).get();
-
-
+                Workflow.continueAsNew(++iterations);
             }
-            return "done";
+
+
+            throw ApplicationFailure.newFailure("test", "test");
+
+
 
         }
 
-        @Override
-        public void signal() {
-
-        }
-
-        @Override
-        public String update() {
-
-
-            return null;
-        }
 
 
     }
 
-    /**
-     * Simple activity implementation, that concatenates two strings.
-     */
-    public static class MyActivitiesImpl implements MyActivities {
+
+    public static class MyActivitiesImplVersioning implements MyActivitiesVersioning {
 
 
         private static final Logger log = LoggerFactory.getLogger("-");
