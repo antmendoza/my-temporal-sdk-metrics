@@ -1,13 +1,15 @@
 package com.temporal.workflow;
 
-import io.grpc.*;
-import io.temporal.api.common.v1.WorkflowExecution;
+import io.grpc.ClientInterceptor;
+import io.grpc.Metadata;
+import io.temporal.api.workflowservice.v1.ListWorkflowExecutionsRequest;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 
+import java.time.Duration;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -21,121 +23,70 @@ public class Starter_API_KEY {
 
     public static void main(String[] args) throws InterruptedException {
 
+        try {
 
 
-        final ClientInterceptor interceptr = new ClientInterceptor() {
-            @Override
-            public <ReqT, RespT> io.grpc.ClientCall<ReqT, RespT> interceptCall(
-                    io.grpc.MethodDescriptor<ReqT, RespT> method,
-                    io.grpc.CallOptions callOptions,
-                    io.grpc.Channel next) {
+            final String namespace = "antonio.a2dd6";
+            String key = "-";
 
+            key = "-";
 
-
-                //Print api key value
-
-
-
-                return next.newCall(method, callOptions);
-            }
-        };
-        final Collection<ClientInterceptor> interceptor = List.of(interceptr, new HeaderLoggingInterceptor());
-
-        final String key = "key";
-
-
-        WorkflowServiceStubsOptions.Builder stubOptions =
-                WorkflowServiceStubsOptions.newBuilder()
-                        .addApiKey(() -> key)
-                        .setEnableHttps(true)
-                        .setGrpcClientInterceptors(interceptor)
-                        .setTarget("us-east-1.aws.api.temporal.io:7233");
-
-        WorkflowServiceStubs service = WorkflowServiceStubs.newServiceStubs(stubOptions.build());
-
-
-        WorkflowClientOptions clientOptions =
-                WorkflowClientOptions.newBuilder()
-                        .setNamespace("antonio-api-key-2.a2dd6")
-//                        .setDataConverter(dataConverter)
-                        .build();
-        WorkflowClient client = WorkflowClient.newInstance(service, clientOptions);
-
-
-        final int millisSleep = 1000;
-
-        final AtomicInteger input = new AtomicInteger();
-        while (input.get() < 2) {
-
-
-            final int andIncrement = input.getAndIncrement();
-            CompletableFuture.runAsync(() -> {
-                final String workflowId = andIncrement + "-" + Math.random();
-                try {
-
-                    WorkflowOptions workflowOptions =
-                            WorkflowOptions.newBuilder()
-                                    .setTaskQueue(TASK_QUEUE)
-                                    .setWorkflowId(workflowId)
-                                    .build();
-
-
-                    MyWorkflow1 workflow = client.newWorkflowStub(MyWorkflow1.class, workflowOptions);
-                    System.out.println("Starting workflow...with after = " + millisSleep + " ms");
-                    System.out.println(workflowId + "init " + new Date());
-                    WorkflowExecution execution = WorkflowClient.start(workflow::run, "" + andIncrement);
-                    System.out.println(workflowId + "end " + new Date());
-
-
-                } catch (Exception e) {
-
-                    System.out.println("Failed workflowId = " + workflowId);
-                }
-            });
-
-            Thread.sleep(millisSleep);
-
-
-        }
-
-
-
-
-    }
-
-
-
-    public static class HeaderLoggingInterceptor implements ClientInterceptor {
-
-        @Override
-        public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(
-                MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next) {
-
-
-            return new ForwardingClientCall.SimpleForwardingClientCall<ReqT, RespT>(
-                    next.newCall(method, callOptions)) {
-
+            final ClientInterceptor interceptr = new ClientInterceptor() {
                 @Override
-                public void start(Listener<RespT> responseListener, Metadata headers) {
+                public <ReqT, RespT> io.grpc.ClientCall<ReqT, RespT> interceptCall(
+                        io.grpc.MethodDescriptor<ReqT, RespT> method,
+                        io.grpc.CallOptions callOptions,
+                        io.grpc.Channel next) {
 
 
-
-                    // Log request headers
-                    System.out.println(new Date() + "Request Headers: " + headers);
-                    super.start(
-                            new ForwardingClientCallListener.SimpleForwardingClientCallListener<RespT>(
-                                    responseListener) {
-                                @Override
-                                public void onHeaders(Metadata headers) {
-                                    // Log response headers
-                                    System.out.println(new Date() + "Response Headers: " + headers);
-                                    super.onHeaders(headers);
-                                }
-                            },
-                            headers);
+                    //Print api key value
+                    return next.newCall(method, callOptions);
                 }
             };
+            final Collection<ClientInterceptor> interceptor = List.of(interceptr, new HeaderLoggingInterceptor());
+
+
+            String finalKey = key;
+            WorkflowServiceStubsOptions.Builder stubOptions =
+                    WorkflowServiceStubsOptions.newBuilder()
+                            .addApiKey(() -> finalKey)
+                            .setEnableHttps(true)
+                            .addGrpcMetadataProvider(() -> {
+                                Metadata metadata = new Metadata();
+                                metadata.put(Metadata.Key.of("temporal-namespace", Metadata.ASCII_STRING_MARSHALLER), namespace);
+                                return metadata;
+                            })
+                            .setGrpcClientInterceptors(interceptor)
+                            .setTarget("us-west-2.aws.api.temporal.io:7233")
+                    //        .setTarget("antonio.a2dd6.tmprl.cloud:7233")
+                    ;
+
+            WorkflowServiceStubs service = WorkflowServiceStubs.newConnectedServiceStubs(
+                    stubOptions.build()
+                    , Duration.ofSeconds(10)
+            );
+
+
+            WorkflowClientOptions clientOptions =
+                    WorkflowClientOptions.newBuilder()
+                            .setNamespace(namespace)
+//                        .setDataConverter(dataConverter)
+                            .build();
+            WorkflowClient client = WorkflowClient.newInstance(service, clientOptions);
+
+
+            try {
+                client.getWorkflowServiceStubs().blockingStub().listWorkflowExecutions(ListWorkflowExecutionsRequest.newBuilder().setNamespace(namespace).build());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
 

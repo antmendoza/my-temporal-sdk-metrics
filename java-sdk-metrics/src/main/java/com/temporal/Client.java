@@ -4,20 +4,20 @@ import com.temporal.config.FromEnv;
 import com.temporal.config.ScopeBuilder;
 import com.temporal.config.SslContextBuilderProvider;
 import com.temporal.query_can_workflow.MyDataConverter;
+import com.temporal.workflow.HeaderLoggingInterceptor;
 import com.uber.m3.tally.Scope;
 import com.uber.m3.util.ImmutableMap;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
-import com.temporal.grpc.GetSystemInfoLatencyInterceptor;
+
 import java.util.List;
 
 public class Client {
 
 
-
-    public  WorkflowClient getWorkflowClient() {
+    public WorkflowClient getWorkflowClient() {
         SslContextBuilderProvider sslContextBuilderProvider = new SslContextBuilderProvider();
 
 
@@ -30,6 +30,7 @@ public class Client {
         final WorkflowServiceStubsOptions.Builder builder = WorkflowServiceStubsOptions.newBuilder()
 //                .setGrpcClientInterceptors(List.of(new GetSystemInfoLatencyInterceptor()))
                 .setMetricsScope(metricsScope)
+                .setGrpcClientInterceptors(List.of(new HeaderLoggingInterceptor()))
 //                                .setRpcTimeout(Duration.ofMillis(167))
                 .setTarget(sslContextBuilderProvider.properties.getTemporalStarterTargetEndpoint());
 
