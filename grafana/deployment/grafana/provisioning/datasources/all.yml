@@ -5,7 +5,7 @@ datasources:
   - name: 'prometheus-SDK-local'
     type: 'prometheus'
     org_id: 1
-    url: 'http://prometheus:9090'
+    url: 'http://prometheus_9090:9090'
     is_default: true
     version: 1
     editable: true
@@ -14,7 +14,7 @@ datasources:
   - name: 'prometheus-cloud-with-API-key'
     type: 'prometheus'
     org_id: 1
-    url: 'http://prometheus:9091'
+    url: 'http://prometheus_9091:9090'
     is_default: false
     version: 1
     editable: true
