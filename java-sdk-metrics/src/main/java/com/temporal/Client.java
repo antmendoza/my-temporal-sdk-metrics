@@ -30,7 +30,7 @@ public class Client {
         final WorkflowServiceStubsOptions.Builder builder = WorkflowServiceStubsOptions.newBuilder()
 //                .setGrpcClientInterceptors(List.of(new GetSystemInfoLatencyInterceptor()))
                 .setMetricsScope(metricsScope)
-                .setGrpcClientInterceptors(List.of(new HeaderLoggingInterceptor()))
+//                .setGrpcClientInterceptors(List.of(new HeaderLoggingInterceptor()))
 //                                .setRpcTimeout(Duration.ofMillis(167))
                 .setTarget(sslContextBuilderProvider.properties.getTemporalStarterTargetEndpoint());
 

@@ -2,7 +2,7 @@ apiVersion: 1
 
 datasources:
 
-  - name: 'prometheus-SDK-local'
+  - name: 'prometheus-SDKandServer-local'
     type: 'prometheus'
     org_id: 1
     url: 'http://prometheus_9090:9090'

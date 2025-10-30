@@ -5,6 +5,10 @@ scrape_configs:
     static_configs:
       - targets:
           - 'host.docker.internal:8010'
+  - job_name: 'temporal'
+    static_configs:
+      - targets:
+          - 'temporal:8003'
   - job_name: 'application'
     metrics_path: '/actuator/prometheus'
     static_configs:

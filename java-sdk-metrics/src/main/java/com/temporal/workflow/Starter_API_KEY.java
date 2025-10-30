@@ -56,7 +56,7 @@ public class Starter_API_KEY {
                                 metadata.put(Metadata.Key.of("temporal-namespace", Metadata.ASCII_STRING_MARSHALLER), namespace);
                                 return metadata;
                             })
-                            .setGrpcClientInterceptors(interceptor)
+                            //.setGrpcClientInterceptors(interceptor)
                             .setTarget("us-west-2.aws.api.temporal.io:7233")
                     //        .setTarget("antonio.a2dd6.tmprl.cloud:7233")
                     ;
