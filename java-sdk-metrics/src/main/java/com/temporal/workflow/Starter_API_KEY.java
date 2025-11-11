@@ -1,22 +1,17 @@
 package com.temporal.workflow;
 
+import com.temporal.grpc.HeaderLoggingInterceptor;
 import io.grpc.ClientInterceptor;
 import io.grpc.Metadata;
 import io.temporal.api.workflowservice.v1.ListWorkflowExecutionsRequest;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
-import io.temporal.client.WorkflowOptions;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 
 import java.time.Duration;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import static com.temporal.WorkerSsl.TASK_QUEUE;
 
 public class Starter_API_KEY {
 
@@ -56,7 +51,7 @@ public class Starter_API_KEY {
                                 metadata.put(Metadata.Key.of("temporal-namespace", Metadata.ASCII_STRING_MARSHALLER), namespace);
                                 return metadata;
                             })
-                            //.setGrpcClientInterceptors(interceptor)
+                            .setGrpcClientInterceptors(interceptor)
                             .setTarget("us-west-2.aws.api.temporal.io:7233")
                     //        .setTarget("antonio.a2dd6.tmprl.cloud:7233")
                     ;

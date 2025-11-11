@@ -1,4 +1,4 @@
-package com.temporal.workflow;
+package com.temporal.grpc;
 
 import io.grpc.*;
 
@@ -44,7 +44,7 @@ public class HeaderLoggingInterceptor implements ClientInterceptor {
                             @Override
                             public void onHeaders(Metadata headers) {
                                 // Log response headers
-                                System.out.println(new Date() + " Response Headers: " + " " + method.getFullMethodName() + " " + headers);
+                                System.out.println(new Date() + " Response Headers: " + " " + method.getFullMethodName() + " - " + headers);
                                 super.onHeaders(headers);
                             }
 

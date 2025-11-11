@@ -7,6 +7,7 @@ import com.temporal.query_can_workflow.MyActivityImpl;
 import com.temporal.query_can_workflow.MyWorkflowCANImpl;
 import com.temporal.query_can_workflow.MyWorkflowRunForeverImpl;
 import com.temporal.workflow.ChildMyWorkflow1Impl;
+import com.temporal.grpc.HeaderLoggingInterceptor;
 import com.temporal.workflow.WorkflowHelloActivity;
 import com.uber.m3.tally.Scope;
 import com.uber.m3.util.ImmutableMap;
@@ -20,6 +21,7 @@ import io.temporal.opentracing.OpenTracingWorkerInterceptor;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 import io.temporal.worker.*;
+import com.temporal.grpc.FailureInjectionInterceptor;
 import io.temporal.worker.tuning.*;
 
 import java.util.concurrent.CompletableFuture;
@@ -68,7 +70,11 @@ public class WorkerSsl {
                 .setMetricsScope(metricsScope)
                 .setTarget(sslContextBuilderProvider.properties.getTemporalWorkerTargetEndpoint())
                 //.setGrpcClientInterceptors(List.of(new GetSystemInfoLatencyInterceptor()))
-                ;
+                .setGrpcClientInterceptors(java.util.List.of(
+                        // Enabled only when INJECT_GRPC_FAILURES=true
+                        new HeaderLoggingInterceptor()
+                       // new FailureInjectionInterceptor()
+                ));
 
         if (sslContextBuilderProvider.getSslContext() != null) {
             builder.setSslContext(sslContextBuilderProvider.getSslContext());
@@ -110,7 +116,7 @@ public class WorkerSsl {
 
 
         WorkerOptions.Builder build1 = loadWorkerOptions();
-        {
+        if (true){
 
             String deploymentName = "llm_srv";
             String buildId = "1.0";
@@ -155,7 +161,7 @@ public class WorkerSsl {
 
         }
 
-        {
+        if (false){
 
             Worker worker = factory.newWorker(TASK_QUEUE, build1.build());
             worker.registerWorkflowImplementationTypes(
@@ -178,7 +184,7 @@ public class WorkerSsl {
         factory.start();
 
         System.getenv().forEach((k, v) -> {
-            System.out.println(k + ":" + v);
+            //System.out.println(k + ":" + v);
         });
 
 

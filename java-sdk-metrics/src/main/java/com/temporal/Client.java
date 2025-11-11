@@ -4,7 +4,8 @@ import com.temporal.config.FromEnv;
 import com.temporal.config.ScopeBuilder;
 import com.temporal.config.SslContextBuilderProvider;
 import com.temporal.query_can_workflow.MyDataConverter;
-import com.temporal.workflow.HeaderLoggingInterceptor;
+import com.temporal.grpc.HeaderLoggingInterceptor;
+import com.temporal.grpc.FailureInjectionInterceptor;
 import com.uber.m3.tally.Scope;
 import com.uber.m3.util.ImmutableMap;
 import io.temporal.client.WorkflowClient;
@@ -30,7 +31,10 @@ public class Client {
         final WorkflowServiceStubsOptions.Builder builder = WorkflowServiceStubsOptions.newBuilder()
 //                .setGrpcClientInterceptors(List.of(new GetSystemInfoLatencyInterceptor()))
                 .setMetricsScope(metricsScope)
-//                .setGrpcClientInterceptors(List.of(new HeaderLoggingInterceptor()))
+               .setGrpcClientInterceptors(List.of(
+                       new HeaderLoggingInterceptor(),
+                       // Enabled only when INJECT_GRPC_FAILURES=true
+                       new FailureInjectionInterceptor()))
 //                                .setRpcTimeout(Duration.ofMillis(167))
                 .setTarget(sslContextBuilderProvider.properties.getTemporalStarterTargetEndpoint());
 

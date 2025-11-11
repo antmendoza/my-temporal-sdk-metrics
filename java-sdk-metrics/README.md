@@ -34,3 +34,30 @@ for i in {8071..8071}; do export PQL_PORT=$i; ./mvnw compile exec:java -Dexec.ma
 
 
 The Java dashboard in [dashboard](http://localhost:3000/) will start showing data.
+
+## Inject gRPC Failures (retry simulation)
+
+Use the built-in client interceptor to force retryable gRPC errors from the Java SDK to the Temporal server. Configure via env vars when starting the worker or starter (examples below):
+
+- INJECT_GRPC_FAILURES: set to `true` to enable.
+- INJECT_GRPC_METHOD_SUBSTR: comma-separated substrings to match gRPC methods (default `*`). Examples: `StartWorkflowExecution,PollWorkflowTaskQueue,PollActivityTaskQueue,GetSystemInfo`.
+- INJECT_GRPC_FAIL_PERCENT: integer 0–100 to fail that percent of matching calls.
+- INJECT_GRPC_FAIL_FIRST_N: fail the first N matching calls per method (once per method if set to 1).
+
+Failures are returned as `UNAVAILABLE` which the SDK retries with backoff.
+
+Examples:
+
+```bash
+# Fail the first StartWorkflowExecution once per process (SDK will retry)
+export INJECT_GRPC_FAILURES=true
+export INJECT_GRPC_METHOD_SUBSTR=StartWorkflowExecution
+export INJECT_GRPC_FAIL_FIRST_N=1
+
+# Or: randomly fail ~30% of PollWorkflowTaskQueue calls
+export INJECT_GRPC_FAILURES=true
+export INJECT_GRPC_METHOD_SUBSTR=PollWorkflowTaskQueue
+export INJECT_GRPC_FAIL_PERCENT=30
+```
+
+You can combine both `INJECT_GRPC_FAIL_PERCENT` and `INJECT_GRPC_FAIL_FIRST_N`. If both are set, a call fails if either condition triggers.

@@ -95,6 +95,8 @@ public class WorkflowHelloActivity {
             localActivity.sleep_time(300);
 
 
+            Workflow.sleep(2);
+
             //name  = halfMBString;
 
             {
