@@ -11,7 +11,8 @@ import java.util.Date;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.temporal.WorkerSsl.TASK_QUEUE_VERSIONING;
+import static com.temporal.WorkerSsl.TASK_QUEUE;
+
 
 public class Starter {
 
@@ -36,7 +37,7 @@ public class Starter {
 
                     WorkflowOptions workflowOptions =
                             WorkflowOptions.newBuilder()
-                                    .setTaskQueue(TASK_QUEUE_VERSIONING)
+                                    .setTaskQueue(TASK_QUEUE)
                                     .setWorkflowId(workflowId)
                                     .setVersioningOverride(new VersioningOverride.AutoUpgradeVersioningOverride())
                                     .setRetryOptions(

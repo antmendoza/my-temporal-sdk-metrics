@@ -3,35 +3,26 @@ package com.temporal;
 import com.temporal.config.FromEnv;
 import com.temporal.config.ScopeBuilder;
 import com.temporal.config.SslContextBuilderProvider;
-import com.temporal.query_can_workflow.MyActivityImpl;
-import com.temporal.query_can_workflow.MyWorkflowCANImpl;
-import com.temporal.query_can_workflow.MyWorkflowRunForeverImpl;
-import com.temporal.workflow.ChildMyWorkflow1Impl;
 import com.temporal.grpc.HeaderLoggingInterceptor;
-import com.temporal.workflow.WorkflowHelloActivity;
 import com.uber.m3.tally.Scope;
 import com.uber.m3.util.ImmutableMap;
-import io.temporal.api.workflowservice.v1.SetWorkerDeploymentCurrentVersionRequest;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
-import io.temporal.common.VersioningBehavior;
-import io.temporal.common.WorkerDeploymentVersion;
 import io.temporal.opentracing.OpenTracingClientInterceptor;
 import io.temporal.opentracing.OpenTracingWorkerInterceptor;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
-import io.temporal.worker.*;
-import com.temporal.grpc.FailureInjectionInterceptor;
+import io.temporal.worker.Worker;
+import io.temporal.worker.WorkerFactory;
+import io.temporal.worker.WorkerFactoryOptions;
+import io.temporal.worker.WorkerOptions;
 import io.temporal.worker.tuning.*;
-
-import java.util.concurrent.CompletableFuture;
 
 import static com.temporal.OpenTelemetryConfig.initTracer;
 
 
 public class WorkerSsl {
 
-    public static final String TASK_QUEUE_VERSIONING = "MyTaskQueue_versioning";
     public static final String TASK_QUEUE = "MyTaskQueue";
 
     public static void main(String[] args) throws Exception {
@@ -73,7 +64,7 @@ public class WorkerSsl {
                 .setGrpcClientInterceptors(java.util.List.of(
                         // Enabled only when INJECT_GRPC_FAILURES=true
                         new HeaderLoggingInterceptor()
-                       // new FailureInjectionInterceptor()
+                        // new FailureInjectionInterceptor()
                 ));
 
         if (sslContextBuilderProvider.getSslContext() != null) {
@@ -114,78 +105,17 @@ public class WorkerSsl {
 
         WorkerFactory factory = WorkerFactory.newInstance(client, build);
 
+        Worker worker = factory.newWorker(TASK_QUEUE, loadWorkerOptions().build());
+        worker.registerWorkflowImplementationTypes(
+                com.temporal.worker_versioning.WorkflowHelloActivity.MyWorkflowImplVersioning.class
+        );
+        worker.registerActivitiesImplementations(
+                new com.temporal.worker_versioning.WorkflowHelloActivity.MyActivitiesImplVersioning()
+        );
 
-        WorkerOptions.Builder build1 = loadWorkerOptions();
-        if (true){
-
-            String deploymentName = "llm_srv";
-            String buildId = "1.0";
-            build1.setDeploymentOptions(WorkerDeploymentOptions.newBuilder()
-                    .setVersion(new WorkerDeploymentVersion(deploymentName, buildId))
-                    .setUseVersioning(true)
-                    .setDefaultVersioningBehavior(VersioningBehavior.AUTO_UPGRADE)
-                    .build());
-
-            Worker worker = factory.newWorker(TASK_QUEUE_VERSIONING, build1.build());
-            worker.registerWorkflowImplementationTypes(
-                    com.temporal.worker_versioning.WorkflowHelloActivity.MyWorkflowImplVersioning.class
-            );
-            worker.registerActivitiesImplementations(
-                    new com.temporal.worker_versioning.WorkflowHelloActivity.MyActivitiesImplVersioning()
-            );
-
-
-            CompletableFuture.runAsync(()-> {
-
-
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-                // Once the version is available, set it as current
-                SetWorkerDeploymentCurrentVersionRequest setRequest =
-                        SetWorkerDeploymentCurrentVersionRequest.newBuilder()
-                                .setNamespace(client.getOptions().getNamespace())
-                                .setDeploymentName(deploymentName)
-                                .setBuildId(buildId)
-                                .build();
-
-                service.blockingStub().setWorkerDeploymentCurrentVersion(setRequest);
-
-
-            });
-
-
-
-        }
-
-        if (false){
-
-            Worker worker = factory.newWorker(TASK_QUEUE, build1.build());
-            worker.registerWorkflowImplementationTypes(
-                    WorkflowHelloActivity.MyWorkflowImpl.class,
-                    ChildMyWorkflow1Impl.class,
-
-                    //Query CAN Workflow
-                    MyWorkflowCANImpl.class,
-                    MyWorkflowRunForeverImpl.class
-            );
-            worker.registerActivitiesImplementations(
-                    new WorkflowHelloActivity.MyActivitiesImpl(),
-
-                    //Query CAN Workflow
-                    new MyActivityImpl()
-            );
-
-        }
 
         factory.start();
 
-        System.getenv().forEach((k, v) -> {
-            //System.out.println(k + ":" + v);
-        });
 
 
     }
