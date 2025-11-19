@@ -3,7 +3,7 @@ package com.temporal;
 import com.temporal.config.FromEnv;
 import com.temporal.config.ScopeBuilder;
 import com.temporal.config.SslContextBuilderProvider;
-import com.temporal.grpc.HeaderLoggingInterceptor;
+import com.temporal.worker_tuner.AcceptTaskLimitedTimeSlotSupplier;
 import com.temporal.worker_tuner.BaseLogger;
 import com.temporal.worker_tuner.SuspendableSlotSupplier;
 import com.temporal.workflow.WorkflowHelloActivity;
@@ -21,6 +21,8 @@ import io.temporal.worker.WorkerFactoryOptions;
 import io.temporal.worker.WorkerOptions;
 import io.temporal.worker.tuning.*;
 
+import java.time.Duration;
+import java.util.Date;
 import java.util.concurrent.CompletableFuture;
 
 import static com.temporal.OpenTelemetryConfig.initTracer;
@@ -64,6 +66,7 @@ public class WorkerSsl {
 
         final WorkflowServiceStubsOptions.Builder builder = WorkflowServiceStubsOptions.newBuilder()
                 .setMetricsScope(metricsScope)
+                .setRpcLongPollTimeout(Duration.ofSeconds(2))
                 .setTarget(sslContextBuilderProvider.properties.getTemporalWorkerTargetEndpoint())
                 //.setGrpcClientInterceptors(List.of(new GetSystemInfoLatencyInterceptor()))
                 .setGrpcClientInterceptors(java.util.List.of(
@@ -108,20 +111,27 @@ public class WorkerSsl {
                 .build();
 
 
-        WorkerFactory factory = WorkerFactory.newInstance(client, build);
-
-        Worker worker = factory.newWorker(TASK_QUEUE, loadWorkerOptions().build());
-        worker.registerWorkflowImplementationTypes(
-                WorkflowHelloActivity.MyWorkflowImpl.class
-        );
-        worker.registerActivitiesImplementations(
-                new WorkflowHelloActivity.MyActivitiesImpl()
-        );
+        while (true) {
 
 
-        factory.start();
+            WorkerFactory factory = WorkerFactory.newInstance(client, build);
 
+            Worker worker = factory.newWorker(TASK_QUEUE, loadWorkerOptions().build());
+            worker.registerWorkflowImplementationTypes(
+                    WorkflowHelloActivity.MyWorkflowImpl.class
+            );
+            worker.registerActivitiesImplementations(
+                    new WorkflowHelloActivity.MyActivitiesImpl()
+            );
 
+            factory.start();
+
+            Thread.sleep(3_000);
+            System.out.println(new Date().toGMTString() + " Shutting down worker...");
+
+            factory.shutdownNow();
+
+        }
 
     }
 
@@ -148,8 +158,8 @@ public class WorkerSsl {
                     new FixedSizeSlotSupplier<>(200));
 
 
-            CompletableFuture.runAsync(()->{
-                while (true){
+            CompletableFuture.runAsync(() -> {
+                while (true) {
 
                     try {
                         Thread.sleep(10_000);
@@ -158,7 +168,7 @@ public class WorkerSsl {
                     }
 
 
-                   // localActivitySlotSupplier.suspend();
+                    // localActivitySlotSupplier.suspend();
 
 
                     try {
@@ -167,7 +177,7 @@ public class WorkerSsl {
                         throw new RuntimeException(e);
                     }
 
-                   // localActivitySlotSupplier.resume();
+                    // localActivitySlotSupplier.resume();
 
                 }
 
@@ -175,16 +185,11 @@ public class WorkerSsl {
 
             return WorkerOptions.newBuilder()
                     .setWorkerTuner(new CompositeTuner(
-                            new SuspendableSlotSupplier<>(new BaseLogger("WorkflowSlotInfo", "WorkflowSlotSupplier"),
-                                    new FixedSizeSlotSupplier<>(200)),
-                            new SuspendableSlotSupplier<>(new BaseLogger("WorkflowSlotInfo", "WorkflowSlotSupplier"),
-                                    new FixedSizeSlotSupplier<>(200)),
-                            localActivitySlotSupplier,
-                            new SuspendableSlotSupplier<>(new BaseLogger("WorkflowSlotInfo", "WorkflowSlotSupplier"),
-                                    new FixedSizeSlotSupplier<>(200))
-                            ));
-
-
+                            new FixedSizeSlotSupplier<>(200),
+                            new AcceptTaskLimitedTimeSlotSupplier<>(),
+                            new FixedSizeSlotSupplier<>(200),
+                            new FixedSizeSlotSupplier<>(200)
+                    ));
 
 
         }

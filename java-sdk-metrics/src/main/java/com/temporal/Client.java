@@ -4,8 +4,6 @@ import com.temporal.config.FromEnv;
 import com.temporal.config.ScopeBuilder;
 import com.temporal.config.SslContextBuilderProvider;
 import com.temporal.query_can_workflow.MyDataConverter;
-import com.temporal.grpc.HeaderLoggingInterceptor;
-import com.temporal.grpc.FailureInjectionInterceptor;
 import com.uber.m3.tally.Scope;
 import com.uber.m3.util.ImmutableMap;
 import io.temporal.client.WorkflowClient;
