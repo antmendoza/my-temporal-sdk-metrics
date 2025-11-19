@@ -4,6 +4,9 @@ import com.temporal.config.FromEnv;
 import com.temporal.config.ScopeBuilder;
 import com.temporal.config.SslContextBuilderProvider;
 import com.temporal.grpc.HeaderLoggingInterceptor;
+import com.temporal.worker_tuner.BaseLogger;
+import com.temporal.worker_tuner.SuspendableSlotSupplier;
+import com.temporal.workflow.WorkflowHelloActivity;
 import com.uber.m3.tally.Scope;
 import com.uber.m3.util.ImmutableMap;
 import io.temporal.client.WorkflowClient;
@@ -18,12 +21,14 @@ import io.temporal.worker.WorkerFactoryOptions;
 import io.temporal.worker.WorkerOptions;
 import io.temporal.worker.tuning.*;
 
+import java.util.concurrent.CompletableFuture;
+
 import static com.temporal.OpenTelemetryConfig.initTracer;
 
 
 public class WorkerSsl {
 
-    public static final String TASK_QUEUE = "MyTaskQueue";
+    public static final String TASK_QUEUE = "MyTaskQueue_1";
 
     public static void main(String[] args) throws Exception {
 
@@ -63,7 +68,7 @@ public class WorkerSsl {
                 //.setGrpcClientInterceptors(List.of(new GetSystemInfoLatencyInterceptor()))
                 .setGrpcClientInterceptors(java.util.List.of(
                         // Enabled only when INJECT_GRPC_FAILURES=true
-                        new HeaderLoggingInterceptor()
+                        //new HeaderLoggingInterceptor()
                         // new FailureInjectionInterceptor()
                 ));
 
@@ -107,10 +112,10 @@ public class WorkerSsl {
 
         Worker worker = factory.newWorker(TASK_QUEUE, loadWorkerOptions().build());
         worker.registerWorkflowImplementationTypes(
-                com.temporal.worker_versioning.WorkflowHelloActivity.MyWorkflowImplVersioning.class
+                WorkflowHelloActivity.MyWorkflowImpl.class
         );
         worker.registerActivitiesImplementations(
-                new com.temporal.worker_versioning.WorkflowHelloActivity.MyActivitiesImplVersioning()
+                new WorkflowHelloActivity.MyActivitiesImpl()
         );
 
 
@@ -132,6 +137,55 @@ public class WorkerSsl {
                     .setMaxConcurrentActivityTaskPollers(FromEnv.getConcurrentActivityPollers())
                     .setMaxConcurrentWorkflowTaskPollers(FromEnv.getConcurrentWorkflowPollers())
                     .setDisableEagerExecution(FromEnv.getDisableEagerDispatch());
+
+        }
+
+
+        if (FromEnv.slotSupplier()) {
+
+
+            SuspendableSlotSupplier<LocalActivitySlotInfo> localActivitySlotSupplier = new SuspendableSlotSupplier<>(new BaseLogger("WorkflowSlotInfo", "WorkflowSlotSupplier"),
+                    new FixedSizeSlotSupplier<>(200));
+
+
+            CompletableFuture.runAsync(()->{
+                while (true){
+
+                    try {
+                        Thread.sleep(10_000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+
+
+                   // localActivitySlotSupplier.suspend();
+
+
+                    try {
+                        Thread.sleep(10_000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                   // localActivitySlotSupplier.resume();
+
+                }
+
+            });
+
+            return WorkerOptions.newBuilder()
+                    .setWorkerTuner(new CompositeTuner(
+                            new SuspendableSlotSupplier<>(new BaseLogger("WorkflowSlotInfo", "WorkflowSlotSupplier"),
+                                    new FixedSizeSlotSupplier<>(200)),
+                            new SuspendableSlotSupplier<>(new BaseLogger("WorkflowSlotInfo", "WorkflowSlotSupplier"),
+                                    new FixedSizeSlotSupplier<>(200)),
+                            localActivitySlotSupplier,
+                            new SuspendableSlotSupplier<>(new BaseLogger("WorkflowSlotInfo", "WorkflowSlotSupplier"),
+                                    new FixedSizeSlotSupplier<>(200))
+                            ));
+
+
+
 
         }
 

@@ -76,6 +76,10 @@ public class FromEnv {
         return getWorkerTunner() != null && getWorkerTunner().equalsIgnoreCase("fine-tunner");
 
     }
+    public static boolean slotSupplier() {
+        return getWorkerTunner() != null && getWorkerTunner().equalsIgnoreCase("slot-supplier");
+
+    }
 
     public static boolean resourceBased() {
         return getWorkerTunner() != null && getWorkerTunner().equalsIgnoreCase("resource-based");

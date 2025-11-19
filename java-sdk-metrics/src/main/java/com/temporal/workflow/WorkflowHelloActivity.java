@@ -53,23 +53,6 @@ public class WorkflowHelloActivity {
         private final Logger logger = Workflow.getLogger(MyWorkflowImpl.class.getName());
 
 
-        private final MyActivities activities = Workflow.newActivityStub(
-                MyActivities.class,
-                ActivityOptions.newBuilder()
-                        .setTaskQueue(WorkerSsl.TASK_QUEUE)
-                        .setStartToCloseTimeout(
-                                //setting to a very large value for demo purpose.
-                                Duration.ofMillis(starToClose + 5000)
-                        )
-                        .setCancellationType(WAIT_CANCELLATION_COMPLETED)
-//                        .setHeartbeatTimeout(Duration.ofMillis(starToClose / 2))
-                        .setRetryOptions(RetryOptions.newBuilder()
-                                .setBackoffCoefficient(1)
-                                .setInitialInterval(Duration.ofSeconds(5))
-                                .build())
-                        //.setScheduleToStartTimeout(Duration.ofSeconds(2))
-                        .build());
-
 
         private final MyActivities localActivity = Workflow.newLocalActivityStub(
                 MyActivities.class,
@@ -92,6 +75,7 @@ public class WorkflowHelloActivity {
         public String run(String name) {
 
 
+
             localActivity.sleep_time(300);
 
 
@@ -101,37 +85,15 @@ public class WorkflowHelloActivity {
 
             {
                 List<Promise<String>> promises = new ArrayList<>();
-                for (int i = 0; i < 5; i++) {
-                    promises.add(Async.function(activities::sleep, name));
+                for (int i = 0; i < 100; i++) {
+                    promises.add(Async.function(localActivity::sleep_time, 3_000));
                 }
 
                 Promise.allOf(promises).get();
             }
 
 
-            {
-                List<Promise<String>> promises = new ArrayList<>();
-                for (int i = 0; i < 5; i++) {
 
-                    final int index = i;
-                    final String finalName = name;
-                    promises.add(Async.function(() -> {
-
-                        final ChildMyWorkflow1 childWF = Workflow.newChildWorkflowStub(ChildMyWorkflow1.class,
-                                ChildWorkflowOptions.newBuilder()
-//                                    .setParentClosePolicy(ParentClosePolicy.PARENT_CLOSE_POLICY_ABANDON)
-                                        .build());
-                        return childWF.run(finalName + "-" + index);
-
-                    }));
-
-                }
-
-
-                Promise.allOf(promises).get();
-
-
-            }
             return "done";
 
         }

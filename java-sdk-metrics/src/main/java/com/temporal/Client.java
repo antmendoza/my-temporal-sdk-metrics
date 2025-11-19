@@ -32,9 +32,10 @@ public class Client {
 //                .setGrpcClientInterceptors(List.of(new GetSystemInfoLatencyInterceptor()))
                 .setMetricsScope(metricsScope)
                .setGrpcClientInterceptors(List.of(
-                       new HeaderLoggingInterceptor(),
+               //        new HeaderLoggingInterceptor(),
                        // Enabled only when INJECT_GRPC_FAILURES=true
-                       new FailureInjectionInterceptor()))
+               //        new FailureInjectionInterceptor())
+               ))
 //                                .setRpcTimeout(Duration.ofMillis(167))
                 .setTarget(sslContextBuilderProvider.properties.getTemporalStarterTargetEndpoint());
 

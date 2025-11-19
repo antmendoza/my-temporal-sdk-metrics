@@ -25,8 +25,9 @@ public class Starter {
         //while (millisSleep > 0) {
 
 
-        for (int i = 0; i < 1; i++) {
+//        for (int i = 0; i < 20; i++) {
 
+        while (true) {
 
 
             final int andIncrement = input.getAndIncrement();
@@ -49,7 +50,7 @@ public class Starter {
 
 
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                     System.out.println("Failed workflowId = " + workflowId);
                 }
             });

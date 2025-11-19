@@ -84,9 +84,6 @@ func GetMetricsHandler(port string) client.MetricsHandler {
 			panic(err)
 		}
 
-		customBuckets := []float64{0, 0.2, 0.5, 1, 2, 3, 4, 5, 10, 25, 50, 75, 100,
-			200, 300, 400, 500, 1000, 2000, 5000, 10000}
-
 		// Create a MeterProvider with explicit bucket histogram configuration
 		view := metric.NewView(
 			metric.Instrument{
@@ -95,7 +92,8 @@ func GetMetricsHandler(port string) client.MetricsHandler {
 			},
 			metric.Stream{
 				Aggregation: metric.AggregationExplicitBucketHistogram{
-					Boundaries: customBuckets,
+					Boundaries: []float64{0, 0.2, 0.5, 1, 2, 3, 4, 5, 10, 25, 50, 75, 100,
+						200, 300, 400, 500, 1000, 2000, 5000, 10000},
 				},
 			},
 		)
@@ -115,6 +113,8 @@ func GetMetricsHandler(port string) client.MetricsHandler {
 		metricsHandler = sdktally.NewMetricsHandler(NewPrometheusScope(prometheus.Configuration{
 			ListenAddress: "0.0.0.0:" + port,
 			TimerType:     "histogram",
+			DefaultHistogramBuckets: []prometheus.HistogramObjective{{Upper: 0.1}, {Upper: 0.2}, {Upper: 0.5}, {Upper: 1},
+				{Upper: 2}, {Upper: 5}, {Upper: 10}},
 		}))
 
 	}
