@@ -21,8 +21,6 @@ import io.temporal.worker.WorkerFactoryOptions;
 import io.temporal.worker.WorkerOptions;
 import io.temporal.worker.tuning.*;
 
-import java.time.Duration;
-import java.util.Date;
 import java.util.concurrent.CompletableFuture;
 
 import static com.temporal.OpenTelemetryConfig.initTracer;
@@ -66,7 +64,7 @@ public class WorkerSsl {
 
         final WorkflowServiceStubsOptions.Builder builder = WorkflowServiceStubsOptions.newBuilder()
                 .setMetricsScope(metricsScope)
-                .setRpcLongPollTimeout(Duration.ofSeconds(2))
+//                .setRpcLongPollTimeout(Duration.ofSeconds(2))
                 .setTarget(sslContextBuilderProvider.properties.getTemporalWorkerTargetEndpoint())
                 //.setGrpcClientInterceptors(List.of(new GetSystemInfoLatencyInterceptor()))
                 .setGrpcClientInterceptors(java.util.List.of(
@@ -111,27 +109,18 @@ public class WorkerSsl {
                 .build();
 
 
-        while (true) {
+        WorkerFactory factory = WorkerFactory.newInstance(client, build);
 
+        Worker worker = factory.newWorker(TASK_QUEUE, loadWorkerOptions().build());
+        worker.registerWorkflowImplementationTypes(
+                WorkflowHelloActivity.MyWorkflowImpl.class
+        );
+        worker.registerActivitiesImplementations(
+                new WorkflowHelloActivity.MyActivitiesImpl()
+        );
 
-            WorkerFactory factory = WorkerFactory.newInstance(client, build);
+        factory.start();
 
-            Worker worker = factory.newWorker(TASK_QUEUE, loadWorkerOptions().build());
-            worker.registerWorkflowImplementationTypes(
-                    WorkflowHelloActivity.MyWorkflowImpl.class
-            );
-            worker.registerActivitiesImplementations(
-                    new WorkflowHelloActivity.MyActivitiesImpl()
-            );
-
-            factory.start();
-
-            Thread.sleep(3_000);
-            System.out.println(new Date().toGMTString() + " Shutting down worker...");
-
-            factory.shutdownNow();
-
-        }
 
     }
 

@@ -4,6 +4,8 @@ import com.temporal.Client;
 import io.temporal.api.common.v1.WorkflowExecution;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;
+import io.temporal.client.WorkflowStub;
+import io.temporal.client.WorkflowUpdateStage;
 
 import java.util.Date;
 import java.util.concurrent.CompletableFuture;
@@ -25,9 +27,9 @@ public class Starter {
         //while (millisSleep > 0) {
 
 
-//        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 1; i++) {
 
-        while (true) {
+            //while (true) {
 
 
             final int andIncrement = input.getAndIncrement();
@@ -47,6 +49,14 @@ public class Starter {
                     System.out.println(workflowId + "init " + new Date());
                     WorkflowExecution execution = WorkflowClient.start(workflow::run, "" + andIncrement);
                     System.out.println(workflowId + "end " + new Date());
+
+
+
+//                    System.out.println(new Date() + " - before update: " + execution.getWorkflowId());
+//                    WorkflowStub.fromTyped(workflow).startUpdate("update",
+//                            WorkflowUpdateStage.COMPLETED,
+//                            String.class);
+//                    System.out.println(new Date() + " - After update: " + execution.getWorkflowId());
 
 
                 } catch (Exception e) {

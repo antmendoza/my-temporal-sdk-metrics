@@ -44,7 +44,8 @@ public class Starter {
         WorkerFactory factory = WorkerFactory.newInstance(client1);
 
         Worker worker = factory.newWorker(TASK_QUEUE, WorkerOptions.newBuilder().
-                setStickyQueueScheduleToStartTimeout(workflowTaskTimeout)
+                //match workflow task timeout
+                        setStickyQueueScheduleToStartTimeout(workflowTaskTimeout)
                 .build());
 
         worker.registerWorkflowImplementationTypes(HelloWorkflowImpl.class);
@@ -58,6 +59,7 @@ public class Starter {
                 WorkflowOptions.newBuilder()
                         .setTaskQueue(TASK_QUEUE)
                         .setWorkflowId(Math.random() + "")
+                        // set workflow task timeout
                         .setWorkflowTaskTimeout(workflowTaskTimeout)
                         .build();
 

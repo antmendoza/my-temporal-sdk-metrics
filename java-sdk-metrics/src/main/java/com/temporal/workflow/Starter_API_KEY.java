@@ -3,15 +3,20 @@ package com.temporal.workflow;
 import com.temporal.grpc.HeaderLoggingInterceptor;
 import io.grpc.ClientInterceptor;
 import io.grpc.Metadata;
+import io.temporal.api.common.v1.WorkflowExecution;
 import io.temporal.api.workflowservice.v1.ListWorkflowExecutionsRequest;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
+import io.temporal.client.WorkflowOptions;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 
 import java.time.Duration;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+
+import static com.temporal.WorkerSsl.TASK_QUEUE;
 
 public class Starter_API_KEY {
 
@@ -22,9 +27,8 @@ public class Starter_API_KEY {
 
 
             final String namespace = "antonio.a2dd6";
-            String key = "-";
+            String key = "";
 
-            key = "-";
 
             final ClientInterceptor interceptr = new ClientInterceptor() {
                 @Override
@@ -72,6 +76,17 @@ public class Starter_API_KEY {
 
             try {
                 client.getWorkflowServiceStubs().blockingStub().listWorkflowExecutions(ListWorkflowExecutionsRequest.newBuilder().setNamespace(namespace).build());
+
+                WorkflowOptions workflowOptions =
+                        WorkflowOptions.newBuilder()
+                                .setTaskQueue(TASK_QUEUE)
+                                .setWorkflowId("workflowId")
+                                .build();
+
+
+                MyWorkflow1 workflow = client.newWorkflowStub(MyWorkflow1.class, workflowOptions);
+                WorkflowExecution execution = WorkflowClient.start(workflow::run, "" + 1);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

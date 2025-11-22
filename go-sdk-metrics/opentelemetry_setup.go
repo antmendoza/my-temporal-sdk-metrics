@@ -87,7 +87,9 @@ func GetMetricsHandler(port string) client.MetricsHandler {
 		// Create a MeterProvider with explicit bucket histogram configuration
 		view := metric.NewView(
 			metric.Instrument{
-				Name:  "*",
+				//Name:  "temporal*latency*",
+				Name: "*",
+
 				Scope: instrumentation.Scope{Name: "temporal-sdk-go"},
 			},
 			metric.Stream{
