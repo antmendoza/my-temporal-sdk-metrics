@@ -34,8 +34,8 @@ services:
     env_file:
       - .env
     # load     cpus from env file
-    cpus: '${WORKER_CPU_LIMIT}'
-    mem_limit: ${WORKER_MEM_LIMIT}
+    cpus: 1
+    mem_limit: 512m
     networks:
       - temporal-network
     # Uncomment if you need to connect to a Temporal server running on the host

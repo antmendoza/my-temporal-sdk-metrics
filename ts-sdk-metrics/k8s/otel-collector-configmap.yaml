@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: otel-collector-config
+  namespace: temporal-metrics
+data:
+  collector.yaml: |
+    receivers:
+      otlp:
+        protocols:
+          http:
+            endpoint: 0.0.0.0:4318
+          grpc:
+            endpoint: 0.0.0.0:4317
+      kubeletstats:
+        collection_interval: 20s
+        auth_type: serviceAccount
+        # On Minikube (single node), scrape the kubelet on the node where the collector pod runs
+        # Uses Collector env var HOST_IP (injected from pod's status.hostIP)
+        endpoint: https://${env:HOST_IP}:10250
+        insecure_skip_verify: true
+        metric_groups: [container, pod, node]
+      k8s_cluster:
+        collection_interval: 60s
+        auth_type: serviceAccount
+
+    processors:
+      batch:
+        send_batch_max_size: 100
+        send_batch_size: 10
+        timeout: 10s
+
+    connectors:
+      datadog/connector: {}
+
+    exporters:
+      datadog/exporter:
+        api:
+          site: datadoghq.com
+          key: ${DATADOG_API_KEY}
+        host_metadata:
+          tags:
+            - env:dev
+      debug:
+        verbosity: detailed
+        sampling_initial: 5
+        sampling_thereafter: 200
+
+    service:
+      pipelines:
+        metrics:
+          receivers: [ otlp, kubeletstats, k8s_cluster ]
+          processors: [ batch ]
+          exporters: [ datadog/exporter]
+        logs:
+          receivers: [ otlp ]
+          processors: [ batch ]
+          exporters: [ datadog/exporter ]

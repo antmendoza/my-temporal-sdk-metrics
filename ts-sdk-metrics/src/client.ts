@@ -1,4 +1,4 @@
-import { Connection, Client } from '@temporalio/client';
+import { Client } from '@temporalio/client';
 import { Resource } from '@opentelemetry/resources';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 import { ConsoleSpanExporter } from '@opentelemetry/sdk-trace-base';
@@ -6,7 +6,8 @@ import { NodeSDK } from '@opentelemetry/sdk-node';
 import { OpenTelemetryWorkflowClientInterceptor } from '@temporalio/interceptors-opentelemetry';
 import { example } from './workflows';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto';
-import {Runtime} from "@temporalio/worker";
+import { Runtime, NativeConnection } from '@temporalio/worker';
+import { loadClientConnectConfig } from '@temporalio/envconfig';
 
 async function run() {
   const resource = new Resource({
@@ -33,16 +34,22 @@ async function run() {
 
   const otel = new NodeSDK({ traceExporter: exporter, resource });
   await otel.start();
-  // Connect to localhost with default ConnectionOptions,
-  // pass options to the Connection constructor to configure TLS and other settings.
-  const connection = await Connection.connect();
-  // Attach the OpenTelemetryClientCallsInterceptor to the client.
-  const client = new Client({
-    connection,
-    interceptors: {
-      workflow: [new OpenTelemetryWorkflowClientInterceptor()],
-    },
+  // Load connection config from ENV and config file (align with worker)
+  const configFile = process.env.TEMPORAL_CONFIG_FILE || './config/config.json';
+  const envProfile = process.env.TEMPORAL_PROFILE || 'default';
+
+  console.log(`Loading '${envProfile}' profile from ${configFile}.`);
+  const config = loadClientConnectConfig({
+    configSource: { path: configFile },
   });
+  console.log(`Loaded '${envProfile}' profile from ${configFile}.`);
+  console.log(`  Address: ${config.connectionOptions.address}`);
+  console.log(`  Namespace: ${config.namespace}`);
+  console.log(`  gRPC Metadata: ${JSON.stringify(config.connectionOptions.metadata)}`);
+
+  const connection = await NativeConnection.connect(config.connectionOptions);
+  // Attach the OpenTelemetryClientCallsInterceptor to the client.
+  const client = new Client({ connection, interceptors: { workflow: [new OpenTelemetryWorkflowClientInterceptor()] } });
   try {
     for (let i = 0; i < 200; i++) {
 
