@@ -68,17 +68,17 @@ async function main() {
     connection,
     workflowsPath: require.resolve('./workflows'),
     activities,
-    taskQueue: 'interceptors-opentelemetry-example',
+    taskQueue: 'temporal-ts',
     sinks: {
       exporter: makeWorkflowExporter(exporter, resource),
     },
     // Registers opentelemetry interceptors for Workflow and Activity calls
-    // interceptors: {
-    //   // example contains both workflow and interceptors
-    //   workflowModules: [require.resolve('./workflows')],
-    //   activity: [(ctx) => ({ inbound: new OpenTelemetryActivityInboundInterceptor(ctx) })],
-    // },
-     namespace: config.namespace,
+      //interceptors: {
+      // example contains both workflow and interceptors
+      //workflowModules: [require.resolve('./workflows')],
+      //activity: [(ctx) => ({ inbound: new OpenTelemetryActivityInboundInterceptor(ctx) })],
+    //},
+    namespace: config.namespace,
 
   });
   try {

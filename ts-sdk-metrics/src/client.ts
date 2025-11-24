@@ -54,7 +54,7 @@ async function run() {
     for (let i = 0; i < 200; i++) {
 
       const result = await client.workflow.execute(example, {
-        taskQueue: 'interceptors-opentelemetry-example',
+        taskQueue: 'temporal-ts',
         workflowId: 'otel-example-0',
         args: ['Temporal'],
       });

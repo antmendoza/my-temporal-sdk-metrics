@@ -458,25 +458,6 @@
                     {
                       "data_source": "metrics",
                       "name": "query1",
-                      "query": "p95:temporal_long_request_latency{namespace:$namespace,service_name:$service_name} by {namespace,operation}"
-                    }
-                  ],
-                  "formulas": [
-                    {
-                      "formula": "query1"
-                    }
-                  ],
-                  "style": {
-                    "palette": "purple"
-                  },
-                  "display_type": "line"
-                },
-                {
-                  "response_format": "timeseries",
-                  "queries": [
-                    {
-                      "data_source": "metrics",
-                      "name": "query1",
                       "query": "p99:temporal_long_request_latency{namespace:$namespace,service_name:$service_name} by {namespace,operation}"
                     }
                   ],
@@ -587,7 +568,6 @@
                 "value",
                 "sum"
               ],
-              "time": {},
               "type": "timeseries",
               "requests": [
                 {
@@ -722,7 +702,6 @@
                 "value",
                 "sum"
               ],
-              "time": {},
               "type": "timeseries",
               "requests": [
                 {
@@ -766,7 +745,6 @@
                 "value",
                 "sum"
               ],
-              "time": {},
               "type": "timeseries",
               "requests": [
                 {
@@ -809,7 +787,7 @@
           {
             "id": 259645795890657,
             "definition": {
-              "title": "Workflow Task Replay Latency",
+              "title": "Workflow Task Execution Latency",
               "show_legend": true,
               "legend_layout": "auto",
               "legend_columns": [
@@ -819,7 +797,6 @@
                 "value",
                 "sum"
               ],
-              "time": {},
               "type": "timeseries",
               "requests": [
                 {
@@ -1639,7 +1616,6 @@
                 "value",
                 "sum"
               ],
-              "time": {},
               "type": "timeseries",
               "requests": [
                 {
@@ -1683,7 +1659,6 @@
                 "value",
                 "sum"
               ],
-              "time": {},
               "type": "timeseries",
               "requests": [
                 {
